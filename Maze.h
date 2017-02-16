@@ -5,20 +5,27 @@
 #include "Direction.h"
 #include "Node.h"
 
-const int ROWS = 31;
-const int COLS = 31;
 
-class Maze {
+class Maze
+{
   public:
+		static const int CELL_ROWS = 16;
+		static const int CELL_COLS = 16;
+		static const int NODE_ROWS = CELL_ROWS * 2 - 1;
+		static const int NODE_COLS = CELL_COLS * 2 - 1;
+
     Maze();
-    Maze(int rows, int cols);
+
     bool isWall(Coordinate pos);
     bool isWall(Coordinate pos, Direction dir);
-    void setWall(Coordinate pos, Direction dir, bool wall);
+
+		void setWall(Coordinate pos, bool wall);
+		void setWall(Coordinate pos, Direction dir, bool wall);
+
     void reset();
 
   private:
-    Node maze[ROWS][COLS];
+    Node maze[NODE_ROWS][NODE_COLS];
 };
 
 #endif
