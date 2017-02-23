@@ -14,8 +14,6 @@ class Maze
 		static const int NODE_ROWS = CELL_ROWS * 2 - 1;
 		static const int NODE_COLS = CELL_COLS * 2 - 1;
 
-    Maze();
-
     bool isWall(Coordinate pos);
     bool isWall(Coordinate pos, Direction dir);
 
