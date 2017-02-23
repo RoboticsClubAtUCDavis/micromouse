@@ -11,3 +11,7 @@ Node::operator bool() const {
 void Node::remove(void) {
     exists = false;
 }
+
+void Node::reset(void) {
+    exists = true;
+}
