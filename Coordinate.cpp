@@ -11,11 +11,6 @@ Coordinate::Coordinate(int x, int y) :
 {}
 
 
-CellCoordinate NodeCoordinate::toCell(Direction dir) const {
-    // TODO
-}
-
-
-NodeCoordinate CellCoordinate::toNode(Direction dir) const {
-    // TODO
+NodeCoordinate CellCoordinate::toNode(void) const {
+    return NodeCoordinate(x * 2 + 1, y * 2 + 1);
 }

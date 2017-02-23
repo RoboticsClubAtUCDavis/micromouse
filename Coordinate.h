@@ -16,11 +16,12 @@ class CellCoordinate;
 
 class NodeCoordinate : public Coordinate {
   public:
-     CellCoordinate toCell(Direction dir) const;
+    NodeCoordinate(int x, int y) : Coordinate(x, y) {};
 };
 
 
 class CellCoordinate : public Coordinate {
   public:
-     NodeCoordinate toNode(Direction dir) const;
+     CellCoordinate(int x, int y) : Coordinate(x, y) {};
+     NodeCoordinate toNode(void) const;
 };

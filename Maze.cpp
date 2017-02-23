@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "Maze.h"
 
 
@@ -13,7 +14,27 @@ bool Maze::isWall(NodeCoordinate pos) {
 }
 
 bool Maze::isWall(CellCoordinate pos, Direction dir) {
-    return isWall(pos.toNode(dir));
+    auto node = pos.toNode();
+    int x = node.x;
+    int y = node.y;
+    switch (dir) {
+        case N:
+            y++;
+            break;
+        case S:
+            y--;
+            break;
+        case E:
+            x--;
+            break;
+        case W:
+            x++;
+            break;
+        default:
+            throw std::invalid_argument("Direction must be: N, S, E, W");
+    }
+    
+    return !maze[x][y];
 }
 
 void Maze::setWall(NodeCoordinate pos, bool wall) {
@@ -21,5 +42,25 @@ void Maze::setWall(NodeCoordinate pos, bool wall) {
 }
 
 void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
-    setWall(pos.toNode(dir), wall);
+    auto node = pos.toNode();
+    int x = node.x;
+    int y = node.y;
+    switch (dir) {
+        case N:
+            y++;
+            break;
+        case S:
+            y--;
+            break;
+        case E:
+            x--;
+            break;
+        case W:
+            x++;
+            break;
+        default:
+            throw std::invalid_argument("Direction must be: N, S, E, W");
+    }
+
+    maze[x][y].exists = !wall;
 }
