@@ -10,18 +10,15 @@ class Coordinate {
     int y;
 };
 
-
 class CellCoordinate;
-
 
 class NodeCoordinate : public Coordinate {
   public:
-    NodeCoordinate(int x, int y) : Coordinate(x, y) {};
+    NodeCoordinate(int x, int y) : Coordinate(x, y){};
 };
-
 
 class CellCoordinate : public Coordinate {
   public:
-     CellCoordinate(int x, int y) : Coordinate(x, y) {};
-     NodeCoordinate toNode(void) const;
+    CellCoordinate(int x, int y) : Coordinate(x, y){};
+    NodeCoordinate toNode(void) const;
 };
