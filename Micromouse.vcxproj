@@ -110,6 +110,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Coordinate.h" />
+    <ClInclude Include="Direction.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Node.h" />
   </ItemGroup>
