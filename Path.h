@@ -8,8 +8,11 @@ public:
 	Path();
 
 		void push(DirectionVector step);
-		DirectionVector peek();
-		DirectionVector pop();
+		DirectionVector top();
+		DirectionVector topPop();
+		void pop();
 		int size();
+private:
+	std::stack<DirectionVector> path;	
 };
 
