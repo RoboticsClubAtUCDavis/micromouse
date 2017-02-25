@@ -10,9 +10,14 @@ const int WINDOW_WIDTH = MARGIN * 2 + Maze::CELL_COLS * CELL_SIZE;
 const int WINDOW_HEIGHT = MARGIN * 2 + Maze::CELL_ROWS * CELL_SIZE;
 const std::string WINDOW_TITLE = "Micromouse simulator";
 
-class Simulator {
+class Simulator : public sf::RenderWindow {
   public:
-    Simulator(sf::RenderWindow &window) : window(window), maze() {
+    Simulator(void)
+        : maze(),
+          sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
+                           WINDOW_TITLE, sf::Style::Titlebar | sf::Style::Close)
+
+    {
     }
 
     sf::Vertex cellVertex(int x, int y) {
@@ -31,13 +36,13 @@ class Simulator {
             cellVertex(0, 0),
         };
 
-        window.draw(border, 5, sf::LineStrip);
+        draw(border, 5, sf::LineStrip);
     }
 
     void drawLine(int x1, int y1, int x2, int y2) {
         sf::Vertex line[] = {cellVertex(x1, y1), cellVertex(x2, y2)};
 
-        window.draw(line, 2, sf::Lines);
+        draw(line, 2, sf::Lines);
     }
 
     void drawCell(int row, int col) {
@@ -60,8 +65,8 @@ class Simulator {
         }
     }
 
-    void draw(void) {
-        window.clear(sf::Color::Black);
+    void render(void) {
+        clear(sf::Color::Black);
 
         drawBorder();
 
@@ -71,29 +76,27 @@ class Simulator {
             }
         }
 
-        window.display();
+        display();
+    }
+
+    void main_loop(void) {
+        while (isOpen()) {
+            sf::Event event;
+            while (pollEvent(event)) {
+                if (event.type == sf::Event::Closed)
+                    close();
+            }
+
+            render();
+        }
     }
 
   private:
     Maze maze;
-    sf::RenderWindow &window;
 };
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
-                            WINDOW_TITLE,
-                            sf::Style::Titlebar | sf::Style::Close);
-    Simulator simulator(window);
-
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        simulator.draw();
-    }
-
+    Simulator simulator;
+    simulator.main_loop();
     return 0;
 }
