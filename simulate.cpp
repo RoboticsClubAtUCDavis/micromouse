@@ -5,9 +5,9 @@
 #include "Maze.h"
 
 const int CELL_SIZE = 30;
-const int WINDOW_WIDTH = 10 + Maze::CELL_COLS * CELL_SIZE;
-const int WINDOW_HEIGHT = 10 + Maze::CELL_ROWS * CELL_SIZE;
 const int MARGIN = 5;
+const int WINDOW_WIDTH = MARGIN * 2 + Maze::CELL_COLS * CELL_SIZE;
+const int WINDOW_HEIGHT = MARGIN * 2 + Maze::CELL_ROWS * CELL_SIZE;
 const std::string WINDOW_TITLE = "Micromouse simulator";
 
 class Simulator {
@@ -15,23 +15,23 @@ class Simulator {
     Simulator(sf::RenderWindow &window) : window(window), maze() {
     }
 
+    sf::Vertex cellVertex(int x, int y) {
+        int x_p = MARGIN + (Maze::CELL_COLS - x) * CELL_SIZE;
+        int y_p = MARGIN + (Maze::CELL_ROWS - y) * CELL_SIZE;
+        printf("%d %d\n", x_p, y_p);
+        return sf::Vertex(sf::Vector2f(x_p, y_p));
+    }
+
     void drawBorder(void) {
         const sf::Vertex border[] = {
-            sf::Vertex(sf::Vector2f(MARGIN, MARGIN)),
-            sf::Vertex(sf::Vector2f(WINDOW_WIDTH - MARGIN, MARGIN)),
-            sf::Vertex(
-                sf::Vector2f(WINDOW_WIDTH - MARGIN, WINDOW_HEIGHT - MARGIN)),
-            sf::Vertex(sf::Vector2f(MARGIN, WINDOW_HEIGHT - MARGIN)),
-            sf::Vertex(sf::Vector2f(MARGIN, MARGIN)),
+            cellVertex(0, 0),
+            cellVertex(Maze::CELL_COLS, 0),
+            cellVertex(Maze::CELL_COLS, Maze::CELL_ROWS),
+            cellVertex(0, Maze::CELL_ROWS),
+            cellVertex(0, 0),
         };
 
         window.draw(border, 5, sf::LineStrip);
-    }
-
-    sf::Vertex cellVertex(int x, int y) {
-        int x_p = MARGIN + (Maze::CELL_COLS - 1 - x);
-        int y_p = MARGIN + (Maze::CELL_ROWS - 1 - y);
-        return sf::Vertex(sf::Vector2f(x_p, y_p));
     }
 
     void drawLine(int x1, int y1, int x2, int y2) {
