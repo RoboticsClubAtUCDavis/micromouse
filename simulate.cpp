@@ -29,7 +29,6 @@ class Simulator : public sf::RenderWindow {
     sf::Vertex cellVertex(int x, int y) {
         int x_p = MARGIN + (Maze::CELL_COLS - x) * cell_size;
         int y_p = MARGIN + (Maze::CELL_ROWS - y) * cell_size;
-        printf("%d %d\n", x_p, y_p);
         return sf::Vertex(sf::Vector2f(x_p, y_p));
     }
 
