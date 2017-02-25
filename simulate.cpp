@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Coordinate.h"
+#include "Direction.h"
 #include "Maze.h"
 
 const int CELL_SIZE = 30;
@@ -27,17 +28,48 @@ class Simulator {
         window.draw(border, 5, sf::LineStrip);
     }
 
+    sf::Vertex cellVertex(int x, int y) {
+        int x_p = MARGIN + (Maze::CELL_COLS - 1 - x);
+        int y_p = MARGIN + (Maze::CELL_ROWS - 1 - y);
+        return sf::Vertex(sf::Vector2f(x_p, y_p));
+    }
+
+    void drawLine(int x1, int y1, int x2, int y2) {
+        sf::Vertex line[] = {cellVertex(x1, y1), cellVertex(x2, y2)};
+
+        window.draw(line, 2, sf::Lines);
+    }
+
+    void drawCell(int row, int col) {
+        CellCoordinate pos(row, col);
+
+        if (maze.isWall(pos, N)) {
+            drawLine(row + 1, col, row + 1, col + 1);
+        }
+
+        if (maze.isWall(pos, S)) {
+            drawLine(row, col, row, col + 1);
+        }
+
+        if (maze.isWall(pos, E)) {
+            drawLine(row, col + 1, row + 1, col + 1);
+        }
+
+        if (maze.isWall(pos, W)) {
+            drawLine(row, col, row + 1, col);
+        }
+    }
+
     void draw(void) {
         window.clear(sf::Color::Black);
 
-        for (int row = 0; row != Maze::NODE_ROWS; row++) {
-            for (int col = 0; col != Maze::NODE_COLS; col++) {
-                if (maze.isWall(NodeCoordinate(row, col))) {
-                }
+        drawBorder();
+
+        for (int row = 0; row != Maze::CELL_ROWS; row++) {
+            for (int col = 0; col != Maze::CELL_COLS; col++) {
+                drawCell(row, col);
             }
         }
-
-        drawBorder();
 
         window.display();
     }
