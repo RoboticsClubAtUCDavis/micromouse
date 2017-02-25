@@ -1,4 +1,4 @@
-CFLAGS = -g
+CFLAGS = -g -std=c++11
 
 all: simulate Node.o Maze.o Coordinate.o Path.o Direction.o
 
