@@ -65,8 +65,8 @@ class Simulator {
 
         drawBorder();
 
-        for (int row = 0; row != Maze::CELL_ROWS; row++) {
-            for (int col = 0; col != Maze::CELL_COLS; col++) {
+        for (int row = 0; row < Maze::CELL_ROWS; row++) {
+            for (int col = 0; col < Maze::CELL_COLS; col++) {
                 drawCell(row, col);
             }
         }
