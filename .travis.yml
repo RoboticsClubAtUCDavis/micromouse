@@ -4,7 +4,7 @@ dist: trusty
 compiler:
    - gcc
 before_install:
-   - sudo apt-add-repository ppa:sonkun/sfml-stable
+   - sudo apt-add-repository -y ppa:sonkun/sfml-stable
    - sudo apt-get update -qq
    - sudo apt-get install -y libsfml-dev
 script:
