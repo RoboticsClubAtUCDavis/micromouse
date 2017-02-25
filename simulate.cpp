@@ -14,16 +14,34 @@ class Simulator : public sf::RenderWindow {
         calculateCellSize();
     }
 
+
+    void main_loop(void) {
+        while (isOpen()) {
+            sf::Event event;
+            while (pollEvent(event)) {
+                if (event.type == sf::Event::Closed)
+                    close();
+                if (event.type == sf::Event::Resized)
+                    setView(sf::View(sf::FloatRect(0, 0, event.size.width,
+                                                   event.size.height)));
+            }
+
+            render();
+        }
+    }
+
+  protected:
+    virtual void onResize(void) {
+        sf::RenderWindow::onResize();
+        calculateCellSize();
+    }
+
+  private:
     void calculateCellSize(void) {
         sf::Vector2u size = getSize();
         int x = (size.x - 2 * MARGIN) / Maze::CELL_COLS;
         int y = (size.y - 2 * MARGIN) / Maze::CELL_ROWS;
         cell_size = std::min(x, y);
-    }
-
-    virtual void onResize(void) {
-        sf::RenderWindow::onResize();
-        calculateCellSize();
     }
 
     sf::Vertex cellVertex(int x, int y) {
@@ -84,22 +102,6 @@ class Simulator : public sf::RenderWindow {
         display();
     }
 
-    void main_loop(void) {
-        while (isOpen()) {
-            sf::Event event;
-            while (pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
-                    close();
-                if (event.type == sf::Event::Resized)
-                    setView(sf::View(sf::FloatRect(0, 0, event.size.width,
-                                                   event.size.height)));
-            }
-
-            render();
-        }
-    }
-
-  private:
     Maze maze;
     int cell_size;
 };
