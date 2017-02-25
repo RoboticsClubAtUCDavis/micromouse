@@ -41,7 +41,7 @@ class Simulator {
     }
 
     void drawCell(int row, int col) {
-        CellCoordinate pos(row, col);
+        CellCoordinate pos(col, row);
 
         if (maze.isWall(pos, N)) {
             drawLine(row + 1, col, row + 1, col + 1);
