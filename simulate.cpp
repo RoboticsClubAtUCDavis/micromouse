@@ -10,8 +10,7 @@ const std::string WINDOW_TITLE = "Micromouse simulator";
 class Simulator : public sf::RenderWindow {
   public:
     Simulator(void)
-        : maze(),
-          sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE) {
+        : maze(), sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE) {
         calculateCellSize();
     }
 
@@ -23,6 +22,7 @@ class Simulator : public sf::RenderWindow {
     }
 
     virtual void onResize(void) {
+        sf::RenderWindow::onResize();
         calculateCellSize();
     }
 
@@ -90,6 +90,9 @@ class Simulator : public sf::RenderWindow {
             while (pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
                     close();
+                if (event.type == sf::Event::Resized)
+                    setView(sf::View(sf::FloatRect(0, 0, event.size.width,
+                                                   event.size.height)));
             }
 
             render();
