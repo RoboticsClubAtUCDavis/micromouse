@@ -4,25 +4,31 @@
 #include "Direction.h"
 #include "Maze.h"
 
-const int CELL_SIZE = 30;
 const int MARGIN = 5;
-const int WINDOW_WIDTH = MARGIN * 2 + Maze::CELL_COLS * CELL_SIZE;
-const int WINDOW_HEIGHT = MARGIN * 2 + Maze::CELL_ROWS * CELL_SIZE;
 const std::string WINDOW_TITLE = "Micromouse simulator";
 
 class Simulator : public sf::RenderWindow {
   public:
     Simulator(void)
         : maze(),
-          sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT),
-                           WINDOW_TITLE, sf::Style::Titlebar | sf::Style::Close)
+          sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE) {
+        calculateCellSize();
+    }
 
-    {
+    void calculateCellSize(void) {
+        sf::Vector2u size = getSize();
+        int x = (size.x - 2 * MARGIN) / Maze::CELL_COLS;
+        int y = (size.y - 2 * MARGIN) / Maze::CELL_ROWS;
+        cell_size = std::min(x, y);
+    }
+
+    virtual void onResize(void) {
+        calculateCellSize();
     }
 
     sf::Vertex cellVertex(int x, int y) {
-        int x_p = MARGIN + (Maze::CELL_COLS - x) * CELL_SIZE;
-        int y_p = MARGIN + (Maze::CELL_ROWS - y) * CELL_SIZE;
+        int x_p = MARGIN + (Maze::CELL_COLS - x) * cell_size;
+        int y_p = MARGIN + (Maze::CELL_ROWS - y) * cell_size;
         printf("%d %d\n", x_p, y_p);
         return sf::Vertex(sf::Vector2f(x_p, y_p));
     }
@@ -93,6 +99,7 @@ class Simulator : public sf::RenderWindow {
 
   private:
     Maze maze;
+    int cell_size;
 };
 
 int main() {
