@@ -3,9 +3,10 @@
 #include "Direction.h"
 
 class Coordinate {
-  public:
+  protected:
     Coordinate();
     Coordinate(int x, int y);
+	public:
     int x;
     int y;
 };
