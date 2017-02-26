@@ -4,6 +4,7 @@
 #include "Coordinate.h"
 #include "Direction.h"
 #include "Node.h"
+#include "Path.h"
 
 class Maze {
   public:
@@ -12,6 +13,9 @@ class Maze {
     static const int NODE_ROWS = CELL_ROWS * 2 + 1;
     static const int NODE_COLS = CELL_COLS * 2 + 1;
 
+	static const CellCoordinate CELL_START;
+	static const CellCoordinate CELL_FINISH;
+
     bool isWall(NodeCoordinate pos);
     bool isWall(CellCoordinate pos, Direction dir);
 
@@ -19,6 +23,8 @@ class Maze {
     void setWall(CellCoordinate pos, Direction dir, bool wall);
 
     void reset();
+
+	Path findPath(CellCoordinate start = CELL_START, CellCoordinate end = CELL_FINISH);
 
   private:
     Node maze[NODE_ROWS][NODE_COLS];
