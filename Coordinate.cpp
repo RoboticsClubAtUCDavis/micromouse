@@ -7,5 +7,5 @@ Coordinate::Coordinate(int x, int y) : x(x), y(y) {
 }
 
 NodeCoordinate CellCoordinate::toNode(void) const {
-    return NodeCoordinate(x * 2 + 1, y * 2 + 1);
+    return NodeCoordinate(x * 2, y * 2);
 }
