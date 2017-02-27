@@ -1,6 +1,6 @@
 #pragma once
 
-enum Direction { N, W, E, S, NE, NW, SW, SE };
+enum Direction { N, NE, E, SE, S, SW, W, NW, NONE };
 
 class DirectionVector {
   public:
