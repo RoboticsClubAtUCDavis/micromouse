@@ -2,12 +2,12 @@
 #include <stdexcept>
 
 const CellCoordinate Maze::CELL_START = CellCoordinate(0,0);
-const CellCoordinate  Maze::CELL_FINISH = CellCoordinate(Maze::CELL_COLS / 2, (Maze::CELL_ROWS / 2);
+const CellCoordinate  Maze::CELL_FINISH = CellCoordinate(Maze::CELL_COLS / 2, Maze::CELL_ROWS / 2);
 
 void Maze::reset() {
 	for (int y = 0; y < NODE_ROWS; y++)
 		for (int x = 0; x < NODE_COLS; x++)
-			maze[y][x] = Node(NodeCoordinate(x, y));
+			maze[y][x] = Node();
 }
 
 
