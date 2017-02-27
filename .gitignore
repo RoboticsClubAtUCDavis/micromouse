@@ -10,6 +10,8 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+SFML-2.4.2/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
