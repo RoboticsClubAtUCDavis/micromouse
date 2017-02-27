@@ -6,6 +6,8 @@
 #include "Node.h"
 #include "Path.h"
 
+//#define MAZE_DIAGONALS
+
 class Maze {
   public:
     static const int CELL_ROWS = 16;
@@ -15,6 +17,9 @@ class Maze {
 
 	static const CellCoordinate CELL_START;
 	static const CellCoordinate CELL_FINISH;
+
+	static const unsigned MOVEMENT_COST = 100;
+	static const unsigned MOVEMENT_COST_DIAGONAL = 141;
 
 	Maze();
 
@@ -29,6 +34,12 @@ class Maze {
 	Path findPath(CellCoordinate start = CELL_START, CellCoordinate end = CELL_FINISH);
 
   private:
+	  Node* getNode(NodeCoordinate pos);
+	  Node* getAdjacentNode(Node* node, Direction direction);
+	  void resetNodePathData();
+	  unsigned calculateMovementCost(Direction direction);
+	  unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
+
     Node maze[NODE_ROWS][NODE_COLS];
 };
 
