@@ -12,7 +12,7 @@ const CellCoordinate  Maze::CELL_FINISH = CellCoordinate(Maze::CELL_COLS / 2, Ma
 void Maze::reset() {
 	for (int y = 0; y < NODE_ROWS; y++)
 		for (int x = 0; x < NODE_COLS; x++)
-			maze[y][x] = Node();
+			maze[y][x] = Node(NodeCoordinate(x,y));
 }
 
 
