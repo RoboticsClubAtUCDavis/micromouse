@@ -12,6 +12,11 @@ void Maze::reset() {
 
 
 
+Maze::Maze()
+{
+	reset();
+}
+
 bool Maze::isWall(NodeCoordinate pos) {
     return !maze[pos.y][pos.x];
 }

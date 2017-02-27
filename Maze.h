@@ -16,6 +16,8 @@ class Maze {
 	static const CellCoordinate CELL_START;
 	static const CellCoordinate CELL_FINISH;
 
+	Maze();
+
     bool isWall(NodeCoordinate pos);
     bool isWall(CellCoordinate pos, Direction dir);
 
