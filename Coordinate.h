@@ -21,5 +21,6 @@ class NodeCoordinate : public Coordinate {
 class CellCoordinate : public Coordinate {
   public:
     CellCoordinate(int x, int y) : Coordinate(x, y){};
+	operator NodeCoordinate() const;
     NodeCoordinate toNode(void) const;
 };
