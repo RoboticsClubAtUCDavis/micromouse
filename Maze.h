@@ -39,6 +39,7 @@ class Maze {
 	  void resetNodePathData();
 	  unsigned calculateMovementCost(Direction direction);
 	  unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
+	  Path constructPath( Node* end );
 
     Node maze[NODE_ROWS][NODE_COLS];
 };

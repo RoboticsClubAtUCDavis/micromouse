@@ -15,5 +15,7 @@ class Node {
 	unsigned gScore;
 	unsigned fScore;
 	Node * previous;
+	Direction direction;
 	bool evaluated;
+
 };

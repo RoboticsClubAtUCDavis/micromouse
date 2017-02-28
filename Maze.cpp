@@ -101,7 +101,7 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end)
 		if ( *currentNodeItr == getNode( end ) )
 		{
 			// We are done. Construct the path.
-			return Path(); // TODO construct path.
+			return constructPath(*currentNodeItr);
 		}
 		
 		// Set the current node as evaluated.
@@ -211,4 +211,23 @@ unsigned Maze::heuristic(NodeCoordinate start, NodeCoordinate end)
 #else
 	return abs(start.x - end.x) + abs(start.y - end.y);
 #endif // MAZE_DIAGONALS
+}
+
+Path Maze::constructPath(Node * end)
+{
+	Path path;
+
+	const Node * nodeA = end->previous;
+	const Node * nodeB = end;
+
+	// while there is more to the path to traverse
+	while (nodeA)
+	{
+		//drawLine( nodeA->pos, nodeB->pos );
+		path.push(DirectionVector(nodeA->direction, 1));
+		nodeB = nodeA;
+		nodeA = nodeA->previous;
+	}
+
+	return path;
 }
