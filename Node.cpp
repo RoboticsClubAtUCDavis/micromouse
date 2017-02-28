@@ -23,6 +23,7 @@ void Node::resetPathData()
 	fScore = numeric_limits<unsigned>::max();
 	previous = nullptr;
 	evaluated = false;
+	direction = NONE;
 }
 
 void Node::setScores(unsigned gScore, unsigned fScore)

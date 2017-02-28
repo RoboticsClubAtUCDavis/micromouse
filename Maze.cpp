@@ -78,8 +78,10 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
 }
 
 
-Path Maze::findPath(CellCoordinate start, CellCoordinate end)
+Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 {
+	Node * startNode = getNode(start);
+
 	// The nodes that still need to be evaluated.
 	// Initially insert the start node.
 	set<Node *> openNodes;
@@ -89,7 +91,8 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end)
 	resetNodePathData();
 	
 	// The start node is 0 distance away.
-	getNode(start)->setScores(0, heuristic(start, end));
+	startNode->setScores(0, heuristic(start, end));
+	startNode->direction = facing;
 
 	// While there are node remaining to be evaluated.
 	while (!openNodes.empty())
@@ -128,7 +131,7 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end)
 				continue;
 			}
 
-			auto tentativeScore = (*currentNodeItr)->gScore + calculateMovementCost( direction );
+			auto tentativeScore = (*currentNodeItr)->gScore + calculateMovementCost( (*currentNodeItr)->direction, direction );
 
 			// If adjacent node not in openNodes.
 			if (openNodes.find(adjacentNode) == openNodes.end() )
@@ -179,22 +182,54 @@ void Maze::resetNodePathData()
 	}
 }
 
-unsigned Maze::calculateMovementCost(Direction direction)
+unsigned Maze::calculateMovementCost(Direction currentDirection, Direction nextDirection)
 {
-	switch (direction)
+	unsigned cost;
+	switch (nextDirection)
 	{
 	case N:
 	case E:
 	case S:
 	case W:
-		return 100;
+		cost = MOVEMENT_COST;
 	case NE:
 	case SE:
 	case SW:
 	case NW:
-		return 141;
+		cost = MOVEMENT_COST_DIAGONAL;
 	default:
 		throw std::invalid_argument("Direction cannot be: NONE");
+	}
+
+	// We are not given what direction we are currently facing so no penalty can be given.
+	if (currentDirection == NONE)
+	{
+		return cost;
+	}
+
+	// Penalize turns.
+	switch ( abs(nextDirection - currentDirection) )
+	{
+	case 0:
+		// Goiing straight has no additional cost.
+		return cost;
+	case 1:
+		// Turning 45deg costs moving a quarter cell.
+		// This is an approximation. 
+		return cost + MOVEMENT_COST / 4;
+	case 2:
+		// Turning 90deg costs moving a half cell.
+		// This is an approximation. 
+		return cost + MOVEMENT_COST / 2;
+	case 3:
+		// Turning 135deg costs moving two cells.
+		// We probably never want to do this it is a very difficult turn to make.
+		// This is an approximation. 
+		return cost + MOVEMENT_COST * 2;
+	case 4:
+		throw runtime_error("Path has 180deg turn, this should not occur.");
+	default:
+		throw runtime_error("This should be unreachable");
 	}
 }
 

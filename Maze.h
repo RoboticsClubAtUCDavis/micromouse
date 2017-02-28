@@ -31,13 +31,16 @@ class Maze {
 
     void reset();
 
-	Path findPath(CellCoordinate start = CELL_START, CellCoordinate end = CELL_FINISH);
+	// Returns a path from the `start` coordinate to the `end` coordinate
+	// `facing` is the direction the mouse is currently facing. If given
+	// paths that start in the same direction will be weighted more heavily.
+	Path findPath(CellCoordinate start, CellCoordinate end, Direction facing = NONE);
 
   private:
 	  Node* getNode(NodeCoordinate pos);
 	  Node* getAdjacentNode(Node* node, Direction direction);
 	  void resetNodePathData();
-	  unsigned calculateMovementCost(Direction direction);
+	  unsigned calculateMovementCost(Direction currentDirection, Direction nextDirection);
 	  unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
 	  Path constructPath( Node* end );
 
