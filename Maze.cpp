@@ -214,14 +214,17 @@ unsigned Maze::calculateMovementCost(Direction currentDirection, Direction nextD
 		// Goiing straight has no additional cost.
 		return cost;
 	case 1:
+	case 7:
 		// Turning 45deg costs moving a quarter cell.
 		// This is an approximation. 
 		return cost + MOVEMENT_COST / 4;
 	case 2:
+	case 6:
 		// Turning 90deg costs moving a half cell.
 		// This is an approximation. 
 		return cost + MOVEMENT_COST / 2;
 	case 3:
+	case 5:
 		// Turning 135deg costs moving two cells.
 		// We probably never want to do this it is a very difficult turn to make.
 		// This is an approximation. 
