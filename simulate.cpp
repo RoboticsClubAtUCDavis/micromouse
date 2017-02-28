@@ -72,19 +72,19 @@ class Simulator : public sf::RenderWindow {
         CellCoordinate pos(col, row);
 
         if (maze.isWall(pos, N)) {
-            drawLine(row + 1, col, row + 1, col + 1);
+            drawLine(col, row + 1, col + 1, row + 1);
         }
 
         if (maze.isWall(pos, S)) {
-            drawLine(row, col, row, col + 1);
+            drawLine(col, row, col + 1, row);
         }
 
         if (maze.isWall(pos, E)) {
-            drawLine(row, col + 1, row + 1, col + 1);
+            drawLine(col + 1, row, col + 1, row + 1);
         }
 
         if (maze.isWall(pos, W)) {
-            drawLine(row, col, row + 1, col);
+            drawLine(col, row, col, row + 1);
         }
     }
 
