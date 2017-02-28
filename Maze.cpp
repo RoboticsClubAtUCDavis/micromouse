@@ -1,6 +1,5 @@
 #include "Maze.h"
 #include <stdexcept>
-#include <unordered_set>
 #include <set>
 #include <cstdlib> //abs
 
@@ -81,11 +80,6 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
 
 Path Maze::findPath(CellCoordinate start, CellCoordinate end)
 {
-	// Nodes that have already been evaluated.
-	// Initialize the size to half of the total nodes as a best guess.
-	// TODO: Find the average max size to use as initial size.
-	unordered_set<Node *> closedNodes(NODE_ROWS * NODE_COLS * 0.5);
-
 	// The nodes that still need to be evaluated.
 	// Initially insert the start node.
 	set<Node *> openNodes;
@@ -110,9 +104,9 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end)
 			return Path(); // TODO construct path.
 		}
 		
-		// Move the current node into the closed nodes.
+		// Set the current node as evaluated.
 		openNodes.erase(currentNodeItr);
-		closedNodes.insert(*currentNodeItr);
+		(*currentNodeItr)->evaluated = true;
 
 		// For each node adjacent to the current node.
 		for (
@@ -127,8 +121,8 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end)
 		{
 			Node * adjacentNode = getAdjacentNode(*currentNodeItr, direction);
 
-			// If the adjacent node has already been evaluated.
-			if (closedNodes.find(adjacentNode) != closedNodes.end())
+			// If the adjacent node has already been evaluated or does not exist.
+			if (adjacentNode->evaluated || !adjacentNode->exists)
 			{
 				// Ignore the adjacent node.
 				continue;
@@ -142,6 +136,7 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end)
 				// Discover a new node.
 				openNodes.insert(adjacentNode);
 			}
+			// If the previous score given to the adjacent node is better.
 			else if (tentativeScore >= adjacentNode->gScore)
 			{
 				// This is not a better path.

@@ -15,4 +15,5 @@ class Node {
 	unsigned gScore;
 	unsigned fScore;
 	Node * previous;
+	bool evaluated;
 };
