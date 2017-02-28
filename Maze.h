@@ -26,8 +26,8 @@ class Maze {
     bool isWall(NodeCoordinate pos);
     bool isWall(CellCoordinate pos, Direction dir);
 
-    void setWall(NodeCoordinate pos, bool wall);
-    void setWall(CellCoordinate pos, Direction dir, bool wall);
+    void setWall(NodeCoordinate pos, bool wall = true);
+    void setWall(CellCoordinate pos, Direction dir, bool wall = true);
 
     void reset();
 
