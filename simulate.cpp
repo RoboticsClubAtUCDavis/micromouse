@@ -50,18 +50,6 @@ class Simulator : public sf::RenderWindow {
         return sf::Vertex(sf::Vector2f(x_p, y_p));
     }
 
-    void drawBorder(void) {
-        const sf::Vertex border[] = {
-            nodeVertex(NodeCoordinate(0, 0)),
-            nodeVertex(NodeCoordinate(Maze::NODE_COLS, 0)),
-            nodeVertex(NodeCoordinate(Maze::NODE_COLS, Maze::NODE_ROWS)),
-            nodeVertex(NodeCoordinate(0, Maze::NODE_ROWS)),
-            nodeVertex(NodeCoordinate(0, 0)),
-        };
-
-        draw(border, 5, sf::LineStrip);
-    }
-
     void drawLine(NodeCoordinate c1, NodeCoordinate c2) {
         sf::Vertex line[] = {nodeVertex(c1), nodeVertex(c2)};
         draw(line, 2, sf::Lines);
@@ -88,8 +76,6 @@ class Simulator : public sf::RenderWindow {
 
     void render(void) {
         clear(sf::Color::Black);
-
-        //drawBorder();
 
         for (int row = 0; row < Maze::CELL_ROWS; row++) {
             for (int col = 0; col < Maze::CELL_COLS; col++) {
