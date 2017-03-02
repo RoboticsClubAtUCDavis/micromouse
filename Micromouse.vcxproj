@@ -112,17 +112,27 @@
   <ItemGroup>
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Direction.h" />
+    <ClInclude Include="Encoder.h" />
+    <ClInclude Include="Hardware.h" />
+    <ClInclude Include="Led.h" />
+    <ClInclude Include="Motor.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Path.h" />
+    <ClInclude Include="RangeFinder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Encoder.cpp" />
+    <ClCompile Include="Hardware.cpp" />
+    <ClCompile Include="Led.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="Direction.cpp" />
+    <ClCompile Include="Motor.cpp" />
+    <ClCompile Include="RangeFinder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
