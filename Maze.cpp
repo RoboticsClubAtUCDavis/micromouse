@@ -26,27 +26,9 @@ bool Maze::isWall(NodeCoordinate pos) {
 }
 
 bool Maze::isWall(CellCoordinate pos, Direction dir) {
-    auto node = pos.toNode();
-    int x = node.x;
-    int y = node.y;
-    switch (dir) {
-        case N:
-            y++;
-            break;
-        case S:
-            y--;
-            break;
-        case E:
-            x--;
-            break;
-        case W:
-            x++;
-            break;
-        default:
-            throw std::invalid_argument("Direction must be: N, S, E, W");
-    }
+	auto node = pos.toNode() + dir;
 
-    return !maze[y][x];
+	return !maze[node.y][node.x];
 }
 
 void Maze::setWall(NodeCoordinate pos, bool wall) {
@@ -54,27 +36,7 @@ void Maze::setWall(NodeCoordinate pos, bool wall) {
 }
 
 void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
-    auto node = pos.toNode();
-    int x = node.x;
-    int y = node.y;
-    switch (dir) {
-        case N:
-            y++;
-            break;
-        case S:
-            y--;
-            break;
-        case E:
-            x--;
-            break;
-        case W:
-            x++;
-            break;
-        default:
-            throw std::invalid_argument("Direction must be: N, S, E, W");
-    }
-
-    maze[y][x].exists = !wall;
+	auto node = pos.toNode() + dir;
 }
 
 
