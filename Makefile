@@ -1,4 +1,4 @@
-CFLAGS = -g -std=c++11
+CFLAGS = -g -std=c++11 -Wall -Wextra
 
 all: simulate
 

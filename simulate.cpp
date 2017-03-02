@@ -11,7 +11,7 @@ class Simulator : public sf::RenderWindow {
   public:
     Simulator(void)
         : maze(), sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE) {
-        calculateCellSize();
+        calculateNodeSize();
     }
 
 
@@ -33,59 +33,56 @@ class Simulator : public sf::RenderWindow {
   protected:
     virtual void onResize(void) {
         sf::RenderWindow::onResize();
-        calculateCellSize();
+        calculateNodeSize();
     }
 
   private:
-    void calculateCellSize(void) {
+    void calculateNodeSize(void) {
         sf::Vector2u size = getSize();
-        int x = (size.x - 2 * MARGIN) / Maze::CELL_COLS;
-        int y = (size.y - 2 * MARGIN) / Maze::CELL_ROWS;
-        cell_size = std::min(x, y);
+        int x = (size.x - 2 * MARGIN) / Maze::NODE_COLS;
+        int y = (size.y - 2 * MARGIN) / Maze::NODE_ROWS;
+        node_size = std::min(x, y);
     }
 
-    sf::Vertex cellVertex(int x, int y) {
-        int x_p = MARGIN + (Maze::CELL_COLS - x) * cell_size;
-        int y_p = MARGIN + (Maze::CELL_ROWS - y) * cell_size;
+    sf::Vertex nodeVertex(NodeCoordinate c) {
+        int x_p = MARGIN + c.x * node_size;
+        int y_p = MARGIN + (Maze::NODE_ROWS - c.y) * node_size;
         return sf::Vertex(sf::Vector2f(x_p, y_p));
     }
 
     void drawBorder(void) {
         const sf::Vertex border[] = {
-            cellVertex(0, 0),
-            cellVertex(Maze::CELL_COLS, 0),
-            cellVertex(Maze::CELL_COLS, Maze::CELL_ROWS),
-            cellVertex(0, Maze::CELL_ROWS),
-            cellVertex(0, 0),
+            nodeVertex(NodeCoordinate(0, 0)),
+            nodeVertex(NodeCoordinate(Maze::NODE_COLS, 0)),
+            nodeVertex(NodeCoordinate(Maze::NODE_COLS, Maze::NODE_ROWS)),
+            nodeVertex(NodeCoordinate(0, Maze::NODE_ROWS)),
+            nodeVertex(NodeCoordinate(0, 0)),
         };
 
         draw(border, 5, sf::LineStrip);
     }
 
-    void drawLine(int x1, int y1, int x2, int y2) {
-        sf::Vertex line[] = {cellVertex(x1, y1), cellVertex(x2, y2)};
-
+    void drawLine(NodeCoordinate c1, NodeCoordinate c2) {
+        sf::Vertex line[] = {nodeVertex(c1), nodeVertex(c2)};
         draw(line, 2, sf::Lines);
     }
 
-    void drawCell(int row, int col) {
-        CellCoordinate pos(col, row);
-
-		//Note cell coordinates have origin at lower right corner
+    void drawCell(CellCoordinate pos) {
+	NodeCoordinate node = pos;
         if (maze.isWall(pos, N)) {
-            drawLine(col, row + 1, col + 1, row + 1);
+            drawLine(node + NW, node + NE);
         }
 
         if (maze.isWall(pos, S)) {
-            drawLine(col, row, col + 1, row);
+            drawLine(node + SW, node + SE);
         }
 
         if (maze.isWall(pos, E)) {
-            drawLine(col, row + 1, col, row);
+            drawLine(node + SE, node + NE);
         }
 
         if (maze.isWall(pos, W)) {
-            drawLine(col + 1, row, col + 1, row + 1);
+            drawLine(node + SW, node + NW);
         }
     }
 
@@ -96,7 +93,7 @@ class Simulator : public sf::RenderWindow {
 
         for (int row = 0; row < Maze::CELL_ROWS; row++) {
             for (int col = 0; col < Maze::CELL_COLS; col++) {
-                drawCell(row, col);
+                drawCell(CellCoordinate(col, row));
             }
         }
 
@@ -104,7 +101,7 @@ class Simulator : public sf::RenderWindow {
     }
 
     Maze maze;
-    int cell_size;
+    int node_size;
 };
 
 int main() {
