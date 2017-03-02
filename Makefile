@@ -2,6 +2,15 @@ CFLAGS = -g -std=c++11 -Wall -Wextra
 
 all: simulate
 
+Test/test: Test/Test-Direction.o Test/Test-Main.o Direction.o
+	${CXX} ${CFLAGS} -o $@ $^
+
+Test/Test-Main.o: Test/Test-Main.cpp
+	${CXX} ${CFLAGS} -c -o $@ $<
+
+Test/Test-Direction.o: Test/Test-Direction.cpp Direction.h
+	${CXX} ${CFLAGS} -c -o $@ $<
+
 simulate: simulate.o Maze.o Coordinate.o Node.o Direction.o Path.o
 	${CXX} ${CFLAGS} -o $@ $^ -lsfml-graphics -lsfml-window -lsfml-system
 
@@ -23,7 +32,10 @@ Path.o: Path.cpp Path.h
 Direction.o: Direction.cpp Direction.h
 	${CXX} ${CFLAGS} -c -o $@ $<
 
-clean:
-	rm -f *.o
+check: Test/test
+	Test/test
 
-.PHONY: all clean
+clean:
+	rm -f simulate Test/test *.o
+
+.PHONY: all clean check
