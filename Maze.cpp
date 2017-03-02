@@ -34,17 +34,31 @@ Maze Maze::loadMazeFromFile(std::string fileName)
 		ifstream file(fileName.c_str());
 		if (!file.good()) throw runtime_error("Could not load file");
 
-		for (int y = 0; y < NODE_ROWS; y++)
+		int x = 0;
+		int y = NODE_ROWS - 1;
+
+		while(file)
 		{
-			for (int x = 0; x < NODE_COLS; x++)
+			char c;
+			while (file && file.get(c))
 			{
-				if (!file)
+				if (c == '*')
 				{
-					char c = file.get();
-					if( c  == '*')
-					{
-						maze.getNode(NodeCoordinate(x, y))->exists = false;
-					}
+					maze.getNode(NodeCoordinate(x, y))->exists = false;
+					x++;
+					cout << "* ";
+				}
+				else if (c == ' ')
+				{
+					x++;
+					cout << "  ";
+				}
+
+				if (x >= NODE_COLS)
+				{
+					x = 0;
+					y--;
+					cout << endl;
 				}
 			}
 		}
