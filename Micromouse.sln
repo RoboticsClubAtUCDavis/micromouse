@@ -9,26 +9,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulation", "Simulation\Si
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Debug|x64.ActiveCfg = Debug|x64
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Debug|x64.Build.0 = Debug|x64
 		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Debug|x86.ActiveCfg = Debug|Win32
 		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Debug|x86.Build.0 = Debug|Win32
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Release|x64.ActiveCfg = Release|x64
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Release|x64.Build.0 = Release|x64
 		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Release|x86.ActiveCfg = Release|Win32
 		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Release|x86.Build.0 = Release|Win32
-		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Debug|x64.ActiveCfg = Debug|x64
-		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Debug|x64.Build.0 = Debug|x64
 		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Debug|x86.ActiveCfg = Debug|Win32
 		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Debug|x86.Build.0 = Debug|Win32
-		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Release|x64.ActiveCfg = Release|x64
-		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Release|x64.Build.0 = Release|x64
 		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Release|x86.ActiveCfg = Release|Win32
 		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
