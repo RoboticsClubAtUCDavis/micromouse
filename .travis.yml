@@ -12,5 +12,6 @@ before_install:
    - cmake .
    - make
    - sudo make install
+   - cd ..
 script:
    - make
