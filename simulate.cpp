@@ -68,27 +68,28 @@ class Simulator : public sf::RenderWindow {
     }
 
     void drawCell(CellCoordinate pos) {
+	NodeCoordinate node = pos;
         if (maze.isWall(pos, N)) {
-            drawLine(pos + N, pos + NE);
+            drawLine(node + NW, node + NE);
         }
 
         if (maze.isWall(pos, S)) {
-            drawLine(pos, pos + E);
+            drawLine(node + SW, node + SE);
         }
 
         if (maze.isWall(pos, E)) {
-            drawLine(pos + E, pos + NE);
+            drawLine(node + SE, node + NE);
         }
 
         if (maze.isWall(pos, W)) {
-            drawLine(pos, pos + N);
+            drawLine(node + SW, node + NW);
         }
     }
 
     void render(void) {
         clear(sf::Color::Black);
 
-        drawBorder();
+        //drawBorder();
 
         for (int row = 0; row < Maze::CELL_ROWS; row++) {
             for (int col = 0; col < Maze::CELL_COLS; col++) {

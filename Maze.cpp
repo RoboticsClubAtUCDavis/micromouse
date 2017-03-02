@@ -9,9 +9,15 @@ const CellCoordinate Maze::CELL_START = CellCoordinate(0,0);
 const CellCoordinate  Maze::CELL_FINISH = CellCoordinate(Maze::CELL_COLS / 2, Maze::CELL_ROWS / 2);
 
 void Maze::reset() {
-	for (int y = 0; y < NODE_ROWS; y++)
-		for (int x = 0; x < NODE_COLS; x++)
+	for (int y = 0; y < NODE_ROWS; y++) {
+		for (int x = 0; x < NODE_COLS; x++) {
 			maze[y][x] = Node(NodeCoordinate(x,y));
+
+			//Initialize border
+			if (x == 0 || y == 0 || y == NODE_ROWS - 1 || x == NODE_COLS - 1)
+				setWall(NodeCoordinate(x, y));
+		}
+	}
 }
 
 
