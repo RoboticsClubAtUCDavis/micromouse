@@ -22,9 +22,7 @@ bool Maze::isWall(NodeCoordinate pos) {
 }
 
 bool Maze::isWall(CellCoordinate pos, Direction dir) {
-	auto node = pos.toNode() + dir;
-
-	return !maze[node.y][node.x];
+	isWall(pos.toNode() + dir);
 }
 
 void Maze::setWall(NodeCoordinate pos, bool wall) {
