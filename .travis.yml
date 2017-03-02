@@ -3,11 +3,13 @@ sudo: required
 dist: trusty
 compiler:
    - gcc
+cache:
+  directories:
+    - SFML-2.4.2
 before_install:
    - sudo apt-get update -y
    - sudo apt-get install -y freeglut3-dev libjpeg-dev  libfreetype6-dev libxrandr-dev libglew-dev libsndfile1-dev libopenal-dev libudev-dev
-   - wget http://www.sfml-dev.org/files/SFML-2.4.2-sources.zip
-   - unzip SFML-2.4.2-sources.zip
+   - if [ ! -d SFML-2.4.2 ]; then wget http://www.sfml-dev.org/files/SFML-2.4.2-sources.zip; unzip SFML-2.4.2-sources.zip; fi
    - cd SFML-2.4.2
    - cmake .
    - make
