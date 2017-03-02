@@ -17,12 +17,14 @@ class NodeCoordinate : public Coordinate {
   public:
     NodeCoordinate(int x, int y) : Coordinate(x, y){};
 	NodeCoordinate operator+(Direction);
+	NodeCoordinate operator+(DirectionVector dirvect);
 };
 
 class CellCoordinate : public Coordinate {
   public:
     CellCoordinate(int x, int y) : Coordinate(x, y){};
 	CellCoordinate operator+(Direction);
+	CellCoordinate operator+(DirectionVector dirvect);
 	operator NodeCoordinate() const;
     NodeCoordinate toNode(void) const;
 };

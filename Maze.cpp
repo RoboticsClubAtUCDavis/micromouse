@@ -26,9 +26,7 @@ bool Maze::isWall(NodeCoordinate pos) {
 }
 
 bool Maze::isWall(CellCoordinate pos, Direction dir) {
-	auto node = pos.toNode() + dir;
-
-	return !maze[node.y][node.x];
+	return isWall(pos.toNode() + dir);
 }
 
 void Maze::setWall(NodeCoordinate pos, bool wall) {
@@ -36,7 +34,7 @@ void Maze::setWall(NodeCoordinate pos, bool wall) {
 }
 
 void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
-	auto node = pos.toNode() + dir;
+	setWall(pos.toNode() + dir, wall);
 }
 
 
