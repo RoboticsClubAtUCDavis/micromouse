@@ -32,7 +32,7 @@ void Maze::setWall(NodeCoordinate pos, bool wall) {
 }
 
 void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
-	auto node = pos.toNode() + dir;
+	setWall(pos.toNode() + dir, wall);
 }
 
 
