@@ -12,6 +12,14 @@ class Simulator : public sf::RenderWindow {
     Simulator(void)
         : maze(), sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE) {
         calculateNodeSize();
+				maze = Maze::loadMazeFromFile("test.maze");
+				//maze.setWall(CellCoordinate(8, 8), N);
+				//maze.setWall(CellCoordinate(8, 7), N);
+				//maze.setWall(CellCoordinate(7, 7), N);
+
+
+				//maze.setWall(CellCoordinate(8, 6), N);
+
     }
 
 

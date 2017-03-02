@@ -21,6 +21,9 @@ class Maze {
 	static const unsigned MOVEMENT_COST = 100;
 	static const unsigned MOVEMENT_COST_DIAGONAL = 141;
 
+	static Maze loadMazeFromFile(std::string fileName);
+
+
 	Maze();
 
     bool isWall(NodeCoordinate pos);

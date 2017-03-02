@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <set>
 #include <cstdlib> //abs
+#include <fstream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -16,6 +18,36 @@ void Maze::reset() {
 
 
 
+Maze Maze::loadMazeFromFile(std::string fileName)
+{
+	Maze maze;
+
+	try
+	{
+		ifstream file(fileName.c_str());
+		for (int y = 0; y < NODE_ROWS; y++)
+		{
+			for (int x = 0; x < NODE_COLS; x++)
+			{
+				if (!file.eof())
+				{
+					char c = file.get();
+					if( c  == '*')
+					{
+						maze.getNode(NodeCoordinate(x, y))->exists = false;
+					}
+
+				}
+			}
+		}
+	}
+	catch (const ifstream::failure& e) {
+		runtime_error("Could not open file");
+	}
+
+	return maze;
+}
+
 Maze::Maze()
 {
 	reset();
@@ -26,7 +58,7 @@ bool Maze::isWall(NodeCoordinate pos) {
 }
 
 bool Maze::isWall(CellCoordinate pos, Direction dir) {
-	isWall(pos.toNode() + dir);
+	return isWall(pos.toNode() + dir);
 }
 
 void Maze::setWall(NodeCoordinate pos, bool wall) {
