@@ -4,6 +4,7 @@
 #include <cstdlib> //abs
 #include <fstream>
 #include <stdexcept>
+#include <iostream>
 
 using namespace std;
 
@@ -25,24 +26,25 @@ Maze Maze::loadMazeFromFile(std::string fileName)
 	try
 	{
 		ifstream file(fileName.c_str());
+		if (!file.good()) throw runtime_error("Could not load file");
+
 		for (int y = 0; y < NODE_ROWS; y++)
 		{
 			for (int x = 0; x < NODE_COLS; x++)
 			{
-				if (!file.eof())
+				if (!file)
 				{
 					char c = file.get();
 					if( c  == '*')
 					{
 						maze.getNode(NodeCoordinate(x, y))->exists = false;
 					}
-
 				}
 			}
 		}
 	}
-	catch (const ifstream::failure& e) {
-		runtime_error("Could not open file");
+	catch (const exception &e) {
+		cout << e.what();
 	}
 
 	return maze;
