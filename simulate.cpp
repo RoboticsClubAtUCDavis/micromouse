@@ -14,7 +14,6 @@ class Simulator : public sf::RenderWindow {
         calculateNodeSize();
     }
 
-
     void main_loop(void) {
         while (isOpen()) {
             sf::Event event;
@@ -56,7 +55,7 @@ class Simulator : public sf::RenderWindow {
     }
 
     void drawCell(CellCoordinate pos) {
-	NodeCoordinate node = pos;
+        NodeCoordinate node = pos;
         if (maze.isWall(pos, N)) {
             drawLine(node + NW, node + NE);
         }
