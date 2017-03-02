@@ -4,8 +4,8 @@ dist: trusty
 compiler:
    - gcc
 before_install:
-   - sudo apt-add-repository -y ppa:sonkun/sfml-stable
-   - sudo apt-get update -qq
-   - sudo apt-get install -y libsfml-dev
+   - wget http://www.sfml-dev.org/files/SFML-2.4.2-linux-gcc-64-bit.tar.gz
+   - tar -xf SFML-2.4.2-linux-gcc-64-bit.tar.gz
+   - sudo cp -r SFML-2.4.2/* /usr/
 script:
    - make
