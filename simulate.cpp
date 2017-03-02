@@ -71,6 +71,7 @@ class Simulator : public sf::RenderWindow {
     void drawCell(int row, int col) {
         CellCoordinate pos(col, row);
 
+		//Note cell coordinates have origin at lower right corner
         if (maze.isWall(pos, N)) {
             drawLine(col, row + 1, col + 1, row + 1);
         }
@@ -80,18 +81,18 @@ class Simulator : public sf::RenderWindow {
         }
 
         if (maze.isWall(pos, E)) {
-            drawLine(col + 1, row, col + 1, row + 1);
+            drawLine(col, row + 1, col, row);
         }
 
         if (maze.isWall(pos, W)) {
-            drawLine(col, row, col, row + 1);
+            drawLine(col + 1, row, col + 1, row + 1);
         }
     }
 
     void render(void) {
         clear(sf::Color::Black);
 
-        drawBorder();
+        //drawBorder();
 
         for (int row = 0; row < Maze::CELL_ROWS; row++) {
             for (int col = 0; col < Maze::CELL_COLS; col++) {
