@@ -10,7 +10,7 @@ const std::string WINDOW_TITLE = "Micromouse simulator";
 class Simulator : public sf::RenderWindow {
   public:
     Simulator(void)
-        : maze(), sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE) {
+        : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE), maze() {
         calculateNodeSize();
     }
 
