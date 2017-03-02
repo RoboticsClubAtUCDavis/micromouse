@@ -57,7 +57,8 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 	resetNodePathData();
 	
 	// The start node is 0 distance away.
-	startNode->setScores(0, heuristic(start, end));
+	startNode->gScore = 0;
+	startNode->fScore = heuristic(start, end);
 	startNode->direction = facing;
 
 	// While there are node remaining to be evaluated.
@@ -115,7 +116,8 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			// This path is the best so far.
 			adjacentNode->previous = *currentNodeItr;
 			auto heuristicScore = heuristic((*currentNodeItr)->pos, end);
-			(*currentNodeItr)->setScores(tentativeScore, adjacentNode->gScore + heuristicScore);
+			(*currentNodeItr)->gScore = tentativeScore;
+			(*currentNodeItr)->fScore = adjacentNode->gScore + heuristicScore;
 		}
 	}
 

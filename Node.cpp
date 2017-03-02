@@ -25,9 +25,3 @@ void Node::resetPathData()
 	evaluated = false;
 	direction = NONE;
 }
-
-void Node::setScores(unsigned gScore, unsigned fScore)
-{
-	this->gScore = gScore;
-	this->fScore = fScore;
-}

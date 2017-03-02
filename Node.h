@@ -6,7 +6,6 @@ class Node {
 	Node(NodeCoordinate pos);
     explicit operator bool() const;
 	void resetPathData();
-	void setScores(unsigned gScore, unsigned fScore);
 
 	NodeCoordinate pos;
     bool exists;
