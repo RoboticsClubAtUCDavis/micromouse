@@ -5,9 +5,12 @@ compiler:
    - gcc
 before_install:
    - sudo apt-get update -y
-   - sudo apt-get install -y gcc-4.9
-   - wget http://www.sfml-dev.org/files/SFML-2.4.2-linux-gcc-64-bit.tar.gz
-   - tar -xf SFML-2.4.2-linux-gcc-64-bit.tar.gz
-   - sudo cp -r SFML-2.4.2/* /usr/
+     sudo apt-get install -y freeglut3-dev libjpeg-dev  libfreetype6-dev libxrandr-dev libglew-dev libsndfile1-dev libopenal-dev
+   - wget http://www.sfml-dev.org/files/SFML-2.4.2-sources.zip
+   - unzip SFML-2.4.2-sources.zip
+   - cd SFML-2.4.2
+   - cmake .
+   - make
+   - sudo make install
 script:
    - make
