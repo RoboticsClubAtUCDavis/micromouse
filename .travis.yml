@@ -17,4 +17,4 @@ before_install:
    - sudo make install
    - cd ..
 script:
-   - make
+   - make all check
