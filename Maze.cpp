@@ -18,6 +18,8 @@ void Maze::reset() {
 				setWall(NodeCoordinate(x, y));
 		}
 	}
+
+	path.clear();
 }
 
 
@@ -44,7 +46,7 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
 }
 
 
-Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
+void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 {
 	Node * startNode = getNode(start);
 
@@ -71,7 +73,8 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 		if ( *currentNodeItr == getNode( end ) )
 		{
 			// We are done. Construct the path.
-			return constructPath(*currentNodeItr);
+			constructPath(startNode);
+			return;
 		}
 		
 		// Set the current node as evaluated.
@@ -114,7 +117,7 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			}
 
 			// This path is the best so far.
-			adjacentNode->previous = *currentNodeItr;
+			(*currentNodeItr)->next = adjacentNode;
 			auto heuristicScore = heuristic((*currentNodeItr)->pos, end);
 			(*currentNodeItr)->gScore = tentativeScore;
 			(*currentNodeItr)->fScore = adjacentNode->gScore + heuristicScore;
@@ -219,21 +222,19 @@ unsigned Maze::heuristic(NodeCoordinate start, NodeCoordinate end)
 #endif // MAZE_DIAGONALS
 }
 
-Path Maze::constructPath(Node * end)
+void Maze::constructPath(Node * start)
 {
-	Path path;
-
-	const Node * nodeA = end->previous;
-	const Node * nodeB = end;
+	path.clear();
+	path.start = start->pos;
 
 	// while there is more to the path to traverse
-	while (nodeA)
+	for (const Node *i = start; i; i = i->next)
 	{
-		//drawLine( nodeA->pos, nodeB->pos );
-		path.push(DirectionVector(nodeA->direction, 1));
-		nodeB = nodeA;
-		nodeA = nodeA->previous;
+		path.push_back(DirectionVector(i->direction, 1));
 	}
+}
 
+const Path& Maze::getPath() const
+{
 	return path;
 }
