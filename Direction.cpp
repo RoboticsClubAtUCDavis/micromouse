@@ -2,7 +2,7 @@
 
 DirectionVector::DirectionVector() :
 	magnitude(0),
-	direction(N)
+	direction(NONE)
 {}
 
 DirectionVector::DirectionVector(Direction direction, int magnitude) :
