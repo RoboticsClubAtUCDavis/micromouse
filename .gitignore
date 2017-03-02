@@ -11,6 +11,7 @@
 *.userprefs
 
 SFML-2.4.2/
+*.dll
 
 # Build results
 [Dd]ebug/
