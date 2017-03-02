@@ -90,3 +90,80 @@ CellCoordinate CellCoordinate::operator+(Direction direction) {
 	}
 	return CellCoordinate(horizontal, vertical);
 }
+
+
+NodeCoordinate NodeCoordinate::operator+(DirectionVector dirvect) {
+	int horizontal = x;
+	int vertical = y;
+	switch (dirvect.direction) {
+	case N:
+		vertical+= dirvect.magnitude;
+		break;
+	case S:
+		vertical-= dirvect.magnitude;
+		break;
+	case E:
+		horizontal+= dirvect.magnitude;
+		break;
+	case W:
+		horizontal-= dirvect.magnitude;
+		break;
+	case NE:
+		vertical+= dirvect.magnitude;
+		horizontal+= dirvect.magnitude;
+		break;
+	case NW:
+		vertical+= dirvect.magnitude;
+		horizontal-= dirvect.magnitude;
+		break;
+	case SE:
+		vertical-= dirvect.magnitude;
+		horizontal+= dirvect.magnitude;
+		break;
+	case SW:
+		vertical-= dirvect.magnitude;
+		horizontal-= dirvect.magnitude;
+		break;
+	default:
+		break;
+	}
+	return NodeCoordinate(horizontal, vertical);
+}
+
+CellCoordinate CellCoordinate::operator+(DirectionVector dirvect) {
+	int horizontal = x;
+	int vertical = y;
+	switch (dirvect.direction) {
+	case N:
+		vertical+= dirvect.magnitude;
+		break;
+	case S:
+		vertical-= dirvect.magnitude;
+		break;
+	case E:
+		horizontal-= dirvect.magnitude;
+		break;
+	case W:
+		horizontal+= dirvect.magnitude;
+		break;
+	case NE:
+		vertical+= dirvect.magnitude;
+		horizontal+= dirvect.magnitude;
+		break;
+	case NW:
+		vertical+= dirvect.magnitude;
+		horizontal+= dirvect.magnitude;
+		break;
+	case SE:
+		vertical-= dirvect.magnitude;
+		horizontal+= dirvect.magnitude;
+		break;
+	case SW:
+		vertical-= dirvect.magnitude;
+		horizontal-= dirvect.magnitude;
+		break;
+	default:
+		break;
+	}
+	return CellCoordinate(horizontal, vertical);
+}
