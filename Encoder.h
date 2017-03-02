@@ -9,11 +9,3 @@ public:
 private:
 
 };
-
-Encoder::Encoder()
-{
-}
-
-Encoder::~Encoder()
-{
-}

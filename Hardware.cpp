@@ -3,3 +3,11 @@
 #include "RangeFinder.h"
 #include "Encoder.h"
 #include "Led.h"
+
+Hardware::Hardware()
+{
+}
+
+Hardware::~Hardware()
+{
+}

@@ -10,11 +10,3 @@ public:
 private:
 
 };
-
-RangeFinder::RangeFinder()
-{
-}
-
-RangeFinder::~RangeFinder()
-{
-}

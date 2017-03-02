@@ -15,11 +15,3 @@ public:
 private:
 
 };
-
-Hardware::Hardware()
-{
-}
-
-Hardware::~Hardware()
-{
-}

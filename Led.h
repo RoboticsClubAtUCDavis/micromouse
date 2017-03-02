@@ -10,11 +10,3 @@ public:
 private:
 
 };
-
-Led::Led()
-{
-}
-
-Led::~Led()
-{
-}
