@@ -26,10 +26,10 @@ NodeCoordinate NodeCoordinate::operator+(Direction direction) {
 		vertical--;
 		break;
 	case E:
-		horizontal--;
+		horizontal++;
 		break;
 	case W:
-		horizontal++;
+		horizontal--;
 		break;
 	case NE:
 		vertical++;
@@ -37,7 +37,7 @@ NodeCoordinate NodeCoordinate::operator+(Direction direction) {
 		break;
 	case NW:
 		vertical++;
-		horizontal++;
+		horizontal--;
 		break;
 	case SE:
 		vertical--;
