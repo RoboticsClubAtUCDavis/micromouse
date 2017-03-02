@@ -5,7 +5,7 @@ compiler:
    - gcc
 before_install:
    - sudo apt-get update -y
-     sudo apt-get install -y freeglut3-dev libjpeg-dev  libfreetype6-dev libxrandr-dev libglew-dev libsndfile1-dev libopenal-dev
+   - sudo apt-get install -y freeglut3-dev libjpeg-dev  libfreetype6-dev libxrandr-dev libglew-dev libsndfile1-dev libopenal-dev
    - wget http://www.sfml-dev.org/files/SFML-2.4.2-sources.zip
    - unzip SFML-2.4.2-sources.zip
    - cd SFML-2.4.2
