@@ -3,6 +3,7 @@
 #include "Coordinate.h"
 #include "Direction.h"
 #include "Maze.h"
+#include "Path.h"
 
 const int MARGIN = 5;
 const std::string WINDOW_TITLE = "Micromouse simulator";
@@ -16,6 +17,8 @@ class Simulator : public sf::RenderWindow {
     }
 
     void main_loop(void) {
+	maze.findPath(CellCoordinate(0,0), CellCoordinate(8,8), N);
+
         while (isOpen()) {
             sf::Event event;
             while (pollEvent(event)) {
@@ -74,6 +77,15 @@ class Simulator : public sf::RenderWindow {
         }
     }
 
+    void drawPath(const Path &path) {
+ 	NodeCoordinate node = path.start;
+	for (auto &i : path) {
+            NodeCoordinate nextNode = node + i;
+	    drawLine(node, nextNode);
+	    node = nextNode;
+	}    
+    }
+
     void render(void) {
         clear(sf::Color::Black);
 
@@ -82,6 +94,8 @@ class Simulator : public sf::RenderWindow {
                 drawCell(CellCoordinate(col, row));
             }
         }
+
+	drawPath(maze.getPath());
 
         display();
     }
