@@ -2,6 +2,4 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 IndentCaseLabels: true
 AllowShortFunctionsOnASingleLine: false
-SpacesInParentheses: true
 BreakConstructorInitializersBeforeComma: true
-BreakBeforeBraces: Allman
