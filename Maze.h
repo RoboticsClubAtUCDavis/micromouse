@@ -48,6 +48,7 @@ class Maze {
 	  unsigned calculateMovementCost(Direction currentDirection, Direction nextDirection);
 	  unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
 	  void constructPath( Node* start );
+	  static bool scoreComparator(const Node* const & lhs, const Node* const & rhs);
 
 	  Path path;
     Node maze[NODE_ROWS][NODE_COLS];
