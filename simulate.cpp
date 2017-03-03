@@ -56,14 +56,14 @@ class Simulator : public sf::RenderWindow {
         node_size = std::min(x, y);
     }
 
-    sf::Vertex nodeVertex(NodeCoordinate c) {
+    sf::Vertex nodeVertex(NodeCoordinate c, sf::Color color) {
         int x_p = MARGIN + c.x * node_size;
         int y_p = MARGIN + (Maze::NODE_ROWS - c.y) * node_size;
-        return sf::Vertex(sf::Vector2f(x_p, y_p));
+        return sf::Vertex(sf::Vector2f(x_p, y_p), color);
     }
 
-    void drawLine(NodeCoordinate c1, NodeCoordinate c2) {
-        sf::Vertex line[] = {nodeVertex(c1), nodeVertex(c2)};
+    void drawLine(NodeCoordinate c1, NodeCoordinate c2, sf::Color color = sf::Color::White) {
+        sf::Vertex line[] = {nodeVertex(c1, color), nodeVertex(c2, color)};
         draw(line, 2, sf::Lines);
     }
 
@@ -90,7 +90,7 @@ class Simulator : public sf::RenderWindow {
  	NodeCoordinate node = path.start;
 	for (auto &i : path) {
             NodeCoordinate nextNode = node + i;
-	    drawLine(node, nextNode);
+	    drawLine(node, nextNode, sf::Color::Green);
 	    node = nextNode;
 	}    
     }
