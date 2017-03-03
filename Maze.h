@@ -42,8 +42,8 @@ class Maze {
 	const Path& getPath() const;
 
   private:
-	  Node* getNode(NodeCoordinate pos);
-	  Node* getAdjacentNode(Node* node, Direction direction);
+	  Node& getNode(NodeCoordinate pos);
+	  Node& getAdjacentNode(Node* node, Direction direction);
 	  void resetNodePathData();
 	  unsigned calculateMovementCost(Direction currentDirection, Direction nextDirection);
 	  unsigned heuristic(NodeCoordinate start, NodeCoordinate end);

@@ -42,7 +42,7 @@ Maze Maze::fromFile(std::string fileName) {
             char c;
             while (file && file.get(c)) {
                 if (c == '*') {
-                    maze.getNode(NodeCoordinate(x, y))->exists = false;
+                    maze.getNode(NodeCoordinate(x, y)).exists = false;
                     x++;
                     cout << "* ";
                 } else if (c == ' ') {
@@ -70,7 +70,7 @@ Maze::Maze()
 }
 
 bool Maze::isWall(NodeCoordinate pos) {
-    return !maze[pos.y][pos.x];
+    return !getNode(pos);
 }
 
 bool Maze::isWall(CellCoordinate pos, Direction dir) {
@@ -78,7 +78,7 @@ bool Maze::isWall(CellCoordinate pos, Direction dir) {
 }
 
 void Maze::setWall(NodeCoordinate pos, bool wall) {
-    maze[pos.y][pos.x].exists = !wall;
+    getNode(pos).exists = !wall;
 }
 
 void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
@@ -89,20 +89,20 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
 void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 {
 	// Pathfinding is done from end to start
-	Node * endNode = getNode(end);
+	Node& endNode = getNode(end);
 
 	// The nodes that still need to be evaluated.
 	// Initially insert the end node.
 	set<Node *> openNodes;
-	openNodes.insert(endNode);
+	openNodes.insert(&endNode);
 	
 	// Reset any metadata from previous pathfinding.
 	resetNodePathData();
 	
 	// The end node is 0 distance away.
-	endNode->gScore = 0;
-	endNode->fScore = heuristic(end, start);
-	endNode->direction = facing;
+	endNode.gScore = 0;
+	endNode.fScore = heuristic(end, start);
+	endNode.direction = facing;
 
 	// While there are node remaining to be evaluated.
 	while (!openNodes.empty())
@@ -112,7 +112,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 		auto currentNode = *currentNodeItr;
 
 		// If the current node is the finish node.
-		if ( currentNode == getNode( start ) )
+		if ( currentNode == &getNode( start ) )
 		{
 			// We are done. Construct the path.
 			constructPath(*currentNodeItr);
@@ -135,10 +135,10 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 #endif // MAZE_DIAGONALS
 			)
 		{
-			Node * adjacentNode = getAdjacentNode(currentNode, direction);
+			Node& adjacentNode = getAdjacentNode(currentNode, direction);
 
 			// If the adjacent node has already been evaluated or does not exist.
-			if (adjacentNode->evaluated || !adjacentNode->exists)
+			if (adjacentNode.evaluated || !adjacentNode.exists)
 			{
 				// Ignore the adjacent node.
 				continue;
@@ -147,36 +147,38 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			auto tentativeScore = currentNode->gScore + calculateMovementCost(currentNode->direction, direction );
 
 			// If adjacent node not in openNodes.
-			if (openNodes.find(adjacentNode) == openNodes.end() )
+			if (openNodes.find(&adjacentNode) == openNodes.end() )
 			{
 				// Discover a new node.
-				openNodes.insert(adjacentNode);
+				openNodes.insert(&adjacentNode);
 			}
 			// If the previous score given to the adjacent node is better.
-			else if (tentativeScore >= adjacentNode->gScore)
+			else if (tentativeScore >= adjacentNode.gScore)
 			{
 				// This is not a better path.
 				continue;
 			}
 
 			// This path is the best so far.
-			adjacentNode->next = currentNode;
-			adjacentNode->direction = static_cast<Direction>(( direction + S ) % NONE); // TODO move to function/overload
+			adjacentNode.next = currentNode;
+			adjacentNode.direction = static_cast<Direction>(( direction + S ) % NONE); // TODO move to function/overload
 			auto heuristicScore = heuristic(currentNode->pos, start);
 			currentNode->gScore = tentativeScore;
-			currentNode->fScore = adjacentNode->gScore + heuristicScore;
+			currentNode->fScore = adjacentNode.gScore + heuristicScore;
 		}
 	}
 
 	throw runtime_error("No path found");
 }
 
-Node * Maze::getNode(NodeCoordinate pos)
+Node& Maze::getNode(NodeCoordinate pos)
 {
-	return &maze[pos.y][pos.x];
+	if (pos.x < 0 || pos.x >= NODE_COLS || pos.y < 0 || pos.y >= NODE_ROWS)
+		throw out_of_range("Coordinate out of range.");
+	return maze[pos.y][pos.x];
 }
 
-Node * Maze::getAdjacentNode(Node * node, Direction direction)
+Node& Maze::getAdjacentNode(Node * node, Direction direction)
 {
 	return getNode(node->pos + direction);
 }
@@ -187,11 +189,11 @@ void Maze::resetNodePathData()
 	{
 		for (size_t x = 0; x < NODE_COLS; x++)
 		{
-			Node * node = getNode(NodeCoordinate(x, y));
+			Node& node = getNode(NodeCoordinate(x, y));
 
-			if (*node)
+			if (node)
 			{
-				node->resetPathData();
+				node.resetPathData();
 			}
 		}
 	}
