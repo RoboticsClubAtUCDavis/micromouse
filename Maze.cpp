@@ -25,51 +25,41 @@ void Maze::reset() {
 	path.clear();
 }
 
+Maze Maze::loadMazeFromFile(std::string fileName) {
+    Maze maze;
 
+    try {
+        ifstream file(fileName.c_str());
+        if (!file.good())
+            throw runtime_error("Could not load file");
 
-Maze Maze::loadMazeFromFile(std::string fileName)
-{
-	Maze maze;
+        int x = 0;
+        int y = NODE_ROWS - 1;
 
-	try
-	{
-		ifstream file(fileName.c_str());
-		if (!file.good()) throw runtime_error("Could not load file");
+        while (file) {
+            char c;
+            while (file && file.get(c)) {
+                if (c == '*') {
+                    maze.getNode(NodeCoordinate(x, y))->exists = false;
+                    x++;
+                    cout << "* ";
+                } else if (c == ' ') {
+                    x++;
+                    cout << "  ";
+                }
 
-		int x = 0;
-		int y = NODE_ROWS - 1;
+                if (x >= NODE_COLS) {
+                    x = 0;
+                    y--;
+                    cout << endl;
+                }
+            }
+        }
+    } catch (const exception &e) {
+        cout << e.what();
+    }
 
-		while(file)
-		{
-			char c;
-			while (file && file.get(c))
-			{
-				if (c == '*')
-				{
-					maze.getNode(NodeCoordinate(x, y))->exists = false;
-					x++;
-					cout << "* ";
-				}
-				else if (c == ' ')
-				{
-					x++;
-					cout << "  ";
-				}
-
-				if (x >= NODE_COLS)
-				{
-					x = 0;
-					y--;
-					cout << endl;
-				}
-			}
-		}
-	}
-	catch (const exception &e) {
-		cout << e.what();
-	}
-
-	return maze;
+    return maze;
 }
 
 Maze::Maze()
