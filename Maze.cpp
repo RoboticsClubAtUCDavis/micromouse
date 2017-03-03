@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <iostream>
 
+
 using namespace std;
 
 const CellCoordinate Maze::CELL_START = CellCoordinate(0,0);
@@ -159,6 +160,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 
 			// This path is the best so far.
 			adjacentNode->next = currentNode;
+			adjacentNode->direction = static_cast<Direction>(( direction + S ) % NONE); // TODO move to function/overload
 			auto heuristicScore = heuristic(currentNode->pos, start);
 			currentNode->gScore = tentativeScore;
 			currentNode->fScore = adjacentNode->gScore + heuristicScore;
