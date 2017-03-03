@@ -1,12 +1,9 @@
 #pragma once
 
+class Led {
+  public:
+    Led();
+    ~Led();
 
-class Led
-{
-public:
-	Led();
-	~Led();
-
-private:
-
+  private:
 };

@@ -1,19 +1,15 @@
 #include "Motor.h"
 
-class Motor
-{
-public:
-	Motor();
-	~Motor();
+class Motor {
+  public:
+    Motor();
+    ~Motor();
 
-private:
-
+  private:
 };
 
-Motor::Motor()
-{
+Motor::Motor() {
 }
 
-Motor::~Motor()
-{
+Motor::~Motor() {
 }

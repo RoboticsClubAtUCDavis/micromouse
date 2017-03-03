@@ -1,11 +1,9 @@
 #pragma once
 
-class Encoder
-{
-public:
-	Encoder();
-	~Encoder();
+class Encoder {
+  public:
+    Encoder();
+    ~Encoder();
 
-private:
-
+  private:
 };
