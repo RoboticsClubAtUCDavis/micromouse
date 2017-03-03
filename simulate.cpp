@@ -19,7 +19,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
   private:
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
         states.transform *= getTransform();
 
         for (int row = 0; row < Maze::CELL_ROWS; row++) {
@@ -41,13 +41,15 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         return sf::Vertex(nodeVector(c), color);
     }
 
-    void drawLine(sf::RenderTarget& target, sf::RenderStates states, NodeCoordinate c1, NodeCoordinate c2,
+    void drawLine(sf::RenderTarget &target, sf::RenderStates states,
+                  NodeCoordinate c1, NodeCoordinate c2,
                   sf::Color color = sf::Color::White) const {
         sf::Vertex line[] = {nodeVertex(c1, color), nodeVertex(c2, color)};
         target.draw(line, 2, sf::Lines, states);
     }
 
-    void drawCell(sf::RenderTarget& target, sf::RenderStates states, CellCoordinate pos) const {
+    void drawCell(sf::RenderTarget &target, sf::RenderStates states,
+                  CellCoordinate pos) const {
         NodeCoordinate node = pos;
         if (maze.isWall(pos, N)) {
             drawLine(target, states, node + NW, node + NE);
@@ -74,7 +76,8 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         target.draw(cell, states);
     }
 
-    void drawPath(sf::RenderTarget& target, sf::RenderStates states, const Path &path) const {
+    void drawPath(sf::RenderTarget &target, sf::RenderStates states,
+                  const Path &path) const {
         NodeCoordinate node = path.start;
         for (auto &i : path) {
             NodeCoordinate nextNode = node + i;
@@ -83,7 +86,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         }
     }
 
-    Maze& maze;
+    Maze &maze;
     float node_size;
 };
 
@@ -133,7 +136,6 @@ class Simulator : public sf::RenderWindow {
         sf::Vector2u size = getSize();
         maze_size = std::min(size.x, size.y) - 2 * MARGIN;
     }
-
 
     void render(void) {
         clear(sf::Color::Black);
