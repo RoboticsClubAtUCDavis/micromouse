@@ -244,7 +244,8 @@ unsigned Maze::calculateMovementCost(Direction currentDirection, Direction nextD
 		// This is an approximation. 
 		return cost + MOVEMENT_COST * 2;
 	case 4:
-		throw runtime_error("Path has 180deg turn, this should not occur.");
+		// path 180 turn. It is guaranteed not to be the shortest so just return cost.
+		return cost;
 	default:
 		throw runtime_error("This should be unreachable");
 	}
