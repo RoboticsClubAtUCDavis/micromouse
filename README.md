@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/RoboticsClubAtUCDavis/micromouse.svg?branch=dev)](https://travis-ci.org/RoboticsClubAtUCDavis/micromouse)
 # micromouse
 
 
