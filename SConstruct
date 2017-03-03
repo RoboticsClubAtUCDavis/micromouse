@@ -1,6 +1,6 @@
 #!python
 
-cpp_flags     = '-Wall -Wextra'
+cpp_flags     = '-std=c++11 -Wall -Wextra'
 sfml_libs     = Split('sfml-graphics sfml-window sfml-system')
 simulate_deps = Split('''simulate.cpp
                          Maze.cpp
