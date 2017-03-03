@@ -70,7 +70,7 @@ Maze::Maze()
 }
 
 bool Maze::isWall(NodeCoordinate pos) {
-    return !maze[pos.y][pos.x];
+    return !getNode(pos);
 }
 
 bool Maze::isWall(CellCoordinate pos, Direction dir) {
@@ -78,7 +78,7 @@ bool Maze::isWall(CellCoordinate pos, Direction dir) {
 }
 
 void Maze::setWall(NodeCoordinate pos, bool wall) {
-    maze[pos.y][pos.x].exists = !wall;
+    getNode(pos).exists = !wall;
 }
 
 void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
