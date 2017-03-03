@@ -4,8 +4,8 @@
 #include "Direction.h"
 #include "Maze.h"
 #include "Path.h"
-#include <stdexcept>
 #include <iostream>
+#include <stdexcept>
 
 const int MARGIN = 5;
 const std::string WINDOW_TITLE = "Micromouse simulator";
@@ -15,18 +15,16 @@ class Simulator : public sf::RenderWindow {
     Simulator(void)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE), maze() {
         calculateNodeSize();
-		try {
-			maze = Maze::fromFile("test.maze");
-			maze.findPath(Maze::CELL_START, Maze::CELL_FINISH, N);
-		}
-		catch (const std::exception &e) {
-			std::cout << e.what();
-		}
-
+        try {
+            maze = Maze::fromFile("test.maze");
+            maze.findPath(Maze::CELL_START, Maze::CELL_FINISH, N);
+        } catch (const std::exception &e) {
+            std::cout << e.what();
+        }
     }
 
     void main_loop(void) {
-	maze.findPath(CellCoordinate(0,0), CellCoordinate(8,8), N);
+        maze.findPath(CellCoordinate(0, 0), CellCoordinate(8, 8), N);
 
         while (isOpen()) {
             sf::Event event;
@@ -62,7 +60,8 @@ class Simulator : public sf::RenderWindow {
         return sf::Vertex(sf::Vector2f(x_p, y_p), color);
     }
 
-    void drawLine(NodeCoordinate c1, NodeCoordinate c2, sf::Color color = sf::Color::White) {
+    void drawLine(NodeCoordinate c1, NodeCoordinate c2,
+                  sf::Color color = sf::Color::White) {
         sf::Vertex line[] = {nodeVertex(c1, color), nodeVertex(c2, color)};
         draw(line, 2, sf::Lines);
     }
@@ -87,12 +86,12 @@ class Simulator : public sf::RenderWindow {
     }
 
     void drawPath(const Path &path) {
- 	NodeCoordinate node = path.start;
-	for (auto &i : path) {
+        NodeCoordinate node = path.start;
+        for (auto &i : path) {
             NodeCoordinate nextNode = node + i;
-	    drawLine(node, nextNode, sf::Color::Green);
-	    node = nextNode;
-	}    
+            drawLine(node, nextNode, sf::Color::Green);
+            node = nextNode;
+        }
     }
 
     void render(void) {
@@ -104,7 +103,7 @@ class Simulator : public sf::RenderWindow {
             }
         }
 
-	drawPath(maze.getPath());
+        drawPath(maze.getPath());
 
         display();
     }
