@@ -202,11 +202,13 @@ unsigned Maze::calculateMovementCost(Direction currentDirection, Direction nextD
 	case S:
 	case W:
 		cost = MOVEMENT_COST;
+		break;
 	case NE:
 	case SE:
 	case SW:
 	case NW:
 		cost = MOVEMENT_COST_DIAGONAL;
+		break;
 	default:
 		throw std::invalid_argument("Direction cannot be: NONE");
 	}
