@@ -64,10 +64,10 @@ CellCoordinate CellCoordinate::operator+(Direction direction) {
 		vertical--;
 		break;
 	case E:
-		horizontal--;
+		horizontal++;
 		break;
 	case W:
-		horizontal++;
+		horizontal--;
 		break;
 	case NE:
 		vertical++;
@@ -75,7 +75,7 @@ CellCoordinate CellCoordinate::operator+(Direction direction) {
 		break;
 	case NW:
 		vertical++;
-		horizontal++;
+		horizontal--;
 		break;
 	case SE:
 		vertical--;
@@ -141,10 +141,10 @@ CellCoordinate CellCoordinate::operator+(DirectionVector dirvect) {
 		vertical-= dirvect.magnitude;
 		break;
 	case E:
-		horizontal-= dirvect.magnitude;
+		horizontal+= dirvect.magnitude;
 		break;
 	case W:
-		horizontal+= dirvect.magnitude;
+		horizontal-= dirvect.magnitude;
 		break;
 	case NE:
 		vertical+= dirvect.magnitude;
@@ -152,7 +152,7 @@ CellCoordinate CellCoordinate::operator+(DirectionVector dirvect) {
 		break;
 	case NW:
 		vertical+= dirvect.magnitude;
-		horizontal+= dirvect.magnitude;
+		horizontal-= dirvect.magnitude;
 		break;
 	case SE:
 		vertical-= dirvect.magnitude;
