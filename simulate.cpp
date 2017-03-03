@@ -97,8 +97,8 @@ class Simulator : public sf::RenderWindow {
                                MARGIN + (Maze::NODE_ROWS - (node.y + 1)) *
                                             node_size));
         cell.setFillColor(maze.getNode(node).evaluated
-                              ? sf::Color::Color(255, 255, 150, 20)
-                              : sf::Color::Color(255, 255, 255, 10));
+                              ? sf::Color(255, 255, 150, 20)
+                              : sf::Color(255, 255, 255, 10));
         draw(cell);
     }
 
