@@ -31,10 +31,14 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         drawPath(target, states, maze.getPath());
     }
 
-    sf::Vertex nodeVertex(NodeCoordinate c, sf::Color color) const {
+    sf::Vector2f nodeVector(NodeCoordinate c) const {
         float x_p = c.x * node_size;
         float y_p = (Maze::NODE_ROWS - c.y) * node_size;
-        return sf::Vertex(sf::Vector2f(x_p, y_p), color);
+        return sf::Vector2f(x_p, y_p);
+    }
+
+    sf::Vertex nodeVertex(NodeCoordinate c, sf::Color color) const {
+        return sf::Vertex(nodeVector(c), color);
     }
 
     void drawLine(sf::RenderTarget& target, sf::RenderStates states, NodeCoordinate c1, NodeCoordinate c2,
@@ -63,9 +67,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
 
         sf::RectangleShape cell(
             sf::Vector2f(node_size * 2 - .001, node_size * 2 - .001));
-        cell.move(sf::Vector2f((node.x - 1) * node_size,
-                               (Maze::NODE_ROWS - (node.y + 1)) *
-                                            node_size));
+        cell.move(nodeVector(node + NW));
         cell.setFillColor(maze.getNode(node).evaluated
                               ? sf::Color(255, 255, 150, 20)
                               : sf::Color(255, 255, 255, 10));
