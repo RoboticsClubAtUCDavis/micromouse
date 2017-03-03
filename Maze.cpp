@@ -5,6 +5,8 @@
 #include <fstream>
 #include <stdexcept>
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 #define MAZE_DIAGONALS
 
@@ -85,6 +87,9 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
 	setWall(pos.toNode() + dir, wall);
 }
 
+bool Maze::scoreComparator(const Node* const & lhs, const Node* const & rhs) {
+	return lhs->fScore < rhs->fScore;
+}
 
 void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 {
@@ -93,8 +98,8 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 
 	// The nodes that still need to be evaluated.
 	// Initially insert the end node.
-	set<Node *> openNodes;
-	openNodes.insert(&endNode);
+	vector<Node *> openNodes;
+	openNodes.push_back(&endNode);
 	
 	// Reset any metadata from previous pathfinding.
 	resetNodePathData();
@@ -104,18 +109,19 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 	endNode.fScore = heuristic(end, start);
 	endNode.direction = facing;
 
-	// While there are node remaining to be evaluated.
+	// While there are nodes remaining to be evaluated.
 	while (!openNodes.empty())
 	{
 		// Get the open node with lowest score.
+		sort(openNodes.begin(), openNodes.end(), Maze::scoreComparator);
 		auto currentNodeItr = openNodes.begin();
 		auto currentNode = *currentNodeItr;
 
-		// If the current node is the finish node.
+		// If the current node is the start node.
 		if ( currentNode == &getNode( start ) )
 		{
 			// We are done. Construct the path.
-			constructPath(*currentNodeItr);
+			constructPath(currentNode);
 			return;
 		}
 		
@@ -147,10 +153,10 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			auto tentativeScore = currentNode->gScore + calculateMovementCost(currentNode->direction, direction );
 
 			// If adjacent node not in openNodes.
-			if (openNodes.find(&adjacentNode) == openNodes.end() )
+			if (find(openNodes.begin(), openNodes.end(), &adjacentNode) == openNodes.end() )
 			{
 				// Discover a new node.
-				openNodes.insert(&adjacentNode);
+				openNodes.push_back(&adjacentNode);
 			}
 			// If the previous score given to the adjacent node is better.
 			else if (tentativeScore >= adjacentNode.gScore)
@@ -162,9 +168,9 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			// This path is the best so far.
 			adjacentNode.next = currentNode;
 			adjacentNode.direction = static_cast<Direction>(( direction + S ) % NONE); // TODO move to function/overload
-			auto heuristicScore = heuristic(currentNode->pos, start);
-			currentNode->gScore = tentativeScore;
-			currentNode->fScore = adjacentNode.gScore + heuristicScore;
+			auto heuristicScore = heuristic(adjacentNode.pos, start);
+			adjacentNode.gScore = tentativeScore;
+			adjacentNode.fScore = adjacentNode.gScore + heuristicScore;
 		}
 	}
 
@@ -225,6 +231,9 @@ unsigned Maze::calculateMovementCost(Direction currentDirection, Direction nextD
 	{
 		return cost;
 	}
+
+	// Need to flip the direction to compare correctly.
+	nextDirection = static_cast<Direction>((nextDirection + S) % NONE);
 
 	// Penalize turns.
 	switch ( abs(nextDirection - currentDirection) )
