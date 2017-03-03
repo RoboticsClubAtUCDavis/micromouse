@@ -92,7 +92,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 	// The nodes that still need to be evaluated.
 	// Initially insert the end node.
 	set<Node *> openNodes;
-	openNodes.insert(getNode(end));
+	openNodes.insert(endNode);
 	
 	// Reset any metadata from previous pathfinding.
 	resetNodePathData();
@@ -107,9 +107,10 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 	{
 		// Get the open node with lowest score.
 		auto currentNodeItr = openNodes.begin();
+		auto currentNode = *currentNodeItr;
 
 		// If the current node is the finish node.
-		if ( *currentNodeItr == getNode( start ) )
+		if ( currentNode == getNode( start ) )
 		{
 			// We are done. Construct the path.
 			constructPath(*currentNodeItr);
@@ -117,8 +118,9 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 		}
 		
 		// Set the current node as evaluated.
+		// The iterator is incremented so we can no longer use it.
 		openNodes.erase(currentNodeItr);
-		(*currentNodeItr)->evaluated = true;
+		currentNode->evaluated = true;
 
 		// For each node adjacent to the current node.
 		for (
@@ -131,7 +133,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 #endif // MAZE_DIAGONALS
 			)
 		{
-			Node * adjacentNode = getAdjacentNode(*currentNodeItr, direction);
+			Node * adjacentNode = getAdjacentNode(currentNode, direction);
 
 			// If the adjacent node has already been evaluated or does not exist.
 			if (adjacentNode->evaluated || !adjacentNode->exists)
@@ -140,7 +142,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 				continue;
 			}
 
-			auto tentativeScore = (*currentNodeItr)->gScore + calculateMovementCost( (*currentNodeItr)->direction, direction );
+			auto tentativeScore = currentNode->gScore + calculateMovementCost(currentNode->direction, direction );
 
 			// If adjacent node not in openNodes.
 			if (openNodes.find(adjacentNode) == openNodes.end() )
@@ -156,10 +158,10 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			}
 
 			// This path is the best so far.
-			adjacentNode->next = *currentNodeItr;
-			auto heuristicScore = heuristic((*currentNodeItr)->pos, start);
-			(*currentNodeItr)->gScore = tentativeScore;
-			(*currentNodeItr)->fScore = adjacentNode->gScore + heuristicScore;
+			adjacentNode->next = currentNode;
+			auto heuristicScore = heuristic(currentNode->pos, start);
+			currentNode->gScore = tentativeScore;
+			currentNode->fScore = adjacentNode->gScore + heuristicScore;
 		}
 	}
 
