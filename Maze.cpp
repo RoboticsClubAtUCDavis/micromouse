@@ -6,6 +6,8 @@
 #include <stdexcept>
 #include <iostream>
 
+#define MAZE_DIAGONALS
+
 using namespace std;
 
 const CellCoordinate Maze::CELL_START = CellCoordinate(0,0);
@@ -92,7 +94,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 	// The nodes that still need to be evaluated.
 	// Initially insert the end node.
 	set<Node *> openNodes;
-	openNodes.insert(getNode(end));
+	openNodes.insert(endNode);
 	
 	// Reset any metadata from previous pathfinding.
 	resetNodePathData();
@@ -107,9 +109,10 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 	{
 		// Get the open node with lowest score.
 		auto currentNodeItr = openNodes.begin();
+		auto currentNode = *currentNodeItr;
 
 		// If the current node is the finish node.
-		if ( *currentNodeItr == getNode( start ) )
+		if ( currentNode == getNode( start ) )
 		{
 			// We are done. Construct the path.
 			constructPath(*currentNodeItr);
@@ -117,8 +120,9 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 		}
 		
 		// Set the current node as evaluated.
+		// The iterator is incremented so we can no longer use it.
 		openNodes.erase(currentNodeItr);
-		(*currentNodeItr)->evaluated = true;
+		currentNode->evaluated = true;
 
 		// For each node adjacent to the current node.
 		for (
@@ -131,7 +135,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 #endif // MAZE_DIAGONALS
 			)
 		{
-			Node * adjacentNode = getAdjacentNode(*currentNodeItr, direction);
+			Node * adjacentNode = getAdjacentNode(currentNode, direction);
 
 			// If the adjacent node has already been evaluated or does not exist.
 			if (adjacentNode->evaluated || !adjacentNode->exists)
@@ -140,7 +144,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 				continue;
 			}
 
-			auto tentativeScore = (*currentNodeItr)->gScore + calculateMovementCost( (*currentNodeItr)->direction, direction );
+			auto tentativeScore = currentNode->gScore + calculateMovementCost(currentNode->direction, direction );
 
 			// If adjacent node not in openNodes.
 			if (openNodes.find(adjacentNode) == openNodes.end() )
@@ -156,10 +160,11 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			}
 
 			// This path is the best so far.
-			adjacentNode->next = *currentNodeItr;
-			auto heuristicScore = heuristic((*currentNodeItr)->pos, start);
-			(*currentNodeItr)->gScore = tentativeScore;
-			(*currentNodeItr)->fScore = adjacentNode->gScore + heuristicScore;
+			adjacentNode->next = currentNode;
+			adjacentNode->direction = static_cast<Direction>(( direction + S ) % NONE); // TODO move to function/overload
+			auto heuristicScore = heuristic(currentNode->pos, start);
+			currentNode->gScore = tentativeScore;
+			currentNode->fScore = adjacentNode->gScore + heuristicScore;
 		}
 	}
 
@@ -178,9 +183,9 @@ Node * Maze::getAdjacentNode(Node * node, Direction direction)
 
 void Maze::resetNodePathData()
 {
-	for (size_t y = 0; y < CELL_ROWS; y++)
+	for (size_t y = 0; y < NODE_ROWS; y++)
 	{
-		for (size_t x = 0; x < CELL_COLS; x++)
+		for (size_t x = 0; x < NODE_COLS; x++)
 		{
 			Node * node = getNode(NodeCoordinate(x, y));
 
@@ -242,7 +247,8 @@ unsigned Maze::calculateMovementCost(Direction currentDirection, Direction nextD
 		// This is an approximation. 
 		return cost + MOVEMENT_COST * 2;
 	case 4:
-		throw runtime_error("Path has 180deg turn, this should not occur.");
+		// path 180 turn. It is guaranteed not to be the shortest so just return cost.
+		return cost;
 	default:
 		throw runtime_error("This should be unreachable");
 	}

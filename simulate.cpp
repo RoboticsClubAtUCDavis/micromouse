@@ -4,6 +4,8 @@
 #include "Direction.h"
 #include "Maze.h"
 #include "Path.h"
+#include <stdexcept>
+#include <iostream>
 
 const int MARGIN = 5;
 const std::string WINDOW_TITLE = "Micromouse simulator";
@@ -13,7 +15,14 @@ class Simulator : public sf::RenderWindow {
     Simulator(void)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE), maze() {
         calculateNodeSize();
-        maze = Maze::fromFile("test.maze");
+		try {
+			maze = Maze::fromFile("test.maze");
+			maze.findPath(Maze::CELL_START, Maze::CELL_FINISH, N);
+		}
+		catch (const std::exception &e) {
+			std::cout << e.what();
+		}
+
     }
 
     void main_loop(void) {
