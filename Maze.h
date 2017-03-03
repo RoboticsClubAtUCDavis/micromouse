@@ -1,6 +1,7 @@
 #ifndef MAZE_H
 #define MAZE_H
 
+#include <string>
 #include "Coordinate.h"
 #include "Direction.h"
 #include "Node.h"
