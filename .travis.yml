@@ -8,7 +8,7 @@ cache:
     - SFML-2.4.2
 before_install:
    - sudo apt-get update -y
-   - sudo apt-get install -y freeglut3-dev libjpeg-dev  libfreetype6-dev libxrandr-dev libglew-dev libsndfile1-dev libopenal-dev libudev-dev
+   - sudo apt-get install -y freeglut3-dev libjpeg-dev  libfreetype6-dev libxrandr-dev libglew-dev libsndfile1-dev libopenal-dev libudev-dev scons
    - wget http://www.sfml-dev.org/files/SFML-2.4.2-sources.zip
    - unzip -n SFML-2.4.2-sources.zip
    - cd SFML-2.4.2
@@ -17,4 +17,5 @@ before_install:
    - sudo make install
    - cd ..
 script:
-   - make all check
+   - scons
+   - scons test
