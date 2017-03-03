@@ -48,20 +48,21 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
 
 void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 {
-	Node * startNode = getNode(start);
+	// Pathfinding is done from end to start
+	Node * endNode = getNode(end);
 
 	// The nodes that still need to be evaluated.
-	// Initially insert the start node.
+	// Initially insert the end node.
 	set<Node *> openNodes;
-	openNodes.insert(getNode(start));
+	openNodes.insert(getNode(end));
 	
 	// Reset any metadata from previous pathfinding.
 	resetNodePathData();
 	
-	// The start node is 0 distance away.
-	startNode->gScore = 0;
-	startNode->fScore = heuristic(start, end);
-	startNode->direction = facing;
+	// The end node is 0 distance away.
+	endNode->gScore = 0;
+	endNode->fScore = heuristic(end, start);
+	endNode->direction = facing;
 
 	// While there are node remaining to be evaluated.
 	while (!openNodes.empty())
@@ -70,10 +71,10 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 		auto currentNodeItr = openNodes.begin();
 
 		// If the current node is the finish node.
-		if ( *currentNodeItr == getNode( end ) )
+		if ( *currentNodeItr == getNode( start ) )
 		{
 			// We are done. Construct the path.
-			constructPath(startNode);
+			constructPath(*currentNodeItr);
 			return;
 		}
 		
@@ -117,8 +118,8 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			}
 
 			// This path is the best so far.
-			(*currentNodeItr)->next = adjacentNode;
-			auto heuristicScore = heuristic((*currentNodeItr)->pos, end);
+			adjacentNode->next = *currentNodeItr;
+			auto heuristicScore = heuristic((*currentNodeItr)->pos, start);
 			(*currentNodeItr)->gScore = tentativeScore;
 			(*currentNodeItr)->fScore = adjacentNode->gScore + heuristicScore;
 		}
