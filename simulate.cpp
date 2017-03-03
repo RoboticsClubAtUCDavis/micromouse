@@ -12,11 +12,13 @@
 const int MARGIN = 5;
 const std::string WINDOW_TITLE = "Micromouse simulator";
 
-class MazeDrawable : public sf::Drawable {
+class MazeDrawable : public sf::Transformable, public sf::Drawable {
   public:
     MazeDrawable(Maze &maze, int node_size) : maze(maze), node_size(node_size) {}
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
+        states.transform *= getTransform();
+
         for (int row = 0; row < Maze::CELL_ROWS; row++) {
             for (int col = 0; col < Maze::CELL_COLS; col++) {
                 drawCell(target, states, CellCoordinate(col, row));
@@ -27,8 +29,8 @@ class MazeDrawable : public sf::Drawable {
     }
 
     sf::Vertex nodeVertex(NodeCoordinate c, sf::Color color) const {
-        int x_p = MARGIN + c.x * node_size;
-        int y_p = MARGIN + (Maze::NODE_ROWS - c.y) * node_size;
+        int x_p = c.x * node_size;
+        int y_p = (Maze::NODE_ROWS - c.y) * node_size;
         return sf::Vertex(sf::Vector2f(x_p, y_p), color);
     }
 
@@ -58,8 +60,8 @@ class MazeDrawable : public sf::Drawable {
 
         sf::RectangleShape cell(
             sf::Vector2f(node_size * 2 - 1, node_size * 2 - 1));
-        cell.move(sf::Vector2f(MARGIN + (node.x - 1) * node_size,
-                               MARGIN + (Maze::NODE_ROWS - (node.y + 1)) *
+        cell.move(sf::Vector2f((node.x - 1) * node_size,
+                               (Maze::NODE_ROWS - (node.y + 1)) *
                                             node_size));
         cell.setFillColor(maze.getNode(node).evaluated
                               ? sf::Color(255, 255, 150, 20)
@@ -132,7 +134,9 @@ class Simulator : public sf::RenderWindow {
 
     void render(void) {
         clear(sf::Color::Black);
-        draw(MazeDrawable(maze, node_size));
+        MazeDrawable entity(maze, node_size);
+        entity.setPosition(MARGIN, MARGIN);
+        draw(entity);
         display();
     }
 
