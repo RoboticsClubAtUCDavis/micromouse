@@ -3,25 +3,20 @@
 
 using namespace std;
 
-Node::Node(void):
-	pos(NodeCoordinate(0,0)),
-	exists(false)
-{}
+Node::Node(void) : pos(NodeCoordinate(0, 0)), exists(false) {
+}
 
-Node::Node(NodeCoordinate pos):
-	pos(pos),
-	exists(true)
-{}
+Node::Node(NodeCoordinate pos) : pos(pos), exists(true) {
+}
 
 Node::operator bool() const {
     return exists;
 }
 
-void Node::resetPathData()
-{
-	gScore = numeric_limits<unsigned>::max();
-	fScore = numeric_limits<unsigned>::max();
-	next = nullptr;
-	evaluated = false;
-	direction = NONE;
+void Node::resetPathData() {
+    gScore = numeric_limits<unsigned>::max();
+    fScore = numeric_limits<unsigned>::max();
+    next = nullptr;
+    evaluated = false;
+    direction = NONE;
 }
