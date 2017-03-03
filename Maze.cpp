@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <iostream>
 
+#define MAZE_DIAGONALS
 
 using namespace std;
 
