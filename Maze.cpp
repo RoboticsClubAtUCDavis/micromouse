@@ -25,7 +25,7 @@ void Maze::reset() {
 	path.clear();
 }
 
-Maze Maze::loadMazeFromFile(std::string fileName) {
+Maze Maze::fromFile(std::string fileName) {
     Maze maze;
 
     try {
