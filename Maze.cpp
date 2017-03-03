@@ -2,6 +2,9 @@
 #include <stdexcept>
 #include <set>
 #include <cstdlib> //abs
+#include <fstream>
+#include <stdexcept>
+#include <iostream>
 
 using namespace std;
 
@@ -22,7 +25,42 @@ void Maze::reset() {
 	path.clear();
 }
 
+Maze Maze::fromFile(std::string fileName) {
+    Maze maze;
 
+    try {
+        ifstream file(fileName.c_str());
+        if (!file.good())
+            throw runtime_error("Could not load file");
+
+        int x = 0;
+        int y = NODE_ROWS - 1;
+
+        while (file) {
+            char c;
+            while (file && file.get(c)) {
+                if (c == '*') {
+                    maze.getNode(NodeCoordinate(x, y))->exists = false;
+                    x++;
+                    cout << "* ";
+                } else if (c == ' ') {
+                    x++;
+                    cout << "  ";
+                }
+
+                if (x >= NODE_COLS) {
+                    x = 0;
+                    y--;
+                    cout << endl;
+                }
+            }
+        }
+    } catch (const exception &e) {
+        cout << e.what();
+    }
+
+    return maze;
+}
 
 Maze::Maze()
 {

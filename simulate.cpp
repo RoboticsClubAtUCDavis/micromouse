@@ -12,6 +12,7 @@ class Simulator : public sf::RenderWindow {
     Simulator(void)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE), maze() {
         calculateNodeSize();
+        maze = Maze::fromFile("test.maze");
     }
 
     void main_loop(void) {

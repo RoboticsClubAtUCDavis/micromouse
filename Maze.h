@@ -1,6 +1,7 @@
 #ifndef MAZE_H
 #define MAZE_H
 
+#include <string>
 #include "Coordinate.h"
 #include "Direction.h"
 #include "Node.h"
@@ -20,6 +21,9 @@ class Maze {
 
 	static const unsigned MOVEMENT_COST = 100;
 	static const unsigned MOVEMENT_COST_DIAGONAL = 141;
+
+	static Maze fromFile(std::string fileName);
+
 
 	Maze();
 
