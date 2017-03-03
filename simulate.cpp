@@ -14,7 +14,10 @@ const std::string WINDOW_TITLE = "Micromouse simulator";
 
 class MazeDrawable : public sf::Transformable, public sf::Drawable {
   public:
-    MazeDrawable(Maze &maze, int node_size) : maze(maze), node_size(node_size) {}
+    MazeDrawable(Maze &maze) : maze(maze) {
+        node_size = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
+    }
+
   private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
         states.transform *= getTransform();
@@ -29,8 +32,8 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     sf::Vertex nodeVertex(NodeCoordinate c, sf::Color color) const {
-        int x_p = c.x * node_size;
-        int y_p = (Maze::NODE_ROWS - c.y) * node_size;
+        float x_p = c.x * node_size;
+        float y_p = (Maze::NODE_ROWS - c.y) * node_size;
         return sf::Vertex(sf::Vector2f(x_p, y_p), color);
     }
 
@@ -59,7 +62,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         }
 
         sf::RectangleShape cell(
-            sf::Vector2f(node_size * 2 - 1, node_size * 2 - 1));
+            sf::Vector2f(node_size * 2 - .001, node_size * 2 - .001));
         cell.move(sf::Vector2f((node.x - 1) * node_size,
                                (Maze::NODE_ROWS - (node.y + 1)) *
                                             node_size));
@@ -79,7 +82,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     Maze& maze;
-    int node_size;
+    float node_size;
 };
 
 class Simulator : public sf::RenderWindow {
@@ -126,22 +129,21 @@ class Simulator : public sf::RenderWindow {
   private:
     void calculateNodeSize(void) {
         sf::Vector2u size = getSize();
-        int x = (size.x - 2 * MARGIN) / Maze::NODE_COLS;
-        int y = (size.y - 2 * MARGIN) / Maze::NODE_ROWS;
-        node_size = std::min(x, y);
+        maze_size = std::min(size.x, size.y) - 2 * MARGIN;
     }
 
 
     void render(void) {
         clear(sf::Color::Black);
-        MazeDrawable entity(maze, node_size);
+        MazeDrawable entity(maze);
         entity.setPosition(MARGIN, MARGIN);
+        entity.setScale(maze_size, maze_size);
         draw(entity);
         display();
     }
 
     Maze maze;
-    int node_size;
+    float maze_size;
 };
 
 int main() {
