@@ -21,7 +21,7 @@ void Node::resetPathData()
 {
 	gScore = numeric_limits<unsigned>::max();
 	fScore = numeric_limits<unsigned>::max();
-	previous = nullptr;
+	next = nullptr;
 	evaluated = false;
 	direction = NONE;
 }

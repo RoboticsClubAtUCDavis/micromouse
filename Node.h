@@ -13,7 +13,7 @@ class Node {
 	// These are used for pathfinding
 	unsigned gScore;
 	unsigned fScore;
-	Node * previous;
+	Node * next;
 	Direction direction;
 	bool evaluated;
 
