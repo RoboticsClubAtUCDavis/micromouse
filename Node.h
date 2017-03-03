@@ -6,7 +6,6 @@ class Node {
 	Node(NodeCoordinate pos);
     explicit operator bool() const;
 	void resetPathData();
-	void setScores(unsigned gScore, unsigned fScore);
 
 	NodeCoordinate pos;
     bool exists;
@@ -14,7 +13,7 @@ class Node {
 	// These are used for pathfinding
 	unsigned gScore;
 	unsigned fScore;
-	Node * previous;
+	Node * next;
 	Direction direction;
 	bool evaluated;
 

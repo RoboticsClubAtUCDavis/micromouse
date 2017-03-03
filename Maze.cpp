@@ -21,6 +21,8 @@ void Maze::reset() {
 				setWall(NodeCoordinate(x, y));
 		}
 	}
+
+	path.clear();
 }
 
 
@@ -92,21 +94,23 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
 }
 
 
-Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
+void Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 {
-	Node * startNode = getNode(start);
+	// Pathfinding is done from end to start
+	Node * endNode = getNode(end);
 
 	// The nodes that still need to be evaluated.
-	// Initially insert the start node.
+	// Initially insert the end node.
 	set<Node *> openNodes;
-	openNodes.insert(getNode(start));
+	openNodes.insert(getNode(end));
 	
 	// Reset any metadata from previous pathfinding.
 	resetNodePathData();
 	
-	// The start node is 0 distance away.
-	startNode->setScores(0, heuristic(start, end));
-	startNode->direction = facing;
+	// The end node is 0 distance away.
+	endNode->gScore = 0;
+	endNode->fScore = heuristic(end, start);
+	endNode->direction = facing;
 
 	// While there are node remaining to be evaluated.
 	while (!openNodes.empty())
@@ -115,10 +119,11 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 		auto currentNodeItr = openNodes.begin();
 
 		// If the current node is the finish node.
-		if ( *currentNodeItr == getNode( end ) )
+		if ( *currentNodeItr == getNode( start ) )
 		{
 			// We are done. Construct the path.
-			return constructPath(*currentNodeItr);
+			constructPath(*currentNodeItr);
+			return;
 		}
 		
 		// Set the current node as evaluated.
@@ -161,9 +166,10 @@ Path Maze::findPath(CellCoordinate start, CellCoordinate end, Direction facing )
 			}
 
 			// This path is the best so far.
-			adjacentNode->previous = *currentNodeItr;
-			auto heuristicScore = heuristic((*currentNodeItr)->pos, end);
-			(*currentNodeItr)->setScores(tentativeScore, adjacentNode->gScore + heuristicScore);
+			adjacentNode->next = *currentNodeItr;
+			auto heuristicScore = heuristic((*currentNodeItr)->pos, start);
+			(*currentNodeItr)->gScore = tentativeScore;
+			(*currentNodeItr)->fScore = adjacentNode->gScore + heuristicScore;
 		}
 	}
 
@@ -265,21 +271,19 @@ unsigned Maze::heuristic(NodeCoordinate start, NodeCoordinate end)
 #endif // MAZE_DIAGONALS
 }
 
-Path Maze::constructPath(Node * end)
+void Maze::constructPath(Node * start)
 {
-	Path path;
-
-	const Node * nodeA = end->previous;
-	const Node * nodeB = end;
+	path.clear();
+	path.start = start->pos;
 
 	// while there is more to the path to traverse
-	while (nodeA)
+	for (const Node *i = start; i; i = i->next)
 	{
-		//drawLine( nodeA->pos, nodeB->pos );
-		path.push(DirectionVector(nodeA->direction, 1));
-		nodeB = nodeA;
-		nodeA = nodeA->previous;
+		path.push_back(DirectionVector(i->direction, 1));
 	}
+}
 
+const Path& Maze::getPath() const
+{
 	return path;
 }

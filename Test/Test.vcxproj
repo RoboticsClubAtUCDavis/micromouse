@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C65DB01B-CC18-4A45-9B4B-2526A3100193}</ProjectGuid>
-    <RootNamespace>Micromouse</RootNamespace>
+    <ProjectGuid>{8DF96CF3-B144-4438-976B-03A60E57F920}</ProjectGuid>
+    <RootNamespace>Test</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -75,6 +75,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -110,29 +113,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Coordinate.h" />
-    <ClInclude Include="Direction.h" />
-    <ClInclude Include="Encoder.h" />
-    <ClInclude Include="Hardware.h" />
-    <ClInclude Include="Led.h" />
-    <ClInclude Include="Motor.h" />
-    <ClInclude Include="Maze.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="Path.h" />
-    <ClInclude Include="RangeFinder.h" />
+    <ClCompile Include="..\Coordinate.cpp" />
+    <ClCompile Include="..\Direction.cpp" />
+    <ClCompile Include="..\Encoder.cpp" />
+    <ClCompile Include="..\Hardware.cpp" />
+    <ClCompile Include="..\Led.cpp" />
+    <ClCompile Include="..\Maze.cpp" />
+    <ClCompile Include="..\Motor.cpp" />
+    <ClCompile Include="..\Node.cpp" />
+    <ClCompile Include="..\Path.cpp" />
+    <ClCompile Include="..\RangeFinder.cpp" />
+    <ClCompile Include="Test-Direction.cpp" />
+    <ClCompile Include="Test-Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Encoder.cpp" />
-    <ClCompile Include="Hardware.cpp" />
-    <ClCompile Include="Led.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Maze.cpp" />
-    <ClCompile Include="Node.cpp" />
-    <ClCompile Include="Path.cpp" />
-    <ClCompile Include="Coordinate.cpp" />
-    <ClCompile Include="Direction.cpp" />
-    <ClCompile Include="Motor.cpp" />
-    <ClCompile Include="RangeFinder.cpp" />
+    <ClInclude Include="..\Coordinate.h" />
+    <ClInclude Include="..\Direction.h" />
+    <ClInclude Include="..\Encoder.h" />
+    <ClInclude Include="..\Hardware.h" />
+    <ClInclude Include="..\Led.h" />
+    <ClInclude Include="..\Maze.h" />
+    <ClInclude Include="..\Motor.h" />
+    <ClInclude Include="..\Node.h" />
+    <ClInclude Include="..\Path.h" />
+    <ClInclude Include="..\RangeFinder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

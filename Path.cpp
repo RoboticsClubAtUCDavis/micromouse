@@ -1,35 +1,21 @@
 #include "Path.h"
 #include <assert.h>
 
-
-Path::Path()
-{
+std::vector<DirectionVector>::const_iterator Path::begin() const {
+    return directions.begin();
+}
+std::vector<DirectionVector>::const_iterator Path::end() const {
+    return directions.end();
 }
 
-void Path::push(DirectionVector step)
-{
-	path.push(step);
+std::vector<DirectionVector>::size_type Path::size() const {
+    return directions.size();
 }
 
-DirectionVector Path::top()
-{
-	assert(!path.empty());
-	return path.top();
-}
-DirectionVector Path::topPop() 
-{
-	DirectionVector topValue = path.top();
-	path.pop();
-	return topValue;
+void Path::push_back(DirectionVector vec) {
+    directions.push_back(vec);
 }
 
-void Path::pop()
-{
-	assert(!path.empty());
-	path.pop();
-}
-
-int Path::size()
-{
-	return path.size();
+void Path::clear() {
+    directions.clear();
 }
