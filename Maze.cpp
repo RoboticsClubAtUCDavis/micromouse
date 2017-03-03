@@ -1,6 +1,5 @@
 #include "Maze.h"
 #include <stdexcept>
-#include <set>
 #include <cstdlib> //abs
 #include <fstream>
 #include <stdexcept>
