@@ -41,8 +41,9 @@ class Maze {
 	void findPath(CellCoordinate start, CellCoordinate end, Direction facing = NONE);
 	const Path& getPath() const;
 
+	Node& getNode(NodeCoordinate pos);
+
   private:
-	  Node& getNode(NodeCoordinate pos);
 	  Node& getAdjacentNode(Node* node, Direction direction);
 	  void resetNodePathData();
 	  unsigned calculateMovementCost(Direction currentDirection, Direction nextDirection);

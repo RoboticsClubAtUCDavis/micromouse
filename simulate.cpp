@@ -4,6 +4,8 @@
 #include "Direction.h"
 #include "Maze.h"
 #include "Path.h"
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 #include <stdexcept>
 
@@ -17,16 +19,21 @@ class Simulator : public sf::RenderWindow {
         calculateNodeSize();
         try {
             maze = Maze::fromFile("test.maze");
-            maze.findPath(Maze::CELL_START, Maze::CELL_FINISH, N);
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
     }
 
     void main_loop(void) {
-        maze.findPath(CellCoordinate(0, 0), CellCoordinate(8, 8), N);
 
         while (isOpen()) {
+            sf::sleep(sf::milliseconds(800));
+            maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
+                                         rand() % Maze::CELL_ROWS),
+                          CellCoordinate(rand() % Maze::CELL_COLS,
+                                         rand() % Maze::CELL_ROWS),
+                          N);
+
             sf::Event event;
             while (pollEvent(event)) {
                 if (event.type == sf::Event::Closed)
@@ -83,6 +90,16 @@ class Simulator : public sf::RenderWindow {
         if (maze.isWall(pos, W)) {
             drawLine(node + SW, node + NW);
         }
+
+        sf::RectangleShape cell(
+            sf::Vector2f(node_size * 2 - 1, node_size * 2 - 1));
+        cell.move(sf::Vector2f(MARGIN + (node.x - 1) * node_size,
+                               MARGIN + (Maze::NODE_ROWS - (node.y + 1)) *
+                                            node_size));
+        cell.setFillColor(maze.getNode(node).evaluated
+                              ? sf::Color::Color(255, 255, 150, 20)
+                              : sf::Color::Color(255, 255, 255, 10));
+        draw(cell);
     }
 
     void drawPath(const Path &path) {
@@ -113,6 +130,7 @@ class Simulator : public sf::RenderWindow {
 };
 
 int main() {
+    srand(time(0));
     Simulator simulator;
     simulator.main_loop();
     return 0;
