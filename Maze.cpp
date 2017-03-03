@@ -180,9 +180,9 @@ Node * Maze::getAdjacentNode(Node * node, Direction direction)
 
 void Maze::resetNodePathData()
 {
-	for (size_t y = 0; y < CELL_ROWS; y++)
+	for (size_t y = 0; y < NODE_ROWS; y++)
 	{
-		for (size_t x = 0; x < CELL_COLS; x++)
+		for (size_t x = 0; x < NODE_COLS; x++)
 		{
 			Node * node = getNode(NodeCoordinate(x, y));
 
