@@ -32,9 +32,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     sf::Vector2f nodeVector(NodeCoordinate c) const {
-        float x_p = (.5 + c.x) * node_size;
-        float y_p = (Maze::NODE_ROWS - c.y - .5) * node_size;
-        return sf::Vector2f(x_p, y_p);
+        return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * node_size;
     }
 
     sf::Vertex nodeVertex(NodeCoordinate c, sf::Color color) const {
