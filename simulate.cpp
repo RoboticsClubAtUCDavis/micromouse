@@ -94,7 +94,6 @@ class Simulator : public sf::RenderWindow {
   public:
     Simulator(void)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE), maze() {
-        calculateNodeSize();
         try {
             maze = Maze::fromFile("test.maze");
         } catch (const std::exception &e) {
@@ -125,23 +124,18 @@ class Simulator : public sf::RenderWindow {
         }
     }
 
-  protected:
-    virtual void onResize(void) {
-        sf::RenderWindow::onResize();
-        calculateNodeSize();
-    }
-
   private:
-    void calculateNodeSize(void) {
+    float mazeSize(void) {
         sf::Vector2u size = getSize();
-        maze_size = std::min(size.x, size.y) - 2 * MARGIN;
+        return std::min(size.x, size.y) - 2 * MARGIN;
     }
 
     void render(void) {
         clear(sf::Color::Black);
         MazeDrawable entity(maze);
+        float size = mazeSize();
         entity.setPosition(MARGIN, MARGIN);
-        entity.setScale(maze_size, maze_size);
+        entity.setScale(size, size);
         draw(entity);
         display();
     }
