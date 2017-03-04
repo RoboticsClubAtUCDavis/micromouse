@@ -95,12 +95,16 @@ class Simulator : public sf::RenderWindow {
     void main_loop(void) {
 
         while (isOpen()) {
-            sf::sleep(sf::milliseconds(800));
-            maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
-                                         rand() % Maze::CELL_ROWS),
-                          CellCoordinate(rand() % Maze::CELL_COLS,
-                                         rand() % Maze::CELL_ROWS),
-                          N);
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
+                                             rand() % Maze::CELL_ROWS),
+                              CellCoordinate(rand() % Maze::CELL_COLS,
+                                             rand() % Maze::CELL_ROWS),
+                              N);
+
+                while (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                }
+            }
 
             sf::Event event;
             while (pollEvent(event)) {
