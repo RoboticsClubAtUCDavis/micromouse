@@ -10,11 +10,11 @@
 #include <stdexcept>
 
 const std::string WINDOW_TITLE = "Micromouse simulator";
+const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
 
 class MazeDrawable : public sf::Transformable, public sf::Drawable {
   public:
     MazeDrawable(Maze &maze) : maze(maze) {
-        node_size = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
     }
 
   private:
@@ -31,7 +31,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     sf::Vector2f nodeVector(NodeCoordinate c) const {
-        return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * node_size;
+        return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * NODE_SIZE;
     }
 
     sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
@@ -59,7 +59,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
             target.draw(line(node + SW, node + NW), states);
 
         sf::RectangleShape cell(
-            sf::Vector2f(node_size * 2 - .001, node_size * 2 - .001));
+            sf::Vector2f(NODE_SIZE * 2 - .001, NODE_SIZE * 2 - .001));
         cell.move(nodeVector(node + NW));
         cell.setFillColor(maze.getNode(node).evaluated
                               ? sf::Color(255, 255, 150, 20)
@@ -78,7 +78,6 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     Maze &maze;
-    float node_size;
 };
 
 class Simulator : public sf::RenderWindow {
