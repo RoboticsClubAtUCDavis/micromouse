@@ -1,9 +1,9 @@
 #pragma once
 
 class Motor {
-public:
-	Motor();
-	~Motor();
+  public:
+    Motor();
+    ~Motor();
 
-private:
+  private:
 };
