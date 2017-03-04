@@ -2,3 +2,5 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 IndentCaseLabels: true
 AllowShortFunctionsOnASingleLine: false
+BreakConstructorInitializersBeforeComma: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: true

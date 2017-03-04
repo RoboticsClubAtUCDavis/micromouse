@@ -1,12 +1,9 @@
 #pragma once
 
+class RangeFinder {
+  public:
+    RangeFinder();
+    ~RangeFinder();
 
-class RangeFinder
-{
-public:
-	RangeFinder();
-	~RangeFinder();
-
-private:
-
+  private:
 };

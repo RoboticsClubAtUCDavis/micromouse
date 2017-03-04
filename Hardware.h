@@ -1,17 +1,14 @@
 #pragma once
 
-#include "Motor.h"
-#include "RangeFinder.h"
 #include "Encoder.h"
 #include "Led.h"
+#include "Motor.h"
+#include "RangeFinder.h"
 
+class Hardware {
+  public:
+    Hardware();
+    ~Hardware();
 
-class Hardware
-{
-public:
-	Hardware();
-	~Hardware();
-
-private:
-
+  private:
 };

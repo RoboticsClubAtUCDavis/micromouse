@@ -3,18 +3,17 @@
 class Node {
   public:
     Node(void);
-	Node(NodeCoordinate pos);
+    Node(NodeCoordinate pos);
     explicit operator bool() const;
-	void resetPathData();
+    void resetPathData();
 
-	NodeCoordinate pos;
+    NodeCoordinate pos;
     bool exists;
 
-	// These are used for pathfinding
-	unsigned gScore;
-	unsigned fScore;
-	Node * next;
-	Direction direction;
-	bool evaluated;
-
+    // These are used for pathfinding
+    unsigned gScore;
+    unsigned fScore;
+    Node *next;
+    Direction direction;
+    bool evaluated;
 };
