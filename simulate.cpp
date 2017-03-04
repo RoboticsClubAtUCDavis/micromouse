@@ -35,35 +35,29 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * node_size;
     }
 
-    sf::Vertex nodeVertex(NodeCoordinate c, sf::Color color) const {
-        return sf::Vertex(nodeVector(c), color);
-    }
-
-    void drawLine(sf::RenderTarget &target, sf::RenderStates states,
-                  NodeCoordinate c1, NodeCoordinate c2,
-                  sf::Color color = sf::Color::White) const {
-        sf::Vertex line[] = {nodeVertex(c1, color), nodeVertex(c2, color)};
-        target.draw(line, 2, sf::Lines, states);
+    sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
+                         sf::Color color = sf::Color::White) const {
+        sf::VertexArray line(sf::Lines, 2);
+        line[0] = sf::Vertex(nodeVector(c1), color);
+        line[1] = sf::Vertex(nodeVector(c2), color);
+        return line;
     }
 
     void drawCell(sf::RenderTarget &target, sf::RenderStates states,
                   CellCoordinate pos) const {
         NodeCoordinate node = pos;
-        if (maze.isWall(pos, N)) {
-            drawLine(target, states, node + NW, node + NE);
-        }
 
-        if (maze.isWall(pos, S)) {
-            drawLine(target, states, node + SW, node + SE);
-        }
+        if (maze.isWall(pos, N))
+            target.draw(line(node + NW, node + NE), states);
 
-        if (maze.isWall(pos, E)) {
-            drawLine(target, states, node + SE, node + NE);
-        }
+        if (maze.isWall(pos, S))
+            target.draw(line(node + SW, node + SE), states);
 
-        if (maze.isWall(pos, W)) {
-            drawLine(target, states, node + SW, node + NW);
-        }
+        if (maze.isWall(pos, E))
+            target.draw(line(node + SE, node + NE), states);
+
+        if (maze.isWall(pos, W))
+            target.draw(line(node + SW, node + NW), states);
 
         sf::RectangleShape cell(
             sf::Vector2f(node_size * 2 - .001, node_size * 2 - .001));
@@ -79,7 +73,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         NodeCoordinate node = path.start;
         for (auto &i : path) {
             NodeCoordinate nextNode = node + i;
-            drawLine(target, states, node, nextNode, sf::Color::Green);
+            target.draw(line(node, nextNode, sf::Color::Green), states);
             node = nextNode;
         }
     }
