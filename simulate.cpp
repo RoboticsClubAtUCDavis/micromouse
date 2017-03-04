@@ -9,7 +9,7 @@
 #include <iostream>
 #include <stdexcept>
 
-const int MARGIN = 5;
+const sf::Vector2f MARGIN(5, 5);
 const std::string WINDOW_TITLE = "Micromouse simulator";
 
 class MazeDrawable : public sf::Transformable, public sf::Drawable {
@@ -125,17 +125,17 @@ class Simulator : public sf::RenderWindow {
     }
 
   private:
-    float mazeSize(void) {
+    sf::Vector2f mazeSize(void) {
         sf::Vector2u size = getSize();
-        return std::min(size.x, size.y) - 2 * MARGIN;
+        float min = std::min(size.x, size.y);
+        return sf::Vector2f(min, min) - MARGIN * 2.f;
     }
 
     void render(void) {
         clear(sf::Color::Black);
         MazeDrawable entity(maze);
-        float size = mazeSize();
-        entity.setPosition(MARGIN, MARGIN);
-        entity.setScale(size, size);
+        entity.setPosition(MARGIN);
+        entity.setScale(mazeSize());
         draw(entity);
         display();
     }
