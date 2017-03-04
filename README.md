@@ -5,7 +5,7 @@
 
 `dev` is the main development branch of the project. `dev` is a protected branch set to reject any commits that have not passed the automated checks performed by *Travis CI*. In order to push to `dev` you must first push a new branch with your changes to GitHub. The automated tests will run within a minute or two and if they pass you will be able to push your commits to `dev`.
 
-The recommended workflow for making new features/changes is:
+#### The recommended workflow for making new features/changes is:
   1. Checkout `dev` and pull the latest changes from GitHub
     - `git checkout dev`
     - `git pull origin dev`
@@ -30,22 +30,8 @@ The recommended workflow for making new features/changes is:
     - `git checkout dev`
     - `git merge <branch-name>`
     - `git push origin dev`
- 
- 
-## Setting up the simulation
-
-#### If you are using Visual Studio:
-1. Download the **32-bit** version of [SFML 2.4.2](http://www.sfml-dev.org/download/sfml/2.4.2/).
-2. Extract the files.
-3. Place the extracted folder `SFML-2.4.2` at the root of the project folder.
-4. Copy all DLL files in `\SFML-2.4.2\bin` to `\Simulation`
-5. In Studio right-click the `Simulation` project and select `Set as StartUp Project`.
-6. Build and run the project
-
-###### TODO: Setup for other platforms
-
-
-## Code Formatting
+    
+### Code Formatting
 Keeping a consistent code format is important and reduces the occurrences of merge conflicts.
 
 To keep a consistent style on all platforms we are using *Clang-format*.
@@ -64,3 +50,20 @@ To keep a consistent style on all platforms we are using *Clang-format*.
   - Format before making each commit 
   - Or wait until you are done adding code and have committed all your changes. Then format all your changes in a single commit at the end.
 - We may reject your code if it is not properly formatted.
+ 
+
+
+## Setting up the simulation
+
+#### If you are using Visual Studio:
+1. Download the **32-bit** version of [SFML 2.4.2](http://www.sfml-dev.org/download/sfml/2.4.2/).
+2. Extract the files.
+3. Place the extracted folder `SFML-2.4.2` at the root of the project folder.
+4. Copy all DLL files in `\SFML-2.4.2\bin` to `\Simulation`
+5. In Studio right-click the `Simulation` project and select `Set as StartUp Project`.
+6. Build and run the project
+
+###### TODO: Setup for other platforms
+
+
+
