@@ -3,6 +3,7 @@
 #include "Coordinate.h"
 #include "Direction.h"
 #include "Maze.h"
+#include "Node.h"
 #include "Path.h"
 #include <cstdlib>
 #include <ctime>
@@ -11,6 +12,47 @@
 
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
+
+class CellDrawable : public sf::Transformable, public sf::Drawable {
+  public:
+    CellDrawable(Maze &maze, CellCoordinate pos) : maze(maze), pos(pos) {
+    }
+
+  private:
+    sf::VertexArray line(float x1, float y1, float x2, float y2,
+                         sf::Color color = sf::Color::White) const {
+        sf::VertexArray line(sf::Lines, 2);
+
+        line[0] = sf::Vertex(sf::Vector2f(x1, y1), color);
+        line[1] = sf::Vertex(sf::Vector2f(x2, y2), color);
+        return line;
+    }
+
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
+        states.transform *= getTransform();
+
+        sf::RectangleShape cell(sf::Vector2f(1, 1));
+        cell.setFillColor(maze.getNode(pos).evaluated
+                              ? sf::Color(255, 255, 150, 20)
+                              : sf::Color(255, 255, 255, 10));
+        target.draw(cell, states);
+
+        if (maze.isWall(pos, N))
+            target.draw(line(0, 0, 1, 0), states);
+
+        if (maze.isWall(pos, S))
+            target.draw(line(0, 1, 1, 1), states);
+
+        if (maze.isWall(pos, E))
+            target.draw(line(1, 0, 1, 1), states);
+
+        if (maze.isWall(pos, W))
+            target.draw(line(0, 0, 0, 1), states);
+    }
+
+    Maze &maze;
+    CellCoordinate pos;
+};
 
 class MazeDrawable : public sf::Transformable, public sf::Drawable {
   public:
@@ -23,7 +65,11 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
 
         for (int row = 0; row < Maze::CELL_ROWS; row++) {
             for (int col = 0; col < Maze::CELL_COLS; col++) {
-                drawCell(target, states, CellCoordinate(col, row));
+                CellCoordinate pos(col, row);
+                CellDrawable cell(maze, pos);
+                cell.setPosition(nodeVector(pos.toNode() + NW));
+                cell.setScale(sf::Vector2f(NODE_SIZE, NODE_SIZE) * 2.f);
+                target.draw(cell, states);
             }
         }
 
@@ -40,31 +86,6 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         line[0] = sf::Vertex(nodeVector(c1), color);
         line[1] = sf::Vertex(nodeVector(c2), color);
         return line;
-    }
-
-    void drawCell(sf::RenderTarget &target, sf::RenderStates states,
-                  CellCoordinate pos) const {
-        NodeCoordinate node = pos;
-
-        if (maze.isWall(pos, N))
-            target.draw(line(node + NW, node + NE), states);
-
-        if (maze.isWall(pos, S))
-            target.draw(line(node + SW, node + SE), states);
-
-        if (maze.isWall(pos, E))
-            target.draw(line(node + SE, node + NE), states);
-
-        if (maze.isWall(pos, W))
-            target.draw(line(node + SW, node + NW), states);
-
-        sf::RectangleShape cell(
-            sf::Vector2f(NODE_SIZE * 2 - .001, NODE_SIZE * 2 - .001));
-        cell.move(nodeVector(node + NW));
-        cell.setFillColor(maze.getNode(node).evaluated
-                              ? sf::Color(255, 255, 150, 20)
-                              : sf::Color(255, 255, 255, 10));
-        target.draw(cell, states);
     }
 
     void drawPath(sf::RenderTarget &target, sf::RenderStates states,
