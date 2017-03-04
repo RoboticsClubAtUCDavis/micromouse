@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Coordinate.h"
 
 class Node {
