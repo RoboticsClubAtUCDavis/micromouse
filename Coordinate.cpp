@@ -14,6 +14,14 @@ NodeCoordinate CellCoordinate::toNode(void) const {
     return NodeCoordinate(x * 2 + 1, y * 2 + 1);
 }
 
+bool NodeCoordinate::isCell() {
+    return !((this->x - 1) % 2 || (this->y - 1) % 2);
+}
+
+bool NodeCoordinate::isPost() {
+    return !(this->x % 2 || this-y % 2);
+}
+
 NodeCoordinate NodeCoordinate::operator+(Direction direction) {
     int horizontal = x;
     int vertical = y;

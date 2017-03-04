@@ -17,15 +17,25 @@ const CellCoordinate Maze::CELL_FINISH =
 void Maze::reset() {
     for (int y = 0; y < NODE_ROWS; y++) {
         for (int x = 0; x < NODE_COLS; x++) {
-            maze[y][x] = Node(NodeCoordinate(x, y));
+            NodeCoordinate pos = NodeCoordinate(x, y);
+            maze[y][x] = Node(pos);
 
             // Initialize border
-            if (x == 0 || y == 0 || y == NODE_ROWS - 1 || x == NODE_COLS - 1)
-                setWall(NodeCoordinate(x, y));
+            if (this->isBorder(pos) || pos.isPost())
+                maze[y][x].exists = false;
         }
     }
 
     path.clear();
+}
+
+bool Maze::isBorder(NodeCoordinate pos) {
+    return pos.x == 0 || pos.y == 0 || pos.y == NODE_ROWS - 1 ||
+           pos.x == NODE_COLS - 1;
+}
+
+bool Maze::containsNode(NodeCoordinate pos) {
+    return pos.x >= 0 && pos.x < NODE_COLS && pos.y >= 0 && pos.y < NODE_ROWS;
 }
 
 Maze Maze::fromFile(std::string fileName) {
@@ -173,7 +183,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end,
 }
 
 Node &Maze::getNode(NodeCoordinate pos) {
-    if (pos.x < 0 || pos.x >= NODE_COLS || pos.y < 0 || pos.y >= NODE_ROWS)
+    if (!this->containsNode(pos))
         throw out_of_range("Coordinate out of range.");
     return maze[pos.y][pos.x];
 }

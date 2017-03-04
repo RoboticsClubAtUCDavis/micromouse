@@ -17,8 +17,10 @@ class CellCoordinate;
 class NodeCoordinate : public Coordinate {
   public:
     NodeCoordinate(int x, int y) : Coordinate(x, y){};
-    NodeCoordinate operator+(Direction);
-    NodeCoordinate operator+(DirectionVector dirvect);
+	bool isCell();
+	bool isPost();
+	NodeCoordinate operator+(Direction);
+	NodeCoordinate operator+(DirectionVector dirvect);
 };
 
 class CellCoordinate : public Coordinate {
