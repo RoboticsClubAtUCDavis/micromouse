@@ -141,7 +141,6 @@ class Simulator : public sf::RenderWindow {
     }
 
     Maze maze;
-    float maze_size;
 };
 
 int main() {
