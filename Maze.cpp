@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+#include <set>
 
 #define MAZE_DIAGONALS
 
@@ -21,11 +22,11 @@ void Maze::reset() {
             maze[y][x] = Node(pos);
 
             // Initialize border
-            if (this->isBorder(pos) || pos.isPost())
-                maze[y][x].exists = false;
+            if (isBorder(pos) || pos.isPost())
+                setWall(pos);
         }
     }
-
+    setWall(NodeCoordinate(NODE_COLS / 2, NODE_ROWS / 2), false);
     path.clear();
 }
 
@@ -34,8 +35,82 @@ bool Maze::isBorder(NodeCoordinate pos) {
            pos.x == NODE_COLS - 1;
 }
 
-bool Maze::containsNode(NodeCoordinate pos) {
+bool Maze::isBorder(Node node) {
+    return isBorder(node.pos);
+}
+
+bool Maze::withinBounds(NodeCoordinate pos) {
     return pos.x >= 0 && pos.x < NODE_COLS && pos.y >= 0 && pos.y < NODE_ROWS;
+}
+
+bool Maze::withinBounds(Node node) {
+    return withinBounds(node.pos);
+}
+
+void Maze::generate(int seed) {
+    reset();
+    srand(seed);
+    vector<CellCoordinate> backtrackStack;
+    set<CellCoordinate> unvisited;
+    backtrackStack.reserve(CELL_COLS * CELL_ROWS);
+
+    for (int i = 0; i < CELL_ROWS; i++) {
+        for (int j = 0; j < CELL_COLS; j++) {
+            unvisited.insert(CellCoordinate(j, i));
+            setWall(CellCoordinate(j, i).toNode() + N);
+            setWall(CellCoordinate(j, i).toNode() + E);
+            setWall(CellCoordinate(j, i).toNode() + W);
+            setWall(CellCoordinate(j, i).toNode() + S);
+        }
+    }
+    CellCoordinate currentCell = CellCoordinate(0, 0);
+    unvisited.erase(currentCell);
+    vector<CellCoordinate> neighbors;
+    neighbors.reserve(4);
+    while (unvisited.size() > 0) {
+        if (withinBounds(currentCell + N) &&
+            unvisited.find(currentCell + N) != unvisited.end()) {
+            neighbors.push_back(currentCell + N);
+        }
+        if (withinBounds(currentCell + E) &&
+            unvisited.find(currentCell + E) != unvisited.end()) {
+            neighbors.push_back(currentCell + E);
+        }
+        if (withinBounds(currentCell + W) &&
+            unvisited.find(currentCell + W) != unvisited.end()) {
+            neighbors.push_back(currentCell + W);
+        }
+        if (withinBounds(currentCell + S) &&
+            unvisited.find(currentCell + S) != unvisited.end()) {
+            neighbors.push_back(currentCell + S);
+        }
+
+        if (neighbors.size() > 0) {
+            CellCoordinate chosen = neighbors[rand() % neighbors.size()];
+            backtrackStack.push_back(currentCell);
+            if (chosen - currentCell == CellCoordinate(N)) {
+                setWall(currentCell.toNode() + N, false);
+            } else if (chosen - currentCell == CellCoordinate(E)) {
+                setWall(currentCell.toNode() + E, false);
+            } else if (chosen - currentCell == CellCoordinate(S)) {
+                setWall(currentCell.toNode() + S, false);
+            } else if (chosen - currentCell == CellCoordinate(W)) {
+                setWall(currentCell.toNode() + W, false);
+            }
+            currentCell = chosen;
+            unvisited.erase(currentCell);
+        } else {
+            currentCell = backtrackStack.back();
+            backtrackStack.pop_back();
+        }
+        neighbors.clear();
+    }
+    CellCoordinate centerFour =
+        CellCoordinate(CELL_COLS / 2 - 1, CELL_ROWS / 2 - 1);
+    setWall(centerFour.toNode() + N, false);
+    setWall(centerFour.toNode() + E, false);
+    setWall(centerFour.toNode() + N + N + E, false);
+    setWall(centerFour.toNode() + E + E + N, false);
 }
 
 Maze Maze::fromFile(std::string fileName) {
@@ -183,7 +258,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end,
 }
 
 Node &Maze::getNode(NodeCoordinate pos) {
-    if (!this->containsNode(pos))
+    if (!withinBounds(pos))
         throw out_of_range("Coordinate out of range.");
     return maze[pos.y][pos.x];
 }
