@@ -63,7 +63,8 @@ To keep a consistent style on all platforms we are using *Clang-format*.
 5. In Studio right-click the `Simulation` project and select `Set as StartUp Project`.
 6. Build and run the project
 
-###### TODO: Setup for other platforms
-
-
-
+#### On Linux:
+1. Install SFML (for example, `sudo pacman -S sfml` on Arch Linux; `sudo apt-get install sfml` on Ubuntu)
+2. Install `scons` and `gcc` the same way, if you do not already have them
+3. Build with `scons`
+4. Run with `./simulate`
