@@ -10,7 +10,7 @@
     - `git checkout dev`
     - `git pull origin dev`
   2. Make a new branch for your changes
-   \>`git checkout -b <branch-name>`
+   - `git checkout -b <branch-name>`
   3. Make your changes and commits (There are many commands/options to accomplish this, these are just a few)
      - See what changes you made:
       - `git status`  - Shows the modified files
@@ -45,7 +45,7 @@ To keep a consistent style on all platforms we are using *Clang-format*.
 - With a file open, go to `Tools` and select either `Clang Format Selection (Ctrl-R, Ctrl-F)` or `Clang Format Document  (Ctrl-R, Ctrl-D)`
 
 ##### Notes:
-- Do not use `Clang Format Document` if the file you are working in was not previously formatted. This will create a lot of unnecessary noise in the commits. Instead use `Clang Format Selection` on just the code you added. We are working on formatting all current code.
+- Do not use `Clang Format Document` if the file you are working in was not previously formatted. This will create a lot of unnecessary noise in the commits. However all existing code should now be formatted so this should not be an issue. 
 - It is best to either:
   - Format before making each commit 
   - Or wait until you are done adding code and have committed all your changes. Then format all your changes in a single commit at the end.
