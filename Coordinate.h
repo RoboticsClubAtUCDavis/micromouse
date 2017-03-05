@@ -10,6 +10,7 @@ class Coordinate {
     int hash() const;
 
   public:
+    Coordinate operator*(int a);
     Coordinate operator-(const Coordinate &a);
     Coordinate operator+(const Coordinate &a);
     bool operator<(const Coordinate &a) const;
@@ -27,7 +28,10 @@ class NodeCoordinate : public Coordinate {
     NodeCoordinate(Direction d) : Coordinate(d){};
     bool isCell();
     bool isPost();
-    NodeCoordinate operator+(Direction);
+    NodeCoordinate operator*(int a);
+    NodeCoordinate operator-(NodeCoordinate a);
+    NodeCoordinate operator+(NodeCoordinate a);
+    NodeCoordinate operator+(Direction direction);
     NodeCoordinate operator+(DirectionVector dirvect);
 };
 
@@ -35,7 +39,10 @@ class CellCoordinate : public Coordinate {
   public:
     CellCoordinate(int x, int y) : Coordinate(x, y){};
     CellCoordinate(Direction d) : Coordinate(d){};
-    CellCoordinate operator+(Direction);
+    CellCoordinate operator*(int a);
+    CellCoordinate operator-(CellCoordinate a);
+    CellCoordinate operator+(CellCoordinate a);
+    CellCoordinate operator+(Direction direction);
     CellCoordinate operator+(DirectionVector dirvect);
     operator NodeCoordinate() const;
     NodeCoordinate toNode(void) const;

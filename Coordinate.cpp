@@ -34,12 +34,19 @@ Coordinate::Coordinate(Direction d)
 		case SW:
 			*this = Coordinate(-1, -1);
 			break;
+		default:
+			break; // will never reach this state
 	}
 }
 
 int Coordinate::hash() const
 {
 	return x * HASH_CONST + y;
+}
+
+Coordinate Coordinate::operator*(int a)
+{
+	return Coordinate(a * x, a * y);
 }
 
 Coordinate Coordinate::operator-(const Coordinate& a) {
@@ -82,154 +89,42 @@ bool NodeCoordinate::isPost() {
     return !(x % 2 || y % 2);
 }
 
+NodeCoordinate NodeCoordinate::operator*(int a) {
+    return NodeCoordinate(a * x, a * y);
+}
+
+NodeCoordinate NodeCoordinate::operator-(NodeCoordinate a) {
+    return NodeCoordinate(x - a.x, y - a.y);
+}
+
+NodeCoordinate NodeCoordinate::operator+(NodeCoordinate a) {
+    return NodeCoordinate(x + a.x, y + a.y);
+}
+
 NodeCoordinate NodeCoordinate::operator+(Direction direction) {
-    int horizontal = x;
-    int vertical = y;
-    switch (direction) {
-        case N:
-            vertical++;
-            break;
-        case S:
-            vertical--;
-            break;
-        case E:
-            horizontal++;
-            break;
-        case W:
-            horizontal--;
-            break;
-        case NE:
-            vertical++;
-            horizontal++;
-            break;
-        case NW:
-            vertical++;
-            horizontal--;
-            break;
-        case SE:
-            vertical--;
-            horizontal++;
-            break;
-        case SW:
-            vertical--;
-            horizontal--;
-            break;
-        default:
-            break;
-    }
-    return NodeCoordinate(horizontal, vertical);
+    return *this + NodeCoordinate(direction);
+}
+
+CellCoordinate CellCoordinate::operator*(int a) {
+    return CellCoordinate(a * x, a * y);
+}
+
+CellCoordinate CellCoordinate::operator-(CellCoordinate a) {
+    return CellCoordinate(x - a.x, y - a.y);
+}
+
+CellCoordinate CellCoordinate::operator+(CellCoordinate a) {
+    return CellCoordinate(x + a.x, y + a.y);
 }
 
 CellCoordinate CellCoordinate::operator+(Direction direction) {
-    int horizontal = x;
-    int vertical = y;
-    switch (direction) {
-        case N:
-            vertical++;
-            break;
-        case S:
-            vertical--;
-            break;
-        case E:
-            horizontal++;
-            break;
-        case W:
-            horizontal--;
-            break;
-        case NE:
-            vertical++;
-            horizontal++;
-            break;
-        case NW:
-            vertical++;
-            horizontal--;
-            break;
-        case SE:
-            vertical--;
-            horizontal++;
-            break;
-        case SW:
-            vertical--;
-            horizontal--;
-            break;
-        default:
-            break;
-    }
-    return CellCoordinate(horizontal, vertical);
+    return *this + CellCoordinate(direction);
 }
 
 NodeCoordinate NodeCoordinate::operator+(DirectionVector dirvect) {
-    int horizontal = x;
-    int vertical = y;
-    switch (dirvect.direction) {
-        case N:
-            vertical += dirvect.magnitude;
-            break;
-        case S:
-            vertical -= dirvect.magnitude;
-            break;
-        case E:
-            horizontal += dirvect.magnitude;
-            break;
-        case W:
-            horizontal -= dirvect.magnitude;
-            break;
-        case NE:
-            vertical += dirvect.magnitude;
-            horizontal += dirvect.magnitude;
-            break;
-        case NW:
-            vertical += dirvect.magnitude;
-            horizontal -= dirvect.magnitude;
-            break;
-        case SE:
-            vertical -= dirvect.magnitude;
-            horizontal += dirvect.magnitude;
-            break;
-        case SW:
-            vertical -= dirvect.magnitude;
-            horizontal -= dirvect.magnitude;
-            break;
-        default:
-            break;
-    }
-    return NodeCoordinate(horizontal, vertical);
+    return *this + NodeCoordinate(dirvect.direction) * dirvect.magnitude;
 }
 
 CellCoordinate CellCoordinate::operator+(DirectionVector dirvect) {
-    int horizontal = x;
-    int vertical = y;
-    switch (dirvect.direction) {
-        case N:
-            vertical += dirvect.magnitude;
-            break;
-        case S:
-            vertical -= dirvect.magnitude;
-            break;
-        case E:
-            horizontal += dirvect.magnitude;
-            break;
-        case W:
-            horizontal -= dirvect.magnitude;
-            break;
-        case NE:
-            vertical += dirvect.magnitude;
-            horizontal += dirvect.magnitude;
-            break;
-        case NW:
-            vertical += dirvect.magnitude;
-            horizontal -= dirvect.magnitude;
-            break;
-        case SE:
-            vertical -= dirvect.magnitude;
-            horizontal += dirvect.magnitude;
-            break;
-        case SW:
-            vertical -= dirvect.magnitude;
-            horizontal -= dirvect.magnitude;
-            break;
-        default:
-            break;
-    }
-    return CellCoordinate(horizontal, vertical);
+    return *this + CellCoordinate(dirvect.direction) * dirvect.magnitude;
 }
