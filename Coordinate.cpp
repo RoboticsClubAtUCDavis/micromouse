@@ -35,6 +35,7 @@ Coordinate::Coordinate(Direction d)
 			*this = Coordinate(-1, -1);
 			break;
 		default:
+			*this = Coordinate(0, 0);
 			break; // will never reach this state
 	}
 }

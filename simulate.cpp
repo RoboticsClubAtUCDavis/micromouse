@@ -127,7 +127,7 @@ class Simulator : public sf::RenderWindow {
             }
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 				maze.generate();
-				while (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+				while (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 				}
 			}
             sf::Event event;
