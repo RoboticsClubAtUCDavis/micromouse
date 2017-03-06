@@ -112,18 +112,26 @@ class Simulator : public sf::RenderWindow {
         }
     }
 
-    void main_loop(void) {
+    bool keyPress(sf::Keyboard::Key key) {
+        if (sf::Keyboard::isKeyPressed(key)) {
+            while (sf::Keyboard::isKeyPressed(key)) {
+            }
+            return true;
+        }
+        return false;
+    }
 
+    void main_loop(void) {
         while (isOpen()) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+            if (keyPress(sf::Keyboard::R)) {
                 maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
                                              rand() % Maze::CELL_ROWS),
                               CellCoordinate(rand() % Maze::CELL_COLS,
-                                             rand() % Maze::CELL_ROWS),
-                              N);
-
-                while (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-                }
+                                             rand() % Maze::CELL_ROWS));
+            } else if (keyPress(sf::Keyboard::Return)) {
+                maze.findPath(CellCoordinate(0, 0), CellCoordinate(7, 7));
+            } else if (keyPress(sf::Keyboard::Space)) {
+                maze.generate();
             }
 
             sf::Event event;
