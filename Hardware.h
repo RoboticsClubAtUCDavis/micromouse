@@ -18,7 +18,12 @@ class Hardware {
 
     Hardware();
 
-    void moveForward(unsigned mm);
+    // Moves forward the given number of millimeters.
+    // If `keepGoing` is true the mouse will not stop at the end of the
+    // movement. If `useCaution` is true it will stop when a wall is
+    // encountered. Returns the total millilmeters traveled.
+    unsigned moveForward(unsigned mm, bool keepGoing, bool useCaution);
+
     void rotate(int deg);
 
     // Eventually we will want movement/turning 'macros' to handle smooth turns
@@ -29,6 +34,8 @@ class Hardware {
 
     // Returns the corresponding result after calling `checkWall`.
     bool isWall(Relation relation);
+
+    void setSpeed(unsigned mmps);
 
     void calibrateMotors();
     void calibrateRangeFinders();
