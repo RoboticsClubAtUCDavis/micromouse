@@ -19,8 +19,13 @@ class Mouse {
     void reset();
 
   private:
+    void moveTo(CellCoordinate position);
     void followPath(const Path &path);
-    void move(DirectionVector movement);
+
+    // If `keepGoing` is true the mouse will not stop at the end of the
+    // movement. If `useCaution` is true it will stop when a wall is
+    // encountered. Returns the total number of nodes traveled.
+    unsigned move(DirectionVector movement, bool keepGoing, bool useCaution);
 
     Maze maze;
     Hardware bot;
