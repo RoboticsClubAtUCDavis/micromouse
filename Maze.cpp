@@ -354,7 +354,7 @@ void Maze::constructPath(Node *start) {
     path.start = start->pos;
 
     // while there is more to the path to traverse
-    for (const Node *i = start; i; i = i->next) {
+    for (const Node *i = start; i->next; i = i->next) {
         path.push_back(DirectionVector(i->direction, 1));
     }
 }
