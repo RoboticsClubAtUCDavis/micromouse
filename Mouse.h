@@ -25,7 +25,7 @@ class Mouse {
     Maze maze;
     Hardware bot;
 
-    Coordinate position;
+    NodeCoordinate position;
     Direction facing;
 
     // In millimeter per second.
