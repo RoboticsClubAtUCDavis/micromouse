@@ -3,9 +3,9 @@
 #include <cstdlib> //abs
 #include <fstream>
 #include <iostream>
+#include <set>
 #include <stdexcept>
 #include <vector>
-#include <set>
 
 #define MAZE_DIAGONALS
 
