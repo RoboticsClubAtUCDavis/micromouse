@@ -182,10 +182,12 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end,
     // Reset any metadata from previous pathfinding.
     resetNodePathData();
 
+    // Invert `facing` since pathfinding is done in reverse.
+    facing = DirOp::invert(facing);
+
     // The end node is 0 distance away.
     endNode.gScore = 0;
     endNode.fScore = heuristic(end, start);
-    endNode.direction = facing;
 
     // While there are nodes remaining to be evaluated.
     while (!openNodes.empty()) {
@@ -227,6 +229,12 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end,
                 currentNode->gScore +
                 calculateMovementCost(currentNode->direction, direction);
 
+            // If the adjacent node is the start node, add a penalty for paths
+            // that do not start in the direction the mouse is facing.
+            if (&adjacentNode == &getNode(start)) {
+                tentativeScore += calculateMovementCost(direction, facing);
+            }
+
             // If adjacent node not in openNodes.
             if (find(openNodes.begin(), openNodes.end(), &adjacentNode) ==
                 openNodes.end()) {
@@ -241,8 +249,7 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end,
 
             // This path is the best so far.
             adjacentNode.next = currentNode;
-            adjacentNode.direction = static_cast<Direction>(
-                (direction + S) % NONE); // TODO move to function/overload
+            adjacentNode.direction = direction;
             auto heuristicScore = heuristic(adjacentNode.pos, start);
             adjacentNode.gScore = tentativeScore;
             adjacentNode.fScore = adjacentNode.gScore + heuristicScore;
@@ -291,22 +298,19 @@ unsigned Maze::calculateMovementCost(Direction currentDirection,
             cost = MOVEMENT_COST_DIAGONAL;
             break;
         default:
-            throw std::invalid_argument("Direction cannot be: NONE");
+            cost = 0;
     }
 
     // We are not given what direction we are currently facing so no penalty can
     // be given.
-    if (currentDirection == NONE) {
+    if (currentDirection == NONE || nextDirection == NONE) {
         return cost;
     }
-
-    // Need to flip the direction to compare correctly.
-    nextDirection = static_cast<Direction>((nextDirection + S) % NONE);
 
     // Penalize turns.
     switch (abs(nextDirection - currentDirection)) {
         case 0:
-            // Goiing straight has no additional cost.
+            // Going straight has no additional cost.
             return cost;
         case 1:
         case 7:
@@ -325,9 +329,11 @@ unsigned Maze::calculateMovementCost(Direction currentDirection,
             // make. This is an approximation.
             return cost + MOVEMENT_COST * 2;
         case 4:
-            // path 180 turn. It is guaranteed not to be the shortest so just
-            // return cost.
-            return cost;
+            // Turning 180deg costs moving two cells.
+            // This is an approximation.
+            // This can occur if the mouse is initially facing the opposite
+            // direction.
+            return cost + MOVEMENT_COST * 2;
         default:
             throw runtime_error("This should be unreachable");
     }
@@ -355,7 +361,8 @@ void Maze::constructPath(Node *start) {
 
     // while there is more to the path to traverse
     for (const Node *i = start; i->next; i = i->next) {
-        path.push_back(DirectionVector(i->direction, 1));
+        // Invert the directions since pathfinding was done in reverse.
+        path.push_back(DirectionVector(DirOp::invert(i->direction), 1));
     }
 }
 
