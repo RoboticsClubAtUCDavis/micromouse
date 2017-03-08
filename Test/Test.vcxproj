@@ -77,6 +77,8 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>Micromouse.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -97,6 +99,9 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>Micromouse.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Release</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -113,30 +118,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Coordinate.cpp" />
-    <ClCompile Include="..\Direction.cpp" />
-    <ClCompile Include="..\Encoder.cpp" />
-    <ClCompile Include="..\Hardware.cpp" />
-    <ClCompile Include="..\Led.cpp" />
-    <ClCompile Include="..\Maze.cpp" />
-    <ClCompile Include="..\Motor.cpp" />
-    <ClCompile Include="..\Node.cpp" />
-    <ClCompile Include="..\Path.cpp" />
-    <ClCompile Include="..\RangeFinder.cpp" />
     <ClCompile Include="Test-Direction.cpp" />
     <ClCompile Include="Test-Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Coordinate.h" />
-    <ClInclude Include="..\Direction.h" />
-    <ClInclude Include="..\Encoder.h" />
-    <ClInclude Include="..\Hardware.h" />
-    <ClInclude Include="..\Led.h" />
-    <ClInclude Include="..\Maze.h" />
-    <ClInclude Include="..\Motor.h" />
-    <ClInclude Include="..\Node.h" />
-    <ClInclude Include="..\Path.h" />
-    <ClInclude Include="..\RangeFinder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
