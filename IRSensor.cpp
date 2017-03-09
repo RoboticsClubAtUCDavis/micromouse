@@ -1,12 +1,6 @@
 #include "IRSensor.h"
 
-
-
-IRSensor::IRSensor()
-{
-}
-
-
-IRSensor::~IRSensor()
-{
+float IRSensor::getDistance() {
+    // TODO
+    return 0.0f;
 }
