@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef ARDUINO_BUILD
+
+#include <cstdlib>
 #include <iostream>
 #include <stdint.h>
 
@@ -11,7 +15,7 @@
 #define OUTPUT_OPENDRAIN 4
 #define INPUT_DISABLE 5
 
-//#define VERBOSE_ARDUINO
+#define VERBOSE_ARDUINO
 
 #ifdef VERBOSE_ARDUINO
 #define verbose_print(str) std::cout << str << std::endl;
@@ -76,3 +80,32 @@ void delayMicroseconds(uint32_t usec) {
     printf("delayMicroseconds - pusecin: %u\n", usec);
 #endif // VERBOSE_ARDUINO
 }
+
+uint32_t random(uint32_t howbig) {
+#ifdef VERBOSE_ARDUINO
+    printf("random - val: %u\n", howbig);
+#endif // VERBOSE_ARDUINO
+    return rand() % howbig;
+}
+
+int32_t random(int32_t howsmall, int32_t howbig) {
+#ifdef VERBOSE_ARDUINO
+    printf("random - lower: %u, upper: %u\n", howsmall, howbig);
+#endif // VERBOSE_ARDUINO
+    return rand() % (howbig - howsmall) + howsmall;
+}
+
+void randomSeed(uint32_t newseed) {
+#ifdef VERBOSE_ARDUINO
+    printf("randomSeed - seed: %u\n", newseed);
+#endif // VERBOSE_ARDUINO
+    srand(newseed);
+}
+
+void srandom(uint32_t newseed) {
+#ifdef VERBOSE_ARDUINO
+    printf("srandom - seed: %u\n", newseed);
+#endif // VERBOSE_ARDUINO
+    srand(newseed);
+}
+#endif
