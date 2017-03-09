@@ -8,26 +8,29 @@ Led::Led(unsigned pin) : PIN(pin) {
 }
 
 void Led::setBrightness(unsigned percent) {
-    percent *= 2.55;
-    //	analogWrite(led, percent);
-    brightness = percent;
+    if (ledPower) {
+        brightness = percent *= 2.55;
+    } else {
+        brightness = percent *= 2.55;
+        //	analogWrite(led, brightness);
+    }
 }
 
 void Led::turnOn() {
     //  analogWrite(led, brightness);
-    flag = true;
+    ledPower = true;
 }
 
 void Led::turnOff() {
     //	digitalWrite(pin, LOW);
-    flag = false;
+    ledPower = false;
 }
 
 void Led::blink(unsigned n, unsigned delay1, unsigned delay2) {
 
-    if (flag == true) {
+    if (ledPower) {
 
-        for (unsigned i = 1; i <= n; i++) {
+        for (unsigned i = 1;; i++) {
             turnOff();
             //		delay(delay1);
             turnOn();
@@ -38,7 +41,7 @@ void Led::blink(unsigned n, unsigned delay1, unsigned delay2) {
         }
 
     } else {
-        for (unsigned j = 1; j <= n; j++) {
+        for (unsigned j = 1;; j++) {
             turnOn();
             //		delay(delay1);
             turnOff();

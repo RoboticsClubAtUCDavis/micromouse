@@ -13,5 +13,5 @@ class Led {
 
   private:
     unsigned brightness;
-    bool flag;
+    bool ledPower;
 };
