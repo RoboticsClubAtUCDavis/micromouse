@@ -4,7 +4,7 @@
 #include "Motor.h"
 #include "RangeFinder.h"
 
-enum Relation { LEFT, FRONT, RIGHT, NONE };
+enum Relation { LEFT, FRONT, RIGHT, NO_RELATION };
 
 class Hardware {
   public:
@@ -51,6 +51,7 @@ class Hardware {
 
     void calibrateMotors();
     void calibrateRangeFinders();
+    void calibrateRangeFinder(Relation relation);
 
   private:
     void initRangeFinders();
