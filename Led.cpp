@@ -1,33 +1,33 @@
 #include "Led.h"
 
-Led::Led() : Pin(Pin) {
+Led::Led() : PIN(0) {
 }
 
-Led::Led(unsigned pin) : Pin(pin) {
+Led::Led(unsigned pin) : PIN(pin) {
     //	pinMode(pin, OUTPUT);
 }
 
 void Led::setBrightness(unsigned percent) {
-    //  percent = map(percent, 0, 100, 0, 255);
+    percent *= 2.55;
     //	analogWrite(led, percent);
     brightness = percent;
 }
 
 void Led::turnOn() {
     //  analogWrite(led, brightness);
-    flag = 1;
+    flag = true;
 }
 
 void Led::turnOff() {
     //	digitalWrite(pin, LOW);
-    flag = 0;
+    flag = false;
 }
 
 void Led::blink(unsigned n, unsigned delay1, unsigned delay2) {
 
-    if (flag == 1) {
+    if (flag == true) {
 
-        for (unsigned i = 0; i <= n; i++) {
+        for (unsigned i = 1; i <= n; i++) {
             turnOff();
             //		delay(delay1);
             turnOn();
@@ -38,7 +38,7 @@ void Led::blink(unsigned n, unsigned delay1, unsigned delay2) {
         }
 
     } else {
-        for (unsigned j = 0; j <= n; j++) {
+        for (unsigned j = 1; j <= n; j++) {
             turnOn();
             //		delay(delay1);
             turnOff();

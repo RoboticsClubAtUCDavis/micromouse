@@ -4,7 +4,7 @@ class Led {
   public:
     Led();
 
-    const unsigned Pin;
+    const unsigned PIN;
     explicit Led(unsigned pin);
     void setBrightness(unsigned percent);
     void turnOn();
@@ -13,5 +13,5 @@ class Led {
 
   private:
     unsigned brightness;
-    unsigned flag;
+    bool flag;
 };
