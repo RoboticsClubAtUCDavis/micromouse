@@ -104,7 +104,7 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="RangeFinder.h" />
-    <ClInclude Include="UltraSonicSensor.h" />
+    <ClInclude Include="UltrasonicSensor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduinoSpoof\Arduino.cpp" />
@@ -120,7 +120,7 @@
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="Motor.cpp" />
     <ClCompile Include="RangeFinder.cpp" />
-    <ClCompile Include="UltraSonicSensor.cpp" />
+    <ClCompile Include="UltrasonicSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Micromouse.ino" />
