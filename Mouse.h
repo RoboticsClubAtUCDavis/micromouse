@@ -18,7 +18,7 @@ class Mouse {
     void setMappingSpeed(unsigned mmps);
     void setRunningSpeed(unsigned mmps);
 
-    void setMappingStrategy(MappingStrategy strat);
+    void setMappingStrategy(MappingStrategy strategy);
 
     void reset();
 
@@ -40,7 +40,8 @@ class Mouse {
     Direction facing;
 
     // In millimeter per second.
-    int speed = 100;
+    int mappingSpeed = 100;
+    int runningSpeed = 100;
 
     MappingStrategy mappingStrategy = EXHAUSTIVE;
 };

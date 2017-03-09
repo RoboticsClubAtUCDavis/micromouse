@@ -24,15 +24,15 @@ void Mouse::runMaze() {
 }
 
 void Mouse::setMappingSpeed(unsigned mmps) {
-    // TODO
+    mappingSpeed = mmps;
 }
 
 void Mouse::setRunningSpeed(unsigned mmps) {
-    // TODO
+    runningSpeed = mmps;
 }
 
-void Mouse::setMappingStrategy(MappingStrategy strat) {
-    // TODO
+void Mouse::setMappingStrategy(MappingStrategy strategy) {
+    mappingStrategy = strategy;
 }
 
 void Mouse::reset() {
