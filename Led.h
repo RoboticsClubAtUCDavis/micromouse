@@ -3,7 +3,6 @@
 class Led {
   public:
     Led();
-    ~Led();
 
 	const unsigned pin;
 	explicit Led(unsigned pin);
@@ -13,4 +12,5 @@ class Led {
 	void blink(unsigned n = 1, unsigned delay1 = 200, unsigned delay2 = 200);
 
   private:
+	  unsigned brightness;
 };
