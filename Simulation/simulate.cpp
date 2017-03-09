@@ -4,7 +4,6 @@
 #include "../Micromouse/Direction.h"
 #include "../Micromouse/Maze.h"
 #include "../Micromouse/Node.h"
-#include "../Micromouse/Path.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -103,10 +102,12 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
 
 class Simulator : public sf::RenderWindow {
   public:
-    Simulator(void)
-        : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE), maze() {
+    Simulator(Mouse &mouse, Maze &maze)
+        : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE)
+        , mouse(mouse)
+        , maze(maze) {
         try {
-            maze = Maze::fromFile("test.maze");
+            mouse.getMaze() = Maze::fromFile("test.maze");
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
@@ -162,12 +163,14 @@ class Simulator : public sf::RenderWindow {
         display();
     }
 
-    Maze maze;
+    Maze &maze;
+    Mouse &mouse;
 };
 
 int main() {
     srand(time(0));
-    Simulator simulator;
+    Mouse mouse;
+    Simulator simulator(mouse, mouse.getMaze());
     simulator.main_loop();
     return 0;
 }

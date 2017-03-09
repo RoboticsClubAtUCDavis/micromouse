@@ -22,6 +22,8 @@ class Mouse {
 
     void reset();
 
+    Maze &getMaze();
+
   private:
     void moveTo(CellCoordinate position);
     void followPath(const Path &path);
