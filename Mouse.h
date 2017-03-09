@@ -7,6 +7,8 @@
 
 class Mouse {
   public:
+    enum MappingStrategy { EXHAUSTIVE, STRAT2, STRAT3 };
+
     Mouse();
 
     void mapMaze();
@@ -15,6 +17,8 @@ class Mouse {
     // In millimeter per second.
     void setMappingSpeed(unsigned mmps);
     void setRunningSpeed(unsigned mmps);
+
+    void setMappingStrategy(MappingStrategy strat);
 
     void reset();
 
@@ -27,6 +31,8 @@ class Mouse {
     // encountered. Returns the total number of nodes traveled.
     unsigned move(DirectionVector movement, bool keepGoing, bool useCaution);
 
+    void mapMazeExhaustive();
+
     Maze maze;
     Hardware bot;
 
@@ -35,4 +41,6 @@ class Mouse {
 
     // In millimeter per second.
     int speed = 100;
+
+    MappingStrategy mappingStrategy = EXHAUSTIVE;
 };
