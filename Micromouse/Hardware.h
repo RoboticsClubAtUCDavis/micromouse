@@ -16,7 +16,8 @@ class Hardware {
 
     static const unsigned NUM_RANGE_FINDERS = 3;
 
-    Hardware() {};
+    Hardware();
+    ~Hardware();
 
     // Moves forward the given number of millimeters.
     // If `keepGoing` is true the mouse will not stop at the end of the
@@ -41,8 +42,11 @@ class Hardware {
     void calibrateRangeFinders();
 
   private:
-    RangeFinder rangeFinders[NUM_RANGE_FINDERS];
+    RangeFinder * rangeFinders[NUM_RANGE_FINDERS];
     Motor leftMotor;
     Motor rightMotor;
     Led led;
+
+    // Max speed in mmps.
+    unsigned speed = 100;
 };

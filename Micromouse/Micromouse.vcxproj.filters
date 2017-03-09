@@ -51,6 +51,12 @@
     <ClInclude Include="ArduinoSpoof\Arduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IRSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UltraSonicSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Node.cpp">
@@ -86,7 +92,14 @@
     <ClCompile Include="Mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD:Micromouse/Micromouse.vcxproj.filters
     <ClCompile Include="ArduinoSpoof\Arduino.cpp">
+=======
+    <ClCompile Include="IRSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UltraSonicSensor.cpp">
+>>>>>>> Add IRSensor and UltraSonicSensor that inherit from RangeFinder:Micromouse.vcxproj.filters
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

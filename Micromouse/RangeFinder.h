@@ -9,12 +9,15 @@ class RangeFinder {
     // Max distance for sensor in mm.
     const int MAX_RANGE;
 
-    RangeFinder();
-    RangeFinder(unsigned pin);
-
+    // These may need to be virtual.
+    // Going to try to avoid it.
     bool calibrate(/*TODO*/);
     bool loadCalibration(/*TODO*/);
     void saveCalibration(/*TODO*/);
 
-    float getDistance();
+    virtual float getDistance() = 0;
+
+  protected:
+    RangeFinder();
+    RangeFinder(unsigned pin);
 };
