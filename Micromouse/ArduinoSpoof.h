@@ -1,9 +1,8 @@
 #pragma once
 
-#ifndef ARDUINO_BUILD
+#ifndef CORE_TEENSY
 
 #include <cstdlib>
-#include <iostream>
 #include <stdint.h>
 
 #define HIGH 1
@@ -119,4 +118,4 @@ void srandom(uint32_t newseed) {
 #endif // VERBOSE_ARDUINO
     srand(newseed);
 }
-#endif
+#endif // CORE_TEENSY
