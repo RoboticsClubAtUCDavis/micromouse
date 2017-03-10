@@ -88,7 +88,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ArduinoSpoof.h" />
+    <ClInclude Include="Arduino.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Encoder.h" />
