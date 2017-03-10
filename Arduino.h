@@ -30,107 +30,17 @@ static const CSerial Serial;
 
 //#define VERBOSE_ARDUINO
 
-static void pinMode(uint8_t pin, uint8_t mode) {
-#ifdef VERBOSE_ARDUINO
-    printf("pinMode - pin: %u, mode: %u\n", pin, mode);
-#else
-    (void)pin;
-    (void)mode;
-#endif // VERBOSE_ARDUINO
-}
-
-static void digitalWrite(uint8_t pin, uint8_t val) {
-#ifdef VERBOSE_ARDUINO
-    printf("digitalWrite - pin: %u, val: %u\n", pin, val);
-#else
-    (void)pin;
-    (void)val;
-#endif // VERBOSE_ARDUINO
-}
-
-static void analogWrite(uint8_t pin, int val) {
-#ifdef VERBOSE_ARDUINO
-    printf("analogWrite - pin: %u, val: %i\n", pin, val);
-#else
-    (void)pin;
-    (void)val;
-#endif // VERBOSE_ARDUINO
-}
-
-static uint8_t digitalRead(uint8_t pin) {
-#ifdef VERBOSE_ARDUINO
-    printf("digitalRead - pin: %u\n", pin);
-#else
-    (void)pin;
-#endif // VERBOSE_ARDUINO
-    return 0;
-}
-
-static int analogRead(uint8_t pin) {
-#ifdef VERBOSE_ARDUINO
-    printf("analogRead - pin: %u\n", pin);
-#else
-    (void)pin;
-#endif // VERBOSE_ARDUINO
-    return 0;
-}
-
-static uint32_t millis(void) {
-#ifdef VERBOSE_ARDUINO
-    printf("millis\n");
-#endif // VERBOSE_ARDUINO
-    return 0;
-}
-
-static uint32_t micros(void) {
-#ifdef VERBOSE_ARDUINO
-    printf("micros\n");
-#endif // VERBOSE_ARDUINO
-    return 0;
-}
-
-static void delay(uint32_t msec) {
-#ifdef VERBOSE_ARDUINO
-    printf("delay - msec: %u\n", msec);
-#else
-    (void)msec;
-#endif // VERBOSE_ARDUINO
-}
-
-static void delayMicroseconds(uint32_t usec) {
-#ifdef VERBOSE_ARDUINO
-    printf("delayMicroseconds - pusecin: %u\n", usec);
-#else
-    (void)usec;
-#endif // VERBOSE_ARDUINO
-}
-
-static uint32_t random(uint32_t howbig) {
-#ifdef VERBOSE_ARDUINO
-    printf("random - val: %u\n", howbig);
-#endif // VERBOSE_ARDUINO
-    return rand() % howbig;
-}
-
-static int32_t random(int32_t howsmall, int32_t howbig) {
-#ifdef VERBOSE_ARDUINO
-    printf("random - lower: %u, upper: %u\n", howsmall, howbig);
-#endif // VERBOSE_ARDUINO
-    return rand() % (howbig - howsmall) + howsmall;
-}
-
-static void randomSeed(uint32_t newseed) {
-#ifdef VERBOSE_ARDUINO
-    printf("randomSeed - seed: %u\n", newseed);
-#endif // VERBOSE_ARDUINO
-    srand(newseed);
-}
-
-static void srandom(uint32_t newseed) {
-#ifdef VERBOSE_ARDUINO
-    printf("srandom - seed: %u\n", newseed);
-#endif // VERBOSE_ARDUINO
-    srand(newseed);
-}
+void pinMode(uint8_t pin, uint8_t mode);
+void digitalWrite(uint8_t pin, uint8_t val);
+void analogWrite(uint8_t pin, int val);
+uint8_t digitalRead(uint8_t pin);
+int analogRead(uint8_t pin);
+uint32_t millis(void);
+uint32_t micros(void);
+void delay(uint32_t msec);
+void delayMicroseconds(uint32_t usec);
+uint32_t random(uint32_t howbig);
+int32_t random(int32_t howsmall, int32_t howbig);
+void randomSeed(uint32_t newseed);
 
 #endif

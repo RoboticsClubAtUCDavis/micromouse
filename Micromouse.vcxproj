@@ -95,6 +95,7 @@
     <ClInclude Include="RangeFinder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Arduino.cpp" />
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Hardware.cpp" />
     <ClCompile Include="Led.cpp" />
