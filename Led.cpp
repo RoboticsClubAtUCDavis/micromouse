@@ -10,8 +10,8 @@ Led::Led(unsigned pin) : PIN(pin) {
 void Led::setBrightness(unsigned percent) {
     if (ledPower) {
         brightness = percent * 2.55;
+        //	analogWrite(led, brightness);
     }
-    //	analogWrite(led, brightness);
 }
 
 void Led::turnOn() {
