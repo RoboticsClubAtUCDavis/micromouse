@@ -1,7 +1,7 @@
-#pragma once
+#ifndef ARDUINO_SPOOF
+#define ARDUINO_SPOOF
 
-#ifndef CORE_TEENSY
-
+#include <cstdarg>
 #include <cstdlib>
 #include <stdint.h>
 
@@ -13,6 +13,19 @@
 #define INPUT_PULLDOWN 3
 #define OUTPUT_OPENDRAIN 4
 #define INPUT_DISABLE 5
+
+class CSerial {
+  public:
+    int printf(char *fmt, ...) const {
+        va_list args;
+        va_start(args, fmt);
+        int n = vprintf(fmt, args);
+        va_end(args);
+        return n;
+    }
+};
+
+static const CSerial Serial;
 
 //#define VERBOSE_ARDUINO
 
@@ -118,4 +131,5 @@ void srandom(uint32_t newseed) {
 #endif // VERBOSE_ARDUINO
     srand(newseed);
 }
-#endif // CORE_TEENSY
+
+#endif
