@@ -3,7 +3,6 @@
 #ifndef CORE_TEENSY
 
 #include <cstdlib>
-#include <iostream>
 #include <stdint.h>
 
 #define HIGH 1
