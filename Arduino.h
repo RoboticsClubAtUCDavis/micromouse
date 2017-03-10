@@ -4,6 +4,7 @@
 #include <cstdarg>
 #include <cstdlib>
 #include <stdint.h>
+#include <stdio.h>
 
 #define HIGH 1
 #define LOW 0
@@ -29,7 +30,7 @@ static const CSerial Serial;
 
 //#define VERBOSE_ARDUINO
 
-void pinMode(uint8_t pin, uint8_t mode) {
+static void pinMode(uint8_t pin, uint8_t mode) {
 #ifdef VERBOSE_ARDUINO
     printf("pinMode - pin: %u, mode: %u\n", pin, mode);
 #else
@@ -38,7 +39,7 @@ void pinMode(uint8_t pin, uint8_t mode) {
 #endif // VERBOSE_ARDUINO
 }
 
-void digitalWrite(uint8_t pin, uint8_t val) {
+static void digitalWrite(uint8_t pin, uint8_t val) {
 #ifdef VERBOSE_ARDUINO
     printf("digitalWrite - pin: %u, val: %u\n", pin, val);
 #else
@@ -47,7 +48,7 @@ void digitalWrite(uint8_t pin, uint8_t val) {
 #endif // VERBOSE_ARDUINO
 }
 
-void analogWrite(uint8_t pin, int val) {
+static void analogWrite(uint8_t pin, int val) {
 #ifdef VERBOSE_ARDUINO
     printf("analogWrite - pin: %u, val: %i\n", pin, val);
 #else
@@ -56,7 +57,7 @@ void analogWrite(uint8_t pin, int val) {
 #endif // VERBOSE_ARDUINO
 }
 
-uint8_t digitalRead(uint8_t pin) {
+static uint8_t digitalRead(uint8_t pin) {
 #ifdef VERBOSE_ARDUINO
     printf("digitalRead - pin: %u\n", pin);
 #else
@@ -65,7 +66,7 @@ uint8_t digitalRead(uint8_t pin) {
     return 0;
 }
 
-int analogRead(uint8_t pin) {
+static int analogRead(uint8_t pin) {
 #ifdef VERBOSE_ARDUINO
     printf("analogRead - pin: %u\n", pin);
 #else
@@ -74,21 +75,21 @@ int analogRead(uint8_t pin) {
     return 0;
 }
 
-uint32_t millis(void) {
+static uint32_t millis(void) {
 #ifdef VERBOSE_ARDUINO
     printf("millis\n");
 #endif // VERBOSE_ARDUINO
     return 0;
 }
 
-uint32_t micros(void) {
+static uint32_t micros(void) {
 #ifdef VERBOSE_ARDUINO
     printf("micros\n");
 #endif // VERBOSE_ARDUINO
     return 0;
 }
 
-void delay(uint32_t msec) {
+static void delay(uint32_t msec) {
 #ifdef VERBOSE_ARDUINO
     printf("delay - msec: %u\n", msec);
 #else
@@ -96,7 +97,7 @@ void delay(uint32_t msec) {
 #endif // VERBOSE_ARDUINO
 }
 
-void delayMicroseconds(uint32_t usec) {
+static void delayMicroseconds(uint32_t usec) {
 #ifdef VERBOSE_ARDUINO
     printf("delayMicroseconds - pusecin: %u\n", usec);
 #else
@@ -104,28 +105,28 @@ void delayMicroseconds(uint32_t usec) {
 #endif // VERBOSE_ARDUINO
 }
 
-uint32_t random(uint32_t howbig) {
+static uint32_t random(uint32_t howbig) {
 #ifdef VERBOSE_ARDUINO
     printf("random - val: %u\n", howbig);
 #endif // VERBOSE_ARDUINO
     return rand() % howbig;
 }
 
-int32_t random(int32_t howsmall, int32_t howbig) {
+static int32_t random(int32_t howsmall, int32_t howbig) {
 #ifdef VERBOSE_ARDUINO
     printf("random - lower: %u, upper: %u\n", howsmall, howbig);
 #endif // VERBOSE_ARDUINO
     return rand() % (howbig - howsmall) + howsmall;
 }
 
-void randomSeed(uint32_t newseed) {
+static void randomSeed(uint32_t newseed) {
 #ifdef VERBOSE_ARDUINO
     printf("randomSeed - seed: %u\n", newseed);
 #endif // VERBOSE_ARDUINO
     srand(newseed);
 }
 
-void srandom(uint32_t newseed) {
+static void srandom(uint32_t newseed) {
 #ifdef VERBOSE_ARDUINO
     printf("srandom - seed: %u\n", newseed);
 #endif // VERBOSE_ARDUINO
