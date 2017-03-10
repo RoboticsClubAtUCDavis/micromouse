@@ -1,11 +1,14 @@
 #include "Maze.h"
 #include <algorithm>
 #include <cstdlib> //abs
-//#include <fstream>
-//#include <iostream>
 #include <set>
 #include <stdexcept>
 #include <vector>
+
+#ifndef __MK66FX1M0__
+#include <fstream>
+#include <iostream>
+#endif // !__MK20DX256__
 
 #define MAZE_DIAGONALS
 
@@ -111,36 +114,38 @@ void Maze::generate(int seed) {
 Maze Maze::fromFile(std::string fileName) {
     Maze maze;
 
-    //try {
-    //    ifstream file(fileName.c_str());
-    //    if (!file.good())
-    //        throw runtime_error("Could not load file");
+#ifndef __MK66FX1M0__
+    try {
+        ifstream file(fileName.c_str());
+        if (!file.good())
+            throw runtime_error("Could not load file");
 
-    //    int x = 0;
-    //    int y = NODE_ROWS - 1;
+        int x = 0;
+        int y = NODE_ROWS - 1;
 
-    //    while (file) {
-    //        char c;
-    //        while (file && file.get(c)) {
-    //            if (c == '*') {
-    //                maze.getNode(NodeCoordinate(x, y)).exists = false;
-    //                x++;
-    //                cout << "* ";
-    //            } else if (c == ' ') {
-    //                x++;
-    //                cout << "  ";
-    //            }
+        while (file) {
+            char c;
+            while (file && file.get(c)) {
+                if (c == '*') {
+                    maze.getNode(NodeCoordinate(x, y)).exists = false;
+                    x++;
+                    cout << "* ";
+                } else if (c == ' ') {
+                    x++;
+                    cout << "  ";
+                }
 
-    //            if (x >= NODE_COLS) {
-    //                x = 0;
-    //                y--;
-    //                cout << endl;
-    //            }
-    //        }
-    //    }
-    //} catch (const exception &e) {
-    //    cout << e.what();
-    //}
+                if (x >= NODE_COLS) {
+                    x = 0;
+                    y--;
+                    cout << endl;
+                }
+            }
+        }
+    } catch (const exception &e) {
+        cout << e.what();
+    }
+#endif
 
     return maze;
 }
@@ -335,8 +340,11 @@ unsigned Maze::calculateMovementCost(Direction currentDirection,
             // direction.
             return cost + MOVEMENT_COST * 2;
         default:
+#ifndef __MK66FX1M0__
+            throw runtime_error("This should be unreachable");
+#endif // !__MK20DX256__
+            return cost;
             break;
-            //         throw runtime_error("This should be unreachable");
     }
 }
 
