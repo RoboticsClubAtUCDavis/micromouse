@@ -48,7 +48,7 @@
     <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ArduinoSpoof.h">
+    <ClInclude Include="Arduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
