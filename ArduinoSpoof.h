@@ -1,6 +1,6 @@
 #pragma once
 
-#ifndef ARDUINO_BUILD
+#ifndef CORE_TEENSY
 
 #include <cstdlib>
 #include <iostream>
@@ -119,4 +119,4 @@ void srandom(uint32_t newseed) {
 #endif // VERBOSE_ARDUINO
     srand(newseed);
 }
-#endif
+#endif // CORE_TEENSY
