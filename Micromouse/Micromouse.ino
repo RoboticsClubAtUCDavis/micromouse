@@ -1,18 +1,35 @@
-#define printf Serial.printf
-#include "Mouse.h"
 
-extern "C" {
-    void *_sbrk() {
-        return 0;
-    }
+// Define missing definitions
+namespace std {
+void __throw_bad_alloc() {
+    Serial.printf("Unable to allocate memory\n");
+    exit(1);
 }
 
+void __throw_length_error(char const *e) {
+    Serial.printf("Length Error : %s\n", e);
+    exit(1);
+}
+}
+
+extern "C" {
+int _getpid() {
+    return -1;
+}
+int _kill(int pid, int sig) {
+    return -1;
+}
+int _write() {
+    return -1;
+}
+}
+
+#include "Mouse.h"
 
 void setup() {
-    // put your setup code here, to run once:
-    Mouse mouse;
+    Serial.begin(9600);
 }
 
 void loop() {
-    // put your main code here, to run repeatedly:
+    Mouse t;
 }

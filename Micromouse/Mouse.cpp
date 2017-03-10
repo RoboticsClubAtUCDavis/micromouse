@@ -1,8 +1,10 @@
 #include "Mouse.h"
+#include <Arduino.h>
 #include <cstdio>
 
 Mouse::Mouse() {
-    printf("Mouse created\n");
+    pinMode(13, OUTPUT);
+    digitalWrite(13, HIGH);
 }
 
 void Mouse::mapMaze() {
