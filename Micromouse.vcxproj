@@ -81,6 +81,7 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Arduino.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Encoder.h" />
@@ -94,6 +95,7 @@
     <ClInclude Include="RangeFinder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Arduino.cpp" />
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Hardware.cpp" />
     <ClCompile Include="Led.cpp" />
