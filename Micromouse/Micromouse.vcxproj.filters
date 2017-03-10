@@ -91,5 +91,8 @@
     <None Include="README.md">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="Micromouse.ino">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

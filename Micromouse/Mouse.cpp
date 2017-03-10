@@ -1,6 +1,8 @@
 #include "Mouse.h"
+#include <cstdio>
 
 Mouse::Mouse() {
+    printf("Mouse created\n");
 }
 
 void Mouse::mapMaze() {

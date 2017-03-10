@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Micromouse", "Micromouse.vcxproj", "{C65DB01B-CC18-4A45-9B4B-2526A3100193}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simulation", "Simulation\Simulation.vcxproj", "{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C65DB01B-CC18-4A45-9B4B-2526A3100193} = {C65DB01B-CC18-4A45-9B4B-2526A3100193}
@@ -15,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj",
 		{C65DB01B-CC18-4A45-9B4B-2526A3100193} = {C65DB01B-CC18-4A45-9B4B-2526A3100193}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Micromouse", "Micromouse\Micromouse.vcxproj", "{C65DB01B-CC18-4A45-9B4B-2526A3100193}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -22,12 +22,6 @@ Global
 		Teensy|x86 = Teensy|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Debug|x86.ActiveCfg = Debug|Win32
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Debug|x86.Build.0 = Debug|Win32
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Release|x86.ActiveCfg = Release|Win32
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Release|x86.Build.0 = Release|Win32
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Teensy|x86.ActiveCfg = Teensy|Win32
-		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Teensy|x86.Build.0 = Teensy|Win32
 		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Debug|x86.ActiveCfg = Debug|Win32
 		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Debug|x86.Build.0 = Debug|Win32
 		{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}.Release|x86.ActiveCfg = Release|Win32
@@ -40,6 +34,12 @@ Global
 		{8DF96CF3-B144-4438-976B-03A60E57F920}.Release|x86.Build.0 = Release|Win32
 		{8DF96CF3-B144-4438-976B-03A60E57F920}.Teensy|x86.ActiveCfg = Release|Win32
 		{8DF96CF3-B144-4438-976B-03A60E57F920}.Teensy|x86.Build.0 = Release|Win32
+		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Debug|x86.ActiveCfg = Debug|Win32
+		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Debug|x86.Build.0 = Debug|Win32
+		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Release|x86.ActiveCfg = Release|Win32
+		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Release|x86.Build.0 = Release|Win32
+		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Teensy|x86.ActiveCfg = Teensy|Win32
+		{C65DB01B-CC18-4A45-9B4B-2526A3100193}.Teensy|x86.Build.0 = Teensy|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

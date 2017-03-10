@@ -1,8 +1,8 @@
 #include "Maze.h"
 #include <algorithm>
 #include <cstdlib> //abs
-#include <fstream>
-#include <iostream>
+//#include <fstream>
+//#include <iostream>
 #include <set>
 #include <stdexcept>
 #include <vector>
@@ -111,36 +111,36 @@ void Maze::generate(int seed) {
 Maze Maze::fromFile(std::string fileName) {
     Maze maze;
 
-    try {
-        ifstream file(fileName.c_str());
-        if (!file.good())
-            throw runtime_error("Could not load file");
+    //try {
+    //    ifstream file(fileName.c_str());
+    //    if (!file.good())
+    //        throw runtime_error("Could not load file");
 
-        int x = 0;
-        int y = NODE_ROWS - 1;
+    //    int x = 0;
+    //    int y = NODE_ROWS - 1;
 
-        while (file) {
-            char c;
-            while (file && file.get(c)) {
-                if (c == '*') {
-                    maze.getNode(NodeCoordinate(x, y)).exists = false;
-                    x++;
-                    cout << "* ";
-                } else if (c == ' ') {
-                    x++;
-                    cout << "  ";
-                }
+    //    while (file) {
+    //        char c;
+    //        while (file && file.get(c)) {
+    //            if (c == '*') {
+    //                maze.getNode(NodeCoordinate(x, y)).exists = false;
+    //                x++;
+    //                cout << "* ";
+    //            } else if (c == ' ') {
+    //                x++;
+    //                cout << "  ";
+    //            }
 
-                if (x >= NODE_COLS) {
-                    x = 0;
-                    y--;
-                    cout << endl;
-                }
-            }
-        }
-    } catch (const exception &e) {
-        cout << e.what();
-    }
+    //            if (x >= NODE_COLS) {
+    //                x = 0;
+    //                y--;
+    //                cout << endl;
+    //            }
+    //        }
+    //    }
+    //} catch (const exception &e) {
+    //    cout << e.what();
+    //}
 
     return maze;
 }
@@ -256,12 +256,12 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end,
         }
     }
 
-    throw runtime_error("No path found");
+    //    throw runtime_error("No path found");
 }
 
 Node &Maze::getNode(NodeCoordinate pos) {
-    if (!withinBounds(pos))
-        throw out_of_range("Coordinate out of range.");
+    //    if (!withinBounds(pos))
+    //        throw out_of_range("Coordinate out of range.");
     return maze[pos.y][pos.x];
 }
 
@@ -335,7 +335,8 @@ unsigned Maze::calculateMovementCost(Direction currentDirection,
             // direction.
             return cost + MOVEMENT_COST * 2;
         default:
-            throw runtime_error("This should be unreachable");
+            break;
+            //         throw runtime_error("This should be unreachable");
     }
 }
 

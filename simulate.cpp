@@ -1,10 +1,10 @@
 #include <SFML/Graphics.hpp>
 
-#include "Coordinate.h"
-#include "Direction.h"
-#include "Maze.h"
-#include "Node.h"
-#include "Path.h"
+#include "Micromouse\Coordinate.h"
+#include "Micromouse\Direction.h"
+#include "Micromouse\Maze.h"
+#include "Micromouse\Node.h"
+#include "Micromouse\Path.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
