@@ -63,6 +63,9 @@
     <ClInclude Include="PIDController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LedRGB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Node.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PIDController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LedRGB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
