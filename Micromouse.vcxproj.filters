@@ -48,6 +48,9 @@
     <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Arduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Node.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Arduino.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
