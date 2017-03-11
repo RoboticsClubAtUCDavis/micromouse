@@ -87,6 +87,7 @@
     <ClInclude Include="Encoder.h" />
     <ClInclude Include="Hardware.h" />
     <ClInclude Include="Led.h" />
+    <ClInclude Include="LedRGB.h" />
     <ClInclude Include="Motor.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Mouse.h" />
@@ -99,6 +100,7 @@
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Hardware.cpp" />
     <ClCompile Include="Led.cpp" />
+    <ClCompile Include="LedRGB.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Mouse.cpp" />
