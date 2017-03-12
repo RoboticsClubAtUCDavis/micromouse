@@ -8,10 +8,9 @@ Hardware::Hardware() {
 }
 
 Hardware::~Hardware() {
-    for (Relation r = LEFT; r != NO_RELATION;
-         r = static_cast<Relation>(r + 1)) {
-        delete rangeFinders[r];
-    }
+    delete rangeFinders[LEFT];
+    delete rangeFinders[FRONT];
+    delete rangeFinders[RIGHT];
 }
 
 unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
@@ -41,8 +40,7 @@ void Hardware::calibrateMotors() {
 }
 
 void Hardware::calibrateRangeFinders() {
-    for (Relation r = LEFT; r != NO_RELATION;
-         r = static_cast<Relation>(r + 1)) {
+    for (Relation r = LEFT; r != NO_RELATION; r = Relation(r + 1)) {
         rangeFinders[r]->calibrate();
     }
 }
@@ -65,8 +63,7 @@ void Hardware::initRangeFinders() {
         new IRSensor(IRSENSOR_RIGHT_PIN, IRSENSOR_RIGHT_MIN_DISTANCE,
                      IRSENSOR_RIGHT_MAX_DISTANCE);
 
-    for (Relation r = LEFT; r != NO_RELATION;
-         r = static_cast<Relation>(r + 1)) {
+    for (Relation r = LEFT; r != NO_RELATION; r = Relation(r + 1)) {
         rangeFinders[r]->loadCalibration();
     }
 }
