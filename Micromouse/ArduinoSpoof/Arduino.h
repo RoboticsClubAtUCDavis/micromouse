@@ -17,7 +17,7 @@
 
 class CSerial {
   public:
-    int printf(char *fmt, ...) const {
+    int printf(const char *fmt, ...) const {
         va_list args;
         va_start(args, fmt);
         int n = vprintf(fmt, args);
