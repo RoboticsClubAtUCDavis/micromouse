@@ -9,15 +9,21 @@ LedRGB::LedRGB(unsigned redPin, unsigned greenPin, unsigned bluePin)
 }
 
 void LedRGB::setRGB(unsigned r, unsigned g, unsigned b) {
-    RedLed.setBrightness(r / 2.55);
-    GreenLed.setBrightness(g / 2.55);
-    BlueLed.setBrightness(b / 2.55);
+    r /= 2.55;
+    g /= 2.55;
+    b /= 2.55;
+    if (checkBrightness) {
+        RedLed.setBrightness(r);
+        GreenLed.setBrightness(g);
+        BlueLed.setBrightness(b);
+    }
 }
 
 void LedRGB::setBrightness(unsigned percent) {
     RedLed.setBrightness(percent);
     GreenLed.setBrightness(percent);
     BlueLed.setBrightness(percent);
+    checkBrightness = true;
 }
 
 void LedRGB::turnOn() {
