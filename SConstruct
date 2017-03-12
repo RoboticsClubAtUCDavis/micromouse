@@ -8,7 +8,7 @@ sfml_libs = Split('sfml-graphics sfml-window sfml-system')
 
 env = Environment(CPPFLAGS = cpp_flags)
 source_objs = [env.Object(i) for i in sources]
-simulate_deps = ['Simulation/simulate.cpp'] + source_objs
+simulate_deps = Glob('Simulation/*.cpp') + source_objs
 test_deps = Glob('Test/*.cpp') + source_objs
 
 env.Program('simulate', simulate_deps, LIBS=sfml_libs)
