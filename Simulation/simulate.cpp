@@ -105,8 +105,7 @@ class Simulator : public sf::RenderWindow {
   public:
     Simulator(Mouse &mouse)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE)
-        , mouse(mouse)
-        , maze(mouse.maze) {
+        , mouse(mouse) {
         try {
             mouse.maze = Maze::fromFile("test.maze");
         } catch (const std::exception &e) {
@@ -126,14 +125,14 @@ class Simulator : public sf::RenderWindow {
     void main_loop(void) {
         while (isOpen()) {
             if (keyPress(sf::Keyboard::R)) {
-                maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
-                                             rand() % Maze::CELL_ROWS),
-                              CellCoordinate(rand() % Maze::CELL_COLS,
-                                             rand() % Maze::CELL_ROWS));
+                mouse.maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
+                                                   rand() % Maze::CELL_ROWS),
+                                    CellCoordinate(rand() % Maze::CELL_COLS,
+                                                   rand() % Maze::CELL_ROWS));
             } else if (keyPress(sf::Keyboard::Return)) {
-                maze.findPath(CellCoordinate(0, 0), CellCoordinate(7, 7));
+                mouse.maze.findPath(CellCoordinate(0, 0), CellCoordinate(7, 7));
             } else if (keyPress(sf::Keyboard::Space)) {
-                maze.generate();
+                mouse.maze.generate();
             }
 
             sf::Event event;
@@ -158,14 +157,13 @@ class Simulator : public sf::RenderWindow {
 
     void render(void) {
         clear(sf::Color::Black);
-        MazeDrawable entity(maze);
+        MazeDrawable entity(mouse.maze);
         entity.setScale(mazeSize());
         draw(entity);
         display();
     }
 
     Mouse &mouse;
-    Maze &maze;
 };
 
 int main() {
