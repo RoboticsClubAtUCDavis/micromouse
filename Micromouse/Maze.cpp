@@ -260,13 +260,16 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end,
             adjacentNode.fScore = adjacentNode.gScore + heuristicScore;
         }
     }
-
-    //    throw runtime_error("No path found");
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    throw runtime_error("No path found");
+#endif
 }
 
 Node &Maze::getNode(NodeCoordinate pos) {
-    //    if (!withinBounds(pos))
-    //        throw out_of_range("Coordinate out of range.");
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    if (!withinBounds(pos))
+        throw out_of_range("Coordinate out of range.");
+#endif
     return maze[pos.y][pos.x];
 }
 
