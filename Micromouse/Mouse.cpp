@@ -44,10 +44,6 @@ void Mouse::reset() {
     // TODO
 }
 
-Maze &Mouse::getMaze() {
-    return maze;
-}
-
 void Mouse::moveTo(CellCoordinate position) {
     (void)position;
     // TODO

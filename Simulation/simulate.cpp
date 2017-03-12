@@ -103,12 +103,12 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
 
 class Simulator : public sf::RenderWindow {
   public:
-    Simulator(Mouse &mouse, Maze &maze)
+    Simulator(Mouse &mouse)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE)
-        , maze(maze)
-        , mouse(mouse) {
+        , mouse(mouse)
+        , maze(mouse.maze) {
         try {
-            mouse.getMaze() = Maze::fromFile("test.maze");
+            mouse.maze = Maze::fromFile("test.maze");
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
@@ -164,14 +164,14 @@ class Simulator : public sf::RenderWindow {
         display();
     }
 
-    Maze &maze;
     Mouse &mouse;
+    Maze &maze;
 };
 
 int main() {
     srand(time(0));
     Mouse mouse;
-    Simulator simulator(mouse, mouse.getMaze());
+    Simulator simulator(mouse);
     simulator.main_loop();
     return 0;
 }
