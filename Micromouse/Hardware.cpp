@@ -8,8 +8,8 @@ Hardware::Hardware() {
 }
 
 Hardware::~Hardware() {
-    for (unsigned i = 0; i < NUM_RANGE_FINDERS; i++) {
-        delete rangeFinders[i];
+    for (auto i : rangeFinders) {
+        delete i;
     }
 }
 
@@ -40,8 +40,8 @@ void Hardware::setSpeed(unsigned mmps) {
 //}
 
 void Hardware::calibrateRangeFinders() {
-    for (unsigned i = 0; i < NUM_RANGE_FINDERS; i++) {
-        rangeFinders[i]->calibrate();
+    for (auto i : rangeFinders) {
+        i->calibrate();
     }
 }
 
@@ -63,7 +63,7 @@ void Hardware::initRangeFinders() {
         new IRSensor(IRSENSOR_RIGHT_PIN, IRSENSOR_RIGHT_MIN_DISTANCE,
                      IRSENSOR_RIGHT_MAX_DISTANCE);
 
-    for (unsigned i = 0; i < NUM_RANGE_FINDERS; i++) {
-        rangeFinders[i]->loadCalibration();
+    for (auto i : rangeFinders) {
+        i->loadCalibration();
     }
 }
