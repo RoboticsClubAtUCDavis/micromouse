@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Test-Coordinate.cpp" />
     <ClCompile Include="Test-Direction.cpp" />
     <ClCompile Include="Test-Main.cpp" />
   </ItemGroup>
