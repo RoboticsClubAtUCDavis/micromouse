@@ -18,6 +18,7 @@ void Motor::off(void) {
     digitalWrite(in2, LOW);
 }
 
+// 1.0 = max speed forward; -1.0 = max speed reverse
 void Motor::setSpeed(float speed) {
     if (speed < 0) {
         digitalWrite(in1, LOW);
