@@ -15,5 +15,4 @@ class LedRGB {
     void turnOff();
 
   private:
-    bool checkBrightness;
 };
