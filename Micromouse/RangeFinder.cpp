@@ -1,6 +1,6 @@
 #include "RangeFinder.h"
-#include "ArduinoSpoof.h"
-#include <stdexcept>
+#include <Arduino.h>
+#include <assert.h>
 
 RangeFinder::RangeFinder() : DATA_PIN(0), MIN_RANGE(0), MAX_RANGE(0) {
 }
@@ -9,10 +9,7 @@ RangeFinder::RangeFinder(unsigned pin, unsigned minRange, unsigned maxRange)
     : DATA_PIN(pin), MIN_RANGE(minRange), MAX_RANGE(maxRange) {
 
     if (DATA_PIN == 0) {
-        // So Teensy/Arduino doesn't support exceptions
-        // We should implement some way to log errors
-        // throw std::invalid_argument("Pin value not set!");
-        std::cout << "Warning: Pin not set" << std::endl;
+        Serial.printf("Warning: Pin not set!\n");
         return;
     }
 

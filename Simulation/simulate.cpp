@@ -3,6 +3,7 @@
 #include "../Micromouse/Coordinate.h"
 #include "../Micromouse/Direction.h"
 #include "../Micromouse/Maze.h"
+#include "../Micromouse/Mouse.h"
 #include "../Micromouse/Node.h"
 #include <cstdlib>
 #include <ctime>
