@@ -19,3 +19,5 @@ before_install:
 script:
    - scons
    - scons test
+notifications:
+   email: false
