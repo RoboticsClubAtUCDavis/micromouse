@@ -1,11 +1,14 @@
 #include "Maze.h"
 #include <algorithm>
 #include <cstdlib> //abs
-#include <fstream>
-#include <iostream>
 #include <set>
 #include <stdexcept>
 #include <vector>
+
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include <fstream>
+#include <iostream>
+#endif
 
 #define MAZE_DIAGONALS
 
@@ -111,6 +114,7 @@ void Maze::generate(int seed) {
 Maze Maze::fromFile(std::string fileName) {
     Maze maze;
 
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     try {
         ifstream file(fileName.c_str());
         if (!file.good())
@@ -141,6 +145,7 @@ Maze Maze::fromFile(std::string fileName) {
     } catch (const exception &e) {
         cout << e.what();
     }
+#endif
 
     return maze;
 }
@@ -255,13 +260,16 @@ void Maze::findPath(CellCoordinate start, CellCoordinate end,
             adjacentNode.fScore = adjacentNode.gScore + heuristicScore;
         }
     }
-
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     throw runtime_error("No path found");
+#endif
 }
 
 Node &Maze::getNode(NodeCoordinate pos) {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     if (!withinBounds(pos))
         throw out_of_range("Coordinate out of range.");
+#endif
     return maze[pos.y][pos.x];
 }
 
@@ -335,7 +343,11 @@ unsigned Maze::calculateMovementCost(Direction currentDirection,
             // direction.
             return cost + MOVEMENT_COST * 2;
         default:
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
             throw runtime_error("This should be unreachable");
+#endif
+            return cost;
+            break;
     }
 }
 

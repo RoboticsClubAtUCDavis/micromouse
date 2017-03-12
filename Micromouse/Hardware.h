@@ -16,7 +16,7 @@ class Hardware {
 
     static const unsigned NUM_RANGE_FINDERS = 3;
 
-    Hardware();
+    Hardware() {};
 
     // Moves forward the given number of millimeters.
     // If `keepGoing` is true the mouse will not stop at the end of the

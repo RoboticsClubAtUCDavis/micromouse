@@ -1,6 +1,11 @@
 #include "Mouse.h"
+#include <Arduino.h>
+#include <cstdio>
 
 Mouse::Mouse() {
+    pinMode(13, OUTPUT);
+    digitalWrite(13, HIGH);
+    Serial.printf("Mouse Created!");
 }
 
 void Mouse::mapMaze() {
@@ -40,15 +45,20 @@ void Mouse::reset() {
 }
 
 void Mouse::moveTo(CellCoordinate position) {
+    (void)position;
     // TODO
 }
 
 void Mouse::followPath(const Path &path) {
+    (void)path;
     // TODO
 }
 
 unsigned Mouse::move(DirectionVector movement, bool keepGoing,
                      bool useCaution) {
+    (void)movement;
+    (void)keepGoing;
+    (void)useCaution;
     // TODO
     return 0;
 }
