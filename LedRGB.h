@@ -15,4 +15,5 @@ class LedRGB {
     void turnOff();
 
   private:
+	  unsigned redBrightness, greenBrightness, blueBrightness;
 };
