@@ -5,10 +5,10 @@
 #include <stdexcept>
 #include <vector>
 
-#ifndef __MK66FX1M0__
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
 #include <fstream>
 #include <iostream>
-#endif // !__MK20DX256__
+#endif
 
 #define MAZE_DIAGONALS
 
@@ -114,7 +114,7 @@ void Maze::generate(int seed) {
 Maze Maze::fromFile(std::string fileName) {
     Maze maze;
 
-#ifndef __MK66FX1M0__
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     try {
         ifstream file(fileName.c_str());
         if (!file.good())
@@ -340,9 +340,9 @@ unsigned Maze::calculateMovementCost(Direction currentDirection,
             // direction.
             return cost + MOVEMENT_COST * 2;
         default:
-#ifndef __MK66FX1M0__
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
             throw runtime_error("This should be unreachable");
-#endif // !__MK20DX256__
+#endif
             return cost;
             break;
     }

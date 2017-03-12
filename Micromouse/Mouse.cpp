@@ -5,6 +5,7 @@
 Mouse::Mouse() {
     pinMode(13, OUTPUT);
     digitalWrite(13, HIGH);
+    Serial.printf("Mouse Created!");
 }
 
 void Mouse::mapMaze() {
