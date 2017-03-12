@@ -14,6 +14,15 @@ SCENARIO("NodeCoordinates have an x and y component") {
             }
         }
     }
+    GIVEN("no initial value") {
+        WHEN("Default constructor is called") {
+            NodeCoordinate a = NodeCoordinate();
+            THEN("value of (0, 0)") {
+                REQUIRE(a.x == 0);
+                REQUIRE(a.y == 0);
+            }
+        }
+    }
 }
 SCENARIO("CellCoordinates have an x and y component") {
     GIVEN("x and y") {
@@ -24,6 +33,15 @@ SCENARIO("CellCoordinates have an x and y component") {
             THEN("x and y are stored") {
                 REQUIRE(c.x == x);
                 REQUIRE(c.y == y);
+            }
+        }
+    }
+    GIVEN("no initial value") {
+        WHEN("Default constructor is called") {
+            CellCoordinate a = CellCoordinate();
+            THEN("value of (0, 0)") {
+                REQUIRE(a.x == 0);
+                REQUIRE(a.y == 0);
             }
         }
     }
@@ -51,6 +69,48 @@ SCENARIO("CellCoordinates can be converted into NodeCoordinates") {
         }
     }
 }
+SCENARIO("Multiplying coordinate with operator*") {
+    GIVEN("a Coordinate") {
+        Coordinate a = NodeCoordinate(3, 10);
+        WHEN("it is multiplied by an int b") {
+            int b = 2;
+            Coordinate c = a * b;
+            THEN("x = b * a.x") {
+                REQUIRE(c.x == b * a.x);
+            }
+            THEN("y = b * a.y") {
+                REQUIRE(c.y == b * a.y);
+            }
+        }
+    }
+    GIVEN("a CellCoordinate") {
+        CellCoordinate a = CellCoordinate(3, 10);
+        WHEN("it is multiplied by an int b") {
+            int b = 2;
+            CellCoordinate c = a * b;
+            THEN("x = b * a.x") {
+                REQUIRE(c.x == b * a.x);
+            }
+            THEN("y = b * a.y") {
+                REQUIRE(c.y == b * a.y);
+            }
+        }
+    }
+    GIVEN("a NodeCoordinate") {
+        NodeCoordinate a = NodeCoordinate(3, 10);
+        WHEN("it is multiplied by an int b") {
+            int b = 2;
+            NodeCoordinate c = a * b;
+            THEN("x = b * a.x") {
+                REQUIRE(c.x == b * a.x);
+            }
+            THEN("y = b * a.y") {
+                REQUIRE(c.y == b * a.y);
+            }
+        }
+    }
+}
+
 SCENARIO("Direction should be cast to coordinate") {
     GIVEN("a Direction") {
         WHEN("NW") {
@@ -185,14 +245,55 @@ SCENARIO("Equivalence of coordinates") {
         WHEN("It is compared with itself") {
             THEN("It is equal") {
                 REQUIRE(a == a);
-                REQUIRE(!(a != a));
+                REQUIRE_FALSE(a != a);
             }
         }
         WHEN("It is compared with something not equal") {
             NodeCoordinate b = NodeCoordinate(1, 5);
             THEN("Inequality is reflected") {
                 REQUIRE(a != b);
-                REQUIRE(!(a == b));
+                REQUIRE_FALSE(a == b);
+            }
+        }
+    }
+}
+SCENARIO("Checking types of nodes") {
+    GIVEN("A post") {
+        NodeCoordinate a = NodeCoordinate(2, 2);
+        WHEN("isPost is called") {
+            THEN("it returns true") {
+                REQUIRE(a.isPost());
+            }
+        }
+        WHEN("isCell is called") {
+            THEN("it returns false") {
+                REQUIRE_FALSE(a.isCell());
+            }
+        }
+    }
+    GIVEN("A cell") {
+        NodeCoordinate a = CellCoordinate(1, 1);
+        WHEN("isPost is called") {
+            THEN("it returns false") {
+                REQUIRE_FALSE(a.isPost());
+            }
+        }
+        WHEN("isCell is called") {
+            THEN("it returns true") {
+                REQUIRE(a.isCell());
+            }
+        }
+    }
+    GIVEN("Neither") {
+        NodeCoordinate a = NodeCoordinate(2, 1);
+        WHEN("isPost is called") {
+            THEN("it returns false") {
+                REQUIRE_FALSE(a.isPost());
+            }
+        }
+        WHEN("isCell is called") {
+            THEN("it returns false") {
+                REQUIRE_FALSE(a.isCell());
             }
         }
     }
