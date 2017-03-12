@@ -105,8 +105,8 @@ class Simulator : public sf::RenderWindow {
   public:
     Simulator(Mouse &mouse, Maze &maze)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE)
-        , mouse(mouse)
-        , maze(maze) {
+        , maze(maze)
+        , mouse(mouse) {
         try {
             mouse.getMaze() = Maze::fromFile("test.maze");
         } catch (const std::exception &e) {
