@@ -15,6 +15,4 @@ class LedRGB {
     void turnOff();
 
   private:
-    unsigned brightness;
-    bool rgbPower;
 };
