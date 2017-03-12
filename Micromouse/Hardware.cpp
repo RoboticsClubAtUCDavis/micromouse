@@ -13,31 +13,31 @@ Hardware::~Hardware() {
     }
 }
 
-unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
-    // TODO
-    return 0;
-}
+//unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
+//    // TODO
+//    return 0;
+//}
 
-void Hardware::rotate(int deg) {
-    // TODO
-}
+//void Hardware::rotate(int deg) {
+//    // TODO
+//}
 
-void Hardware::checkWall(Relation relation) {
-    // TODO
-}
+//void Hardware::checkWall(Relation relation) {
+//    // TODO
+//}
 
-bool Hardware::isWall(Relation relation) {
-    // TODO
-    return false;
-}
+//bool Hardware::isWall(Relation relation) {
+//    // TODO
+//    return false;
+//}
 
 void Hardware::setSpeed(unsigned mmps) {
     speed = mmps;
 }
 
-void Hardware::calibrateMotors() {
-    // TODO
-}
+//void Hardware::calibrateMotors() {
+//    // TODO
+//}
 
 void Hardware::calibrateRangeFinders() {
     for (unsigned i = 0; i < NUM_RANGE_FINDERS; i++) {
