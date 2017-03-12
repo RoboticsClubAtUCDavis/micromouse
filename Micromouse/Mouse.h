@@ -5,9 +5,17 @@
 #include "Maze.h"
 #include "Path.h"
 
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+class Simulator;
+#endif
+
 class Mouse {
   public:
     enum MappingStrategy { EXHAUSTIVE, STRAT2, STRAT3 };
+
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    friend class Simulator;
+#endif
 
     Mouse();
 

@@ -4,19 +4,31 @@
 #include "Motor.h"
 #include "RangeFinder.h"
 
-enum Relation { LEFT, FRONT, RIGHT };
+enum Relation { LEFT, FRONT, RIGHT, NO_RELATION };
 
 class Hardware {
   public:
     // PIN DEFINITIONS
+
+    // TODO: set correct pin values
+    static const unsigned IRSENSOR_LEFT_PIN = 0;
+    static const unsigned IRSENSOR_RIGHT_PIN = 0;
+    static const unsigned ULTRASONIC_PIN = 0;
     // static const unsigned MOTOR_LEFT_PIN = 17
     // ...
     // ...
     // static const unsigned RANGE_FINDER_FRONT_PIN = 18
 
     static const unsigned NUM_RANGE_FINDERS = 3;
+    static const unsigned IRSENSOR_LEFT_MIN_DISTANCE = 20;
+    static const unsigned IRSENSOR_LEFT_MAX_DISTANCE = 150;
+    static const unsigned IRSENSOR_RIGHT_MIN_DISTANCE = 20;
+    static const unsigned IRSENSOR_RIGHT_MAX_DISTANCE = 150;
+    static const unsigned ULTRASONIC_MIN_DISTANCE = 20;
+    static const unsigned ULTRASONIC_MAX_DISTANCE = 1000;
 
-    Hardware() {};
+    Hardware();
+    ~Hardware();
 
     // Moves forward the given number of millimeters.
     // If `keepGoing` is true the mouse will not stop at the end of the
@@ -39,10 +51,16 @@ class Hardware {
 
     void calibrateMotors();
     void calibrateRangeFinders();
+    void calibrateRangeFinder(Relation relation);
 
   private:
-    RangeFinder rangeFinders[NUM_RANGE_FINDERS];
+    void initRangeFinders();
+
+    RangeFinder *rangeFinders[NUM_RANGE_FINDERS];
     Motor leftMotor;
     Motor rightMotor;
     Led led;
+
+    // Max speed in mmps.
+    unsigned speed = 100;
 };

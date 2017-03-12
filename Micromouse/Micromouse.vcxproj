@@ -96,6 +96,7 @@
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Encoder.h" />
     <ClInclude Include="Hardware.h" />
+    <ClInclude Include="IRSensor.h" />
     <ClInclude Include="Led.h" />
     <ClInclude Include="Motor.h" />
     <ClInclude Include="Maze.h" />
@@ -103,11 +104,13 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="RangeFinder.h" />
+    <ClInclude Include="UltrasonicSensor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduinoSpoof\Arduino.cpp" />
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Hardware.cpp" />
+    <ClCompile Include="IRSensor.cpp" />
     <ClCompile Include="Led.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Mouse.cpp" />
@@ -117,6 +120,7 @@
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="Motor.cpp" />
     <ClCompile Include="RangeFinder.cpp" />
+    <ClCompile Include="UltrasonicSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Micromouse.ino" />

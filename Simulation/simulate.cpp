@@ -3,8 +3,8 @@
 #include "../Micromouse/Coordinate.h"
 #include "../Micromouse/Direction.h"
 #include "../Micromouse/Maze.h"
+#include "../Micromouse/Mouse.h"
 #include "../Micromouse/Node.h"
-#include "../Micromouse/Path.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -103,10 +103,11 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
 
 class Simulator : public sf::RenderWindow {
   public:
-    Simulator(void)
-        : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE), maze() {
+    Simulator(Mouse &mouse)
+        : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE)
+        , mouse(mouse) {
         try {
-            maze = Maze::fromFile("test.maze");
+            mouse.maze = Maze::fromFile("test.maze");
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
@@ -124,14 +125,14 @@ class Simulator : public sf::RenderWindow {
     void main_loop(void) {
         while (isOpen()) {
             if (keyPress(sf::Keyboard::R)) {
-                maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
-                                             rand() % Maze::CELL_ROWS),
-                              CellCoordinate(rand() % Maze::CELL_COLS,
-                                             rand() % Maze::CELL_ROWS));
+                mouse.maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
+                                                   rand() % Maze::CELL_ROWS),
+                                    CellCoordinate(rand() % Maze::CELL_COLS,
+                                                   rand() % Maze::CELL_ROWS));
             } else if (keyPress(sf::Keyboard::Return)) {
-                maze.findPath(CellCoordinate(0, 0), CellCoordinate(7, 7));
+                mouse.maze.findPath(CellCoordinate(0, 0), CellCoordinate(7, 7));
             } else if (keyPress(sf::Keyboard::Space)) {
-                maze.generate();
+                mouse.maze.generate();
             }
 
             sf::Event event;
@@ -156,18 +157,19 @@ class Simulator : public sf::RenderWindow {
 
     void render(void) {
         clear(sf::Color::Black);
-        MazeDrawable entity(maze);
+        MazeDrawable entity(mouse.maze);
         entity.setScale(mazeSize());
         draw(entity);
         display();
     }
 
-    Maze maze;
+    Mouse &mouse;
 };
 
 int main() {
     srand(time(0));
-    Simulator simulator;
+    Mouse mouse;
+    Simulator simulator(mouse);
     simulator.main_loop();
     return 0;
 }

@@ -51,6 +51,12 @@
     <ClInclude Include="ArduinoSpoof\Arduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IRSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UltrasonicSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Node.cpp">
@@ -87,6 +93,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ArduinoSpoof\Arduino.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IRSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UltrasonicSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
