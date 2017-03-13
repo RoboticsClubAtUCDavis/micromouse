@@ -15,13 +15,23 @@ void LedRGB::setRGB(unsigned r, unsigned g, unsigned b) {
     RedLed.setBrightness(redBrightness);
     GreenLed.setBrightness(greenBrightness);
     BlueLed.setBrightness(blueBrightness);
+    setColors = true;
+    if (!checkBrightness) {
+        setBrightness(brightness);
+    }
 }
 
 void LedRGB::setBrightness(unsigned percent) {
-    percent /= 100;
-    RedLed.setBrightness(redBrightness * percent);
-    GreenLed.setBrightness(greenBrightness * percent);
-    BlueLed.setBrightness(blueBrightness * percent);
+    brightness = percent / 100;
+    redBrightness *= brightness;
+    greenBrightness *= brightness;
+    blueBrightness *= brightness;
+    if (setColors) {
+        RedLed.setBrightness(redBrightness);
+        GreenLed.setBrightness(greenBrightness);
+        BlueLed.setBrightness(blueBrightness);
+        checkBrightness = true;
+    }
 }
 
 void LedRGB::turnOn() {
@@ -31,7 +41,7 @@ void LedRGB::turnOn() {
 }
 
 void LedRGB::turnOff() {
-    RedLed.turnOn();
-    GreenLed.turnOn();
+    RedLed.turnOff();
+    GreenLed.turnOff();
     BlueLed.turnOff();
 }
