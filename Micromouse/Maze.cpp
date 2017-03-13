@@ -17,7 +17,8 @@ using namespace std;
 const CellCoordinate Maze::CELL_START = CellCoordinate(0, 0);
 const CellCoordinate Maze::CELL_FINISH =
     CellCoordinate(Maze::CELL_COLS / 2, Maze::CELL_ROWS / 2);
-
+const CellCoordinate Maze::MAZE_CENTER =
+    CellCoordinate(CELL_COLS / 2 - 1, CELL_ROWS / 2 - 1);
 void Maze::reset() {
     for (int y = 0; y < NODE_ROWS; y++) {
         for (int x = 0; x < NODE_COLS; x++) {
@@ -25,8 +26,10 @@ void Maze::reset() {
             maze[y][x] = Node(pos);
 
             // Initialize border
-            if (isBorder(pos) || pos.isPost())
-                setWall(pos);
+			if (isBorder(pos) || pos.isPost()) {
+				setWall(pos);
+				if(!isGoal(pos)) setNodeVisited(pos); //center post
+			}
         }
     }
     setWall(NodeCoordinate(NODE_COLS / 2, NODE_ROWS / 2), false);
@@ -50,6 +53,17 @@ bool Maze::withinBounds(Node node) {
     return withinBounds(node.pos);
 }
 
+bool Maze::isGoal(NodeCoordinate pos)
+{
+	NodeCoordinate centerNode = MAZE_CENTER.toNode();
+	return pos.x >= centerNode.x && pos.x <= centerNode.x + 3 && pos.y >= centerNode.y && pos.y <= centerNode.y + 3;
+}
+
+bool Maze::isNodeVisited(Node node)
+{
+	return unvisitedNodes.find(node) == unvisitedNodes.end();
+}
+
 void Maze::generate(int seed) {
     reset();
     srand(seed);
@@ -67,12 +81,10 @@ void Maze::generate(int seed) {
         }
     }
     CellCoordinate currentCell = CellCoordinate(0, 0);
-    CellCoordinate centerFour =
-        CellCoordinate(CELL_COLS / 2 - 1, CELL_ROWS / 2 - 1);
-    unvisited.erase(centerFour);
-    unvisited.erase(centerFour + N);
-    unvisited.erase(centerFour + E);
-    unvisited.erase(centerFour + NE);
+    unvisited.erase(MAZE_CENTER);
+    unvisited.erase(MAZE_CENTER + N);
+    unvisited.erase(MAZE_CENTER + E);
+    unvisited.erase(MAZE_CENTER + NE);
 
     unvisited.erase(currentCell);
     vector<Direction> neighbors;
@@ -99,7 +111,7 @@ void Maze::generate(int seed) {
         }
         neighbors.clear();
     }
-    NodeCoordinate centerNode = centerFour.toNode() + NE;
+    NodeCoordinate centerNode = MAZE_CENTER.toNode() + NE;
     setWall(centerNode + N, false);
     setWall(centerNode + E, false);
     setWall(centerNode + W, false);
@@ -168,6 +180,13 @@ void Maze::setWall(NodeCoordinate pos, bool wall) {
 
 void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
     setWall(pos.toNode() + dir, wall);
+}
+
+void Maze::setNodeVisited(Node node, bool visited) {
+    if (visited)
+        unvisitedNodes.erase(node);
+    else if (withinBounds(node))
+        unvisitedNodes.insert(node);
 }
 
 bool Maze::scoreComparator(const Node *const &lhs, const Node *const &rhs) {

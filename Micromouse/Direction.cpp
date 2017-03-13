@@ -17,3 +17,18 @@ Direction DirOp::invert(Direction direction) {
     else
         return static_cast<Direction>((direction + S) % NONE);
 }
+
+Direction DirOp::rotateClockwise(Direction direction)
+{
+	if (direction == NONE)
+		return NONE;
+	else
+		return static_cast<Direction>((direction + E) % NONE);
+}
+Direction DirOp::rotateCounterClockwise(Direction direction)
+{
+	if (direction == NONE)
+		return NONE;
+	else
+		return static_cast<Direction>((direction - E) % NONE);
+}

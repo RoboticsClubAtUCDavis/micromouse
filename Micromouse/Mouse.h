@@ -40,6 +40,9 @@ class Mouse {
     unsigned move(DirectionVector movement, bool keepGoing, bool useCaution);
 
     void mapMazeExhaustive();
+	void mapMazeStrategy2();
+	void seeWalls();
+	Direction getRelativeDirection(Relation relation);
 
     Maze maze;
     Hardware bot;

@@ -4,6 +4,8 @@ enum Direction { N, NE, E, SE, S, SW, W, NW, NONE };
 
 namespace DirOp {
 Direction invert(Direction direction);
+Direction rotateClockwise(Direction direction);
+Direction rotateCounterClockwise(Direction direction);
 }
 
 class DirectionVector {

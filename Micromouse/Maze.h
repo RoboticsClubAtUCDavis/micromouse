@@ -7,6 +7,7 @@
 #include "Path.h"
 #include <ctime>
 #include <string>
+#include <>
 //#define MAZE_DIAGONALS
 
 class Maze {
@@ -15,6 +16,7 @@ class Maze {
     static const int CELL_COLS = 16;
     static const int NODE_ROWS = CELL_ROWS * 2 + 1;
     static const int NODE_COLS = CELL_COLS * 2 + 1;
+	static const CellCoordinate MAZE_CENTER;
     static const CellCoordinate CELL_START;
     static const CellCoordinate CELL_FINISH;
     static const unsigned MOVEMENT_COST = 100;
@@ -30,10 +32,12 @@ class Maze {
     bool isBorder(Node node);
     bool withinBounds(NodeCoordinate pos);
     bool withinBounds(Node node);
+	bool isGoal(NodeCoordinate pos);
+	bool isNodeVisited(Node node);
 
     void setWall(NodeCoordinate pos, bool wall = true);
     void setWall(CellCoordinate pos, Direction dir, bool wall = true);
-
+	void setNodeVisited(Node node, bool visited = true);
     void generate(int seed = time(NULL));
 
     void reset();
@@ -60,6 +64,7 @@ class Maze {
 
     Path path;
     Node maze[NODE_ROWS][NODE_COLS];
+	set<Node> unvisitedNodes;
 };
 
 #endif
