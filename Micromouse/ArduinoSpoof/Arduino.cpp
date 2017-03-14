@@ -88,7 +88,7 @@ void randomSeed(uint32_t newseed) {
 
 mock::Teensy::Teensy() {
     for (auto &i : pins) {
-        i = {UNDEFINED, false, false, 0, false};
+        i = Pin{UNDEFINED, false, false, 0, false};
     }
 
     // Set analog in pins.

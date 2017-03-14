@@ -51,7 +51,7 @@ class Teensy {
     Pin pins[40];
 };
 
-static Teensy teensy;
+extern Teensy teensy;
 }
 
 static const mock::CSerial Serial;
