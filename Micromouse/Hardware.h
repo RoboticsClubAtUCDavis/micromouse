@@ -29,6 +29,12 @@ class Hardware {
     static const unsigned ULTRASONIC_MIN_DISTANCE = 20;
     static const unsigned ULTRASONIC_MAX_DISTANCE = 1000;
 
+    static const float COUNT_PER_MM;
+    static const float MM_PER_COUNT;
+
+    static const unsigned Hardware::MM_PER_NODE;
+    static const unsigned Hardware::COUNT_PER_NODE;
+
     Hardware();
     ~Hardware();
 
@@ -81,5 +87,6 @@ class Hardware {
     PIDController rightPID;
 
     // Max speed in mmps.
-    unsigned speed = 100;
+    unsigned speed;
+    float secondsPerCount;
 };
