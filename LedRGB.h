@@ -6,7 +6,7 @@ class LedRGB {
     LedRGB();
 
     LedRGB(unsigned redPin, unsigned greenPin, unsigned bluePin);
-    void setRGB(unsigned r, unsigned g, unsigned);
+    void setRGB(unsigned r, unsigned g, unsigned b);
     void setBrightness(unsigned percent);
     void turnOn();
     void turnOff();
