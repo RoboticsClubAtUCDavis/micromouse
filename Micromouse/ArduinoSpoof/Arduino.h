@@ -29,6 +29,7 @@ class CSerial {
 };
 
 class Teensy {
+  public:
     struct Pin {
         uint8_t mode;
         bool isHigh;
@@ -37,9 +38,8 @@ class Teensy {
         bool hasAin;
     };
 
-    const int PWM_HIGH = 255;
+    static const int PWM_HIGH = 255;
 
-  public:
     Teensy();
 
     void pinMode(uint8_t pin, uint8_t mode);
