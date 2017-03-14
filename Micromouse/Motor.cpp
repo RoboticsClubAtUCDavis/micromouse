@@ -27,7 +27,7 @@ void Motor::setSpeed(float speed) {
         digitalWrite(in2, LOW);
         digitalWrite(in1, HIGH);
     }
-    analogWrite(en, abs(speed * 255));
+    analogWrite(en, abs(int(speed * 255)));
 }
 
 Motor::~Motor() {
