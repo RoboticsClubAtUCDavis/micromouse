@@ -35,3 +35,9 @@ void LedRGB::turnOff() {
     greenLed.turnOff();
     blueLed.turnOff();
 }
+
+void LedRGB::blink(unsigned n, unsigned delay1, unsigned delay2) {
+    redLed.blink(n, delay1, delay2);
+    greenLed.blink(n, delay1, delay2);
+    blueLed.blink(n, delay1, delay2);
+}
