@@ -86,6 +86,8 @@ void randomSeed(uint32_t newseed) {
     srand(newseed);
 }
 
+mock::Teensy mock::teensy;
+
 mock::Teensy::Teensy() {
     for (auto &i : pins) {
         i = Pin{UNDEFINED, false, false, 0, false};
