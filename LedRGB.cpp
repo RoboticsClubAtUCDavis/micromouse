@@ -1,37 +1,37 @@
 #include "LedRGB.h"
 #include "Led.h"
 
-LedRGB::LedRGB() : RedLed(255), GreenLed(255), BlueLed(255) {
+LedRGB::LedRGB() : redLed(0), greenLed(0), blueLed(0) {
 }
 
 LedRGB::LedRGB(unsigned redPin, unsigned greenPin, unsigned bluePin)
-    : RedLed(redPin), GreenLed(greenPin), BlueLed(bluePin) {
+    : redLed(redPin), greenLed(greenPin), blueLed(bluePin) {
 }
 
 void LedRGB::setRGB(unsigned r, unsigned g, unsigned b) {
     redBrightness = r / 2.55;
     greenBrightness = g / 2.55;
     blueBrightness = b / 2.55;
-    RedLed.setBrightness(redBrightness * brightness);
-    GreenLed.setBrightness(greenBrightness * brightness);
-    BlueLed.setBrightness(blueBrightness * brightness);
+    redLed.setBrightness(redBrightness * brightness);
+    greenLed.setBrightness(greenBrightness * brightness);
+    blueLed.setBrightness(blueBrightness * brightness);
 }
 
 void LedRGB::setBrightness(unsigned percent) {
     brightness = percent / 100;
-    RedLed.setBrightness(redBrightness * brightness);
-    GreenLed.setBrightness(greenBrightness * brightness);
-    BlueLed.setBrightness(blueBrightness * brightness);
+    redLed.setBrightness(redBrightness * brightness);
+    greenLed.setBrightness(greenBrightness * brightness);
+    blueLed.setBrightness(blueBrightness * brightness);
 }
 
 void LedRGB::turnOn() {
-    RedLed.turnOn();
-    GreenLed.turnOn();
-    BlueLed.turnOn();
+    redLed.turnOn();
+    greenLed.turnOn();
+    blueLed.turnOn();
 }
 
 void LedRGB::turnOff() {
-    RedLed.turnOff();
-    GreenLed.turnOff();
-    BlueLed.turnOff();
+    redLed.turnOff();
+    greenLed.turnOff();
+    blueLed.turnOff();
 }

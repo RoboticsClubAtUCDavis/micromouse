@@ -5,9 +5,6 @@ class LedRGB {
   public:
     LedRGB();
 
-    Led RedLed;
-    Led GreenLed;
-    Led BlueLed;
     LedRGB(unsigned redPin, unsigned greenPin, unsigned bluePin);
     void setRGB(unsigned r = 255, unsigned g = 255, unsigned b = 255);
     void setBrightness(unsigned percent);
@@ -15,5 +12,9 @@ class LedRGB {
     void turnOff();
 
   private:
-    float redBrightness, greenBrightness, blueBrightness, brightness;
+    Led redLed;
+    Led greenLed;
+    Led blueLed;
+    unsigned redBrightness, greenBrightness, blueBrightness;
+    double brightness = 1;
 };
