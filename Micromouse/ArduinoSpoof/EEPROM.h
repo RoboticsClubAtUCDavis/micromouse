@@ -12,7 +12,7 @@ class CEEPROM {
 
     void checkBounds(int addr) {
         if (addr < 0 || addr >= MEM_SIZE) {
-            printf("Memory access out of bounds");
+            printf("Memory access out of bounds\n");
             exit(1);
         }
     }
@@ -32,7 +32,7 @@ class CEEPROM {
                 mem[i] = (uint8_t)c;
             }
         } catch (const std::exception &e) {
-            std::cout << e.what();
+            std::cout << e.what() << std::endl;
         }
     };
 
@@ -55,7 +55,7 @@ class CEEPROM {
                 memory.write((char *)&i, 1);
             }
         } catch (const std::exception &e) {
-            std::cout << e.what();
+            std::cout << e.what() << std::endl;
         }
     }
 
