@@ -38,7 +38,7 @@ class Teensy {
         bool hasAin;
     };
 
-    static const int PWM_HIGH = 255;
+    static const int PWM_HIGH;
 
     Teensy();
 

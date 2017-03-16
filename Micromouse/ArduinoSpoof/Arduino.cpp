@@ -87,6 +87,7 @@ void randomSeed(uint32_t newseed) {
 }
 
 mock::Teensy mock::teensy;
+const int mock::Teensy::PWM_HIGH = 255;
 
 mock::Teensy::Teensy() {
     for (auto &i : pins) {
