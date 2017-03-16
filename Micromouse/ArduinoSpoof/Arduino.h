@@ -14,10 +14,12 @@
 #define INPUT_PULLDOWN 3
 #define OUTPUT_OPENDRAIN 4
 #define INPUT_DISABLE 5
+#define UNDEFINED 6
 
+namespace mock {
 class CSerial {
   public:
-    int printf(char *fmt, ...) const {
+    int printf(const char *fmt, ...) const {
         va_list args;
         va_start(args, fmt);
         int n = vprintf(fmt, args);
@@ -26,7 +28,33 @@ class CSerial {
     }
 };
 
-static const CSerial Serial;
+class Teensy {
+  public:
+    struct Pin {
+        uint8_t mode;
+        bool isHigh;
+        bool hasPwm;
+        int pwm;
+        bool hasAin;
+    };
+
+    static const int PWM_HIGH;
+
+    Teensy();
+
+    void pinMode(uint8_t pin, uint8_t mode);
+    void digitalWrite(uint8_t pin, uint8_t val);
+    void analogWrite(uint8_t pin, int val);
+    uint8_t digitalRead(uint8_t pin);
+    int analogRead(uint8_t pin);
+
+    Pin pins[40];
+};
+
+extern Teensy teensy;
+}
+
+static const mock::CSerial Serial;
 
 //#define VERBOSE_ARDUINO
 

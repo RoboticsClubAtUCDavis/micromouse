@@ -1,4 +1,4 @@
-#include "../Direction.h"
+#include "../Micromouse/Direction.h"
 #include "catch.hpp"
 
 SCENARIO("DirectionVectors behave correctly") {

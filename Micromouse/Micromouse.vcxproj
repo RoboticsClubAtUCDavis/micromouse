@@ -49,12 +49,20 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)ArduinoSpoof</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -64,6 +72,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)ArduinoSpoof</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -78,14 +87,16 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Teensy|Win32'">
     <ClCompile>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir)ArduinoSpoof</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Arduino.h" />
+    <ClInclude Include="ArduinoSpoof\Arduino.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Encoder.h" />
     <ClInclude Include="Hardware.h" />
+    <ClInclude Include="IRSensor.h" />
     <ClInclude Include="Led.h" />
     <ClInclude Include="LedRGB.h" />
     <ClInclude Include="Motor.h" />
@@ -94,14 +105,15 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="RangeFinder.h" />
+    <ClInclude Include="UltrasonicSensor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Arduino.cpp" />
+    <ClCompile Include="ArduinoSpoof\Arduino.cpp" />
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Hardware.cpp" />
+    <ClCompile Include="IRSensor.cpp" />
     <ClCompile Include="Led.cpp" />
     <ClCompile Include="LedRGB.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
@@ -110,8 +122,10 @@
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="Motor.cpp" />
     <ClCompile Include="RangeFinder.cpp" />
+    <ClCompile Include="UltrasonicSensor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Micromouse.ino" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,10 +1,10 @@
 #include "Led.h"
-#include "Arduino.h"
+#include <Arduino.h>
 
 Led::Led() : PIN(0) {
 }
 
-Led::Led(unsigned pin) : PIN(pin) {
+Led::Led(unsigned pin) : PIN(pin), brightness(255) {
     pinMode(pin, OUTPUT);
 }
 
@@ -26,6 +26,10 @@ void Led::turnOff() {
 }
 
 void Led::blink(unsigned n, unsigned delay1, unsigned delay2) {
+
+    if (n == 0) {
+        return;
+    }
 
     if (ledPower) {
 

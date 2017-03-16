@@ -48,7 +48,13 @@
     <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Arduino.h">
+    <ClInclude Include="ArduinoSpoof\Arduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IRSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UltrasonicSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LedRGB.h">
@@ -71,9 +77,6 @@
     <ClCompile Include="Direction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Motor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -92,7 +95,13 @@
     <ClCompile Include="Mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Arduino.cpp">
+    <ClCompile Include="ArduinoSpoof\Arduino.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IRSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UltrasonicSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LedRGB.cpp">
@@ -101,6 +110,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Micromouse.ino">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
