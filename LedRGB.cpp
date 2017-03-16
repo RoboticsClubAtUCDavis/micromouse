@@ -36,6 +36,4 @@ void LedRGB::turnOff() {
     blueLed.turnOff();
 }
 
-void LedRGB::rgbBlink(unsigned n, unsigned delay1, unsigned delay2) {
-    blink(n, delay1, delay2);
-}
+
