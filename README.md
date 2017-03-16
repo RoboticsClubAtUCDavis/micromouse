@@ -22,14 +22,12 @@
      - Make the commit
       - `git commit -m "<commit-message>"` - When the commit message is short
       - `git commit` - Will open a text editor to enter longer commit messages
-  4. Get any new changes from `dev`
+  4. Get any new changes from `dev` (It is a good idea to do this throughout the development of your feature as well.)
     - `git pull origin dev`
   5. Push your branch to GitHub
     - `git push origin <branch-name>`
-  6. Wait to see if the checks passed. If they pass, push to `dev`
-    - `git checkout dev`
-    - `git merge <branch-name>`
-    - `git push origin dev`
+  6. Wait to see if the checks passed. If they pass, create a pull request on GitHub.
+    - `GitHub` > `Pull requests` >  `New pull request` > `compare: <branch-name>` > `Create pull request` > Fill in the description > `Create pull request`
     
 ### Code Formatting
 Keeping a consistent code format is important and reduces the occurrences of merge conflicts.
