@@ -1,11 +1,20 @@
 #include "Motor.h"
 #include <Arduino.h>
 
-Motor::Motor(void) : Motor(0, 0, 0) {
+Motor::Motor(void) : Motor(0, 0, 0, 0, 0) {
 }
 
-Motor::Motor(unsigned int en, unsigned int in1, unsigned int in2)
-    : en(en), in1(in1), in2(in2) {
+Motor::Motor(unsigned en, unsigned in1, unsigned in2, unsigned enc1,
+             unsigned enc2)
+    : en(en)
+    , in1(in1)
+    , in2(in2)
+#if defined(__MK66FX1M0__) || defined(__MK20DX256__)
+    , encoder(enc1, enc2)
+#endif
+{
+    (void)enc1;
+    (void)enc2;
     pinMode(en, OUTPUT);
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);
@@ -28,6 +37,20 @@ void Motor::setSpeed(float speed) {
         digitalWrite(in1, HIGH);
     }
     analogWrite(en, abs(int(speed * 255)));
+}
+
+long Motor::getCounts(void) {
+#if defined(__MK66FX1M0__) || defined(__MK20DX256__)
+    return encoder.read();
+#else
+    // TODO: May not be the behavior we want
+    return 0;
+#endif
+}
+void Motor::resetCounts(void) {
+#if defined(__MK66FX1M0__) || defined(__MK20DX256__)
+    encoder.write(0);
+#endif
 }
 
 Motor::~Motor() {
