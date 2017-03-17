@@ -92,6 +92,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArduinoSpoof\Arduino.h" />
+    <ClInclude Include="ArduinoSpoof\EEPROM.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Encoder.h" />
@@ -108,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduinoSpoof\Arduino.cpp" />
+    <ClCompile Include="ArduinoSpoof\EEPROM.cpp" />
     <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="Hardware.cpp" />
     <ClCompile Include="IRSensor.cpp" />
