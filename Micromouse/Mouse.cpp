@@ -37,7 +37,7 @@ void Mouse::runMaze() {
     // TEMPORARY
 
     std::this_thread::sleep_for(3000ms);
-    int x = 0;
+
     while (true) {
 
         position = Maze::CELL_START;
