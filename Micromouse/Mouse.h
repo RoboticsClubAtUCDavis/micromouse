@@ -15,6 +15,7 @@ class Mouse {
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     friend class Simulator;
+    friend class MouseDrawable;
 #endif
 
     Mouse();

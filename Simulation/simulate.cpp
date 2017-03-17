@@ -13,6 +13,10 @@
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
 
+sf::Vector2f nodeVector(NodeCoordinate c) {
+    return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * NODE_SIZE;
+}
+
 class CellDrawable : public sf::Transformable, public sf::Drawable {
   public:
     CellDrawable(Maze &maze, CellCoordinate pos) : maze(maze), pos(pos) {
@@ -76,10 +80,6 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         drawPath(target, states, maze.getPath());
     }
 
-    sf::Vector2f nodeVector(NodeCoordinate c) const {
-        return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * NODE_SIZE;
-    }
-
     sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
                          sf::Color color = sf::Color::White) const {
         sf::VertexArray line(sf::Lines, 2);
@@ -99,6 +99,35 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     Maze &maze;
+};
+
+class MouseDrawable : public sf::Transformable, public sf::Drawable {
+  public:
+    MouseDrawable(Mouse &mouse) : mouse(mouse) {
+    }
+
+  private:
+    Mouse &mouse;
+
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
+        states.transform *= getTransform();
+        sf::ConvexShape polygon;
+        polygon.setPointCount(3);
+        polygon.setPoint(0, sf::Vector2f(0.5f, 0.0f));
+        polygon.setPoint(1, sf::Vector2f(0.2f, 1.0f));
+        polygon.setPoint(2, sf::Vector2f(0.8f, 1.0f));
+        polygon.setOrigin(sf::Vector2f(0.5f, 0.5f));
+
+        {
+            polygon.setPosition(nodeVector(mouse.position));
+
+            polygon.setRotation(mouse.facing * 45.0f);
+        }
+        polygon.setFillColor(sf::Color(107, 190, 255));
+        // polygon.setOrigin(sf::Vector2f(0.0f, 0.0f));
+        polygon.setScale(sf::Vector2f(NODE_SIZE, NODE_SIZE) * 1.0f);
+        target.draw(polygon, states);
+    }
 };
 
 class Simulator : public sf::RenderWindow {
@@ -158,8 +187,11 @@ class Simulator : public sf::RenderWindow {
     void render(void) {
         clear(sf::Color::Black);
         MazeDrawable entity(mouse.maze);
+        MouseDrawable mouseEntity(mouse);
         entity.setScale(mazeSize());
+        mouseEntity.setScale(mazeSize());
         draw(entity);
+        draw(mouseEntity);
         display();
     }
 
