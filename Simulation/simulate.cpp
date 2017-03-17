@@ -113,22 +113,17 @@ class MouseDrawable : public sf::Transformable, public sf::Drawable {
 
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
         states.transform *= getTransform();
-        sf::ConvexShape polygon;
-        polygon.setPointCount(3);
-        polygon.setPoint(0, sf::Vector2f(0.5f, 0.0f));
-        polygon.setPoint(1, sf::Vector2f(0.2f, 1.0f));
-        polygon.setPoint(2, sf::Vector2f(0.8f, 1.0f));
-        polygon.setOrigin(sf::Vector2f(0.5f, 0.5f));
-
-        {
-            polygon.setPosition(nodeVector(mouse.position));
-
-            polygon.setRotation(mouse.facing * 45.0f);
-        }
-        polygon.setFillColor(sf::Color(107, 190, 255));
-        // polygon.setOrigin(sf::Vector2f(0.0f, 0.0f));
-        polygon.setScale(sf::Vector2f(NODE_SIZE, NODE_SIZE) * 1.0f);
-        target.draw(polygon, states);
+        sf::ConvexShape triangleBody;
+        triangleBody.setPointCount(3);
+        triangleBody.setPoint(0, sf::Vector2f(0.5f, 0.0f));
+        triangleBody.setPoint(1, sf::Vector2f(0.2f, 1.0f));
+        triangleBody.setPoint(2, sf::Vector2f(0.8f, 1.0f));
+        triangleBody.setOrigin(sf::Vector2f(0.5f, 0.5f));
+        triangleBody.setPosition(nodeVector(mouse.position));
+        triangleBody.setRotation(mouse.facing * 45.0f);
+        triangleBody.setFillColor(sf::Color(107, 190, 255));
+        triangleBody.setScale(sf::Vector2f(NODE_SIZE, NODE_SIZE) * 1.0f);
+        target.draw(triangleBody, states);
     }
 };
 
