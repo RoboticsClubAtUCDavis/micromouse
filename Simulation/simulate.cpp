@@ -132,14 +132,17 @@ class MouseDrawable : public sf::Transformable, public sf::Drawable {
 
 class Simulator : public sf::RenderWindow {
   public:
-    Simulator(Mouse &mouse)
-        : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE)
+    Simulator(Mouse &mouse, sf::ContextSettings settings)
+        : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE,
+                           sf::Style::Default, settings)
         , mouse(mouse) {
         try {
             mouse.maze = Maze::fromFile("test.maze");
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
+
+        this->setFramerateLimit(60);
     }
 
     bool keyPress(sf::Keyboard::Key key) {
@@ -200,8 +203,10 @@ class Simulator : public sf::RenderWindow {
 
 int main() {
     srand(time(0));
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
     Mouse mouse;
-    Simulator simulator(mouse);
+    Simulator simulator(mouse, settings);
     simulator.main_loop();
     return 0;
 }
