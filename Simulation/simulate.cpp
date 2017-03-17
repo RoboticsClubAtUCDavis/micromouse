@@ -159,14 +159,14 @@ class Simulator : public sf::RenderWindow {
     void main_loop(void) {
         while (isOpen()) {
             if (keyPress(sf::Keyboard::R)) {
-                mouse.maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
-                                                   rand() % Maze::CELL_ROWS),
-                                    CellCoordinate(rand() % Maze::CELL_COLS,
-                                                   rand() % Maze::CELL_ROWS));
+                //mouse.maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
+                //                                   rand() % Maze::CELL_ROWS),
+                //                    CellCoordinate(rand() % Maze::CELL_COLS,
+                //                                   rand() % Maze::CELL_ROWS));
             } else if (keyPress(sf::Keyboard::Return)) {
-                mouse.maze.findPath(CellCoordinate(0, 0), CellCoordinate(7, 7));
+                //mouse.maze.findPath(CellCoordinate(0, 0), CellCoordinate(7, 7));
             } else if (keyPress(sf::Keyboard::Space)) {
-                mouse.maze.generate();
+                //mouse.maze.generate();
             }
 
             sf::Event event;
@@ -178,6 +178,7 @@ class Simulator : public sf::RenderWindow {
                                                    event.size.height)));
             }
 
+            std::lock_guard<std::mutex> lock(mtx);
             render();
         }
     }

@@ -1,8 +1,15 @@
 #include "Mouse.h"
 #include <Arduino.h>
+#include <chrono>
 #include <cstdio>
+#include <mutex>
+#include <stdexcept>
+#include <thread>
+using namespace std::literals::chrono_literals;
 
-Mouse::Mouse() {
+std::mutex mtx;
+
+Mouse::Mouse() : position(Maze::CELL_START) {
     pinMode(13, OUTPUT);
     digitalWrite(13, HIGH);
     Serial.printf("Mouse Created!");
@@ -26,6 +33,37 @@ void Mouse::mapMaze() {
 
 void Mouse::runMaze() {
     // TODO
+
+    // TEMPORARY
+
+    std::this_thread::sleep_for(3000ms);
+    int x = 0;
+    while (true) {
+
+        position = Maze::CELL_START;
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            try {
+                maze.findPath(position, Maze::CELL_FINISH);
+            } catch (const std::exception &e) {
+                Serial.printf("%s\n", e.what());
+            }
+        }
+        const Path &path = maze.getPath();
+
+        for (auto i = path.begin(); i != path.end(); ++i) {
+            {
+                std::lock_guard<std::mutex> lock(mtx);
+
+                position = position + *i;
+                facing = i->direction;
+            }
+            std::this_thread::sleep_for(100ms);
+        }
+
+        std::lock_guard<std::mutex> lock(mtx);
+        maze.generate();
+    }
 }
 
 void Mouse::setMappingSpeed(unsigned mmps) {

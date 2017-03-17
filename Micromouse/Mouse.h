@@ -6,7 +6,10 @@
 #include "Path.h"
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include <mutex>
 class Simulator;
+class MouseDrawable;
+extern std::mutex mtx;
 #endif
 
 class Mouse {
