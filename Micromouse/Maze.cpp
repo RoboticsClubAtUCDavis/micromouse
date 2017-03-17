@@ -174,7 +174,7 @@ bool Maze::scoreComparator(const Node *const &lhs, const Node *const &rhs) {
     return lhs->fScore < rhs->fScore;
 }
 
-void Maze::findPath(CellCoordinate start, CellCoordinate end,
+void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
                     Direction facing) {
     // Pathfinding is done from end to start
     Node &endNode = getNode(end);
