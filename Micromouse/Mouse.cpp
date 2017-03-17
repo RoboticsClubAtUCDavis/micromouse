@@ -5,7 +5,6 @@
 #include <mutex>
 #include <stdexcept>
 #include <thread>
-using namespace std::literals::chrono_literals;
 
 std::mutex mtx;
 
@@ -36,7 +35,8 @@ void Mouse::runMaze() {
 
     // TEMPORARY
 
-    std::this_thread::sleep_for(3000ms);
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
 
     while (true) {
 
@@ -58,7 +58,7 @@ void Mouse::runMaze() {
                 position = position + *i;
                 facing = i->direction;
             }
-            std::this_thread::sleep_for(100ms);
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
 
         std::lock_guard<std::mutex> lock(mtx);
