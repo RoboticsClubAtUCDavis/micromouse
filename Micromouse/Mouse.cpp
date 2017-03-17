@@ -1,12 +1,15 @@
 #include "Mouse.h"
 #include <Arduino.h>
-#include <chrono>
 #include <cstdio>
+
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include <chrono>
 #include <mutex>
 #include <stdexcept>
 #include <thread>
 
 std::mutex mtx;
+#endif
 
 Mouse::Mouse() : position(Maze::CELL_START) {
     pinMode(13, OUTPUT);
@@ -31,12 +34,11 @@ void Mouse::mapMaze() {
 }
 
 void Mouse::runMaze() {
-    // TODO
+// TODO
 
-    // TEMPORARY
-
+// TEMPORARY
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-
 
     while (true) {
 
@@ -64,6 +66,7 @@ void Mouse::runMaze() {
         std::lock_guard<std::mutex> lock(mtx);
         maze.generate();
     }
+#endif
 }
 
 void Mouse::setMappingSpeed(unsigned mmps) {
