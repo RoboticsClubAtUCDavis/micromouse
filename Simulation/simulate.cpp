@@ -8,7 +8,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <mutex>
 #include <stdexcept>
+#include <thread>
 
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
@@ -201,12 +203,21 @@ class Simulator : public sf::RenderWindow {
     Mouse &mouse;
 };
 
-int main() {
-    srand(time(0));
+void startSimulation(Mouse *mouse) {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
+    Simulator simulation(*mouse, settings);
+    simulation.main_loop();
+}
+
+int main() {
+    srand(time(0));
+
     Mouse mouse;
-    Simulator simulator(mouse, settings);
-    simulator.main_loop();
+
+    std::thread simulation(startSimulation, &mouse);
+    mouse.runMaze();
+
+    simulation.join();
     return 0;
 }
