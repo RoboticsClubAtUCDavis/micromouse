@@ -19,7 +19,30 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="neat\ConnectionGene.cpp" />
+    <ClCompile Include="neat\Evolver.cpp" />
+    <ClCompile Include="neat\NetworkGenotype.cpp" />
+    <ClCompile Include="neat\NetworkPhenotype.cpp" />
+    <ClCompile Include="neat\Neuron.cpp" />
+    <ClCompile Include="neat\NeuronInput.cpp" />
+    <ClCompile Include="neat\ParentSelectorProportional.cpp" />
     <ClCompile Include="simulate.cpp" />
+    <ClCompile Include="visualization\ImageEvolver.cpp" />
+    <ClCompile Include="visualization\PhenotypeImage.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="neat\ConnectionGene.h" />
+    <ClInclude Include="neat\Evolver.h" />
+    <ClInclude Include="neat\NetworkGenotype.h" />
+    <ClInclude Include="neat\NetworkPhenotype.h" />
+    <ClInclude Include="neat\Neuron.h" />
+    <ClInclude Include="neat\NeuronInput.h" />
+    <ClInclude Include="neat\ParentSelector.h" />
+    <ClInclude Include="neat\ParentSelectorProportional.h" />
+    <ClInclude Include="neat\Uncopyable.h" />
+    <ClInclude Include="neat\UtilFuncs.h" />
+    <ClInclude Include="visualization\ImageEvolver.h" />
+    <ClInclude Include="visualization\PhenotypeImage.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FF1FBD51-2A2B-4302-A157-1F0DE8A09978}</ProjectGuid>

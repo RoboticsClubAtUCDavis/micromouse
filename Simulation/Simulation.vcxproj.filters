@@ -13,10 +13,81 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Neat">
+      <UniqueIdentifier>{f16ad87f-c6bd-4d78-b8ad-71b983cc8ab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Neat">
+      <UniqueIdentifier>{1aa3421e-6c00-46a4-a405-2441bdac93ae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="simulate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="visualization\PhenotypeImage.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="neat\ConnectionGene.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="neat\Evolver.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="visualization\ImageEvolver.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="neat\NetworkGenotype.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="neat\NetworkPhenotype.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="neat\Neuron.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="neat\NeuronInput.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+    <ClCompile Include="neat\ParentSelectorProportional.cpp">
+      <Filter>Source Files\Neat</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="neat\UtilFuncs.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\ConnectionGene.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\Evolver.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="visualization\ImageEvolver.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\NetworkGenotype.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\NetworkPhenotype.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\Neuron.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\NeuronInput.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\ParentSelector.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\ParentSelectorProportional.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="visualization\PhenotypeImage.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
+    <ClInclude Include="neat\Uncopyable.h">
+      <Filter>Header Files\Neat</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
