@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -8,14 +9,7 @@
 namespace mock {
 class CEEPROM {
     static const int MEM_SIZE = 4096;
-    uint8_t mem[MEM_SIZE];
-
-    void checkBounds(int addr) {
-        if (addr < 0 || addr >= MEM_SIZE) {
-            printf("Memory access out of bounds\n");
-            exit(1);
-        }
-    }
+    std::array<uint8_t, MEM_SIZE> mem;
 
   public:
     CEEPROM() {
@@ -29,7 +23,7 @@ class CEEPROM {
 
             for (unsigned i = 0; memory && i < MEM_SIZE; i++) {
                 memory.get(c);
-                mem[i] = (uint8_t)c;
+                mem.at(i) = (uint8_t)c;
             }
         } catch (const std::exception &e) {
             std::cout << e.what() << std::endl;
@@ -37,13 +31,11 @@ class CEEPROM {
     };
 
     uint8_t read(int addr) {
-        checkBounds(addr);
-        return mem[addr];
+        return mem.at(addr);
     }
 
     void write(int addr, uint8_t val) {
-        checkBounds(addr);
-        mem[addr] = val;
+        mem.at(addr) = val;
 
         try {
             std::ofstream memory("EEPROM", std::ios::binary | std::ios::out);
