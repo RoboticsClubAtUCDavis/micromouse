@@ -176,23 +176,21 @@ bool Maze::scoreComparator(const Node *const &lhs, const Node *const &rhs) {
 
 void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
                     Direction facing) {
-    // Pathfinding is done from end to start
-    Node &endNode = getNode(end);
+    // Pathfinding is done from start to end.
+    Node &startNode = getNode(start);
+    startNode.direction = facing;
 
     // The nodes that still need to be evaluated.
-    // Initially insert the end node.
+    // Initially insert the start node.
     vector<Node *> openNodes;
-    openNodes.push_back(&endNode);
+    openNodes.push_back(&startNode);
 
     // Reset any metadata from previous pathfinding.
     resetNodePathData();
 
-    // Invert `facing` since pathfinding is done in reverse.
-    facing = DirOp::invert(facing);
-
-    // The end node is 0 distance away.
-    endNode.gScore = 0;
-    endNode.fScore = heuristic(end, start);
+    // The start node is 0 distance away.
+    startNode.gScore = 0;
+    startNode.fScore = heuristic(start, end);
 
     // While there are nodes remaining to be evaluated.
     while (!openNodes.empty()) {
@@ -201,8 +199,8 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
         auto currentNodeItr = openNodes.begin();
         auto currentNode = *currentNodeItr;
 
-        // If the current node is the start node.
-        if (currentNode == &getNode(start)) {
+        // If the current node is the end node.
+        if (currentNode == &getNode(end)) {
             // We are done. Construct the path.
             constructPath(currentNode);
             return;
@@ -234,12 +232,6 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
                 currentNode->gScore +
                 calculateMovementCost(currentNode->direction, direction);
 
-            // If the adjacent node is the start node, add a penalty for paths
-            // that do not start in the direction the mouse is facing.
-            if (&adjacentNode == &getNode(start)) {
-                tentativeScore += calculateMovementCost(direction, facing);
-            }
-
             // If adjacent node not in openNodes.
             if (find(openNodes.begin(), openNodes.end(), &adjacentNode) ==
                 openNodes.end()) {
@@ -255,7 +247,7 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
             // This path is the best so far.
             adjacentNode.next = currentNode;
             adjacentNode.direction = direction;
-            auto heuristicScore = heuristic(adjacentNode.pos, start);
+            auto heuristicScore = heuristic(adjacentNode.pos, end);
             adjacentNode.gScore = tentativeScore;
             adjacentNode.fScore = adjacentNode.gScore + heuristicScore;
         }
@@ -369,13 +361,14 @@ unsigned Maze::heuristic(NodeCoordinate start, NodeCoordinate end) {
 
 void Maze::constructPath(Node *start) {
     path.clear();
-    path.start = start->pos;
 
+    const Node *i;
     // while there is more to the path to traverse
-    for (const Node *i = start; i->next; i = i->next) {
-        // Invert the directions since pathfinding was done in reverse.
-        path.push_back(DirectionVector(DirOp::invert(i->direction), 1));
+    for (i = start; i->next; i = i->next) {
+        path.push_back(DirectionVector(i->direction, 1));
     }
+
+    path.start = i->pos;
 }
 
 const Path &Maze::getPath() const {
