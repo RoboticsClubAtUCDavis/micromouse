@@ -71,10 +71,12 @@ void Mouse::runMaze() {
 #endif
 }
 
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
 void Mouse::stopMaze() {
     std::lock_guard<std::mutex> lock(mtx);
     running = false;
 }
+#endif
 
 void Mouse::setMappingSpeed(unsigned mmps) {
     mappingSpeed = mmps;
