@@ -6,7 +6,11 @@
 #include "Path.h"
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include <mutex>
+extern std::mutex mtx;
+
 class Simulator;
+class MouseDrawable;
 #endif
 
 class Mouse {
@@ -15,12 +19,14 @@ class Mouse {
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     friend class Simulator;
+    friend class MouseDrawable;
 #endif
 
     Mouse();
 
     void mapMaze();
     void runMaze();
+    void stopMaze();
 
     // In millimeter per second.
     void setMappingSpeed(unsigned mmps);
@@ -52,4 +58,6 @@ class Mouse {
     int runningSpeed = 100;
 
     MappingStrategy mappingStrategy = EXHAUSTIVE;
+
+    bool running;
 };

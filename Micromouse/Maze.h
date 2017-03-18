@@ -41,7 +41,7 @@ class Maze {
     // Returns a path from the `start` coordinate to the `end` coordinate
     // `facing` is the direction the mouse is currently facing. If given
     // paths that start in the same direction will be weighted more heavily.
-    void findPath(CellCoordinate start, CellCoordinate end,
+    void findPath(NodeCoordinate start, NodeCoordinate end,
                   Direction facing = NONE);
     const Path &getPath() const;
 
