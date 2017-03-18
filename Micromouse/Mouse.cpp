@@ -40,7 +40,9 @@ void Mouse::runMaze() {
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
-    while (true) {
+    running = true;
+
+    while (running) {
 
         position = Maze::CELL_START;
         {
@@ -67,6 +69,11 @@ void Mouse::runMaze() {
         maze.generate();
     }
 #endif
+}
+
+void Mouse::stopMaze() {
+    std::lock_guard<std::mutex> lock(mtx);
+    running = false;
 }
 
 void Mouse::setMappingSpeed(unsigned mmps) {

@@ -132,7 +132,9 @@ class Simulator : public sf::RenderWindow {
     Simulator(Mouse &mouse)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE,
                            sf::Style::Default, sf::ContextSettings(0, 0, 8))
-        , mouse(mouse) {
+        , mouse(mouse)
+        , mouse_thread(&Mouse::runMaze, &mouse) {
+
         try {
             mouse.maze = Maze::fromFile("test.maze");
         } catch (const std::exception &e) {
@@ -167,8 +169,11 @@ class Simulator : public sf::RenderWindow {
 
             sf::Event event;
             while (pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
+                if (event.type == sf::Event::Closed) {
+                    mouse.stopMaze();
+                    mouse_thread.join();
                     close();
+                }
                 if (event.type == sf::Event::Resized)
                     setView(sf::View(sf::FloatRect(0, 0, event.size.width,
                                                    event.size.height)));
@@ -198,21 +203,13 @@ class Simulator : public sf::RenderWindow {
     }
 
     Mouse &mouse;
+    std::thread mouse_thread;
 };
-
-void startSimulation(Mouse *mouse) {
-    Simulator simulation(*mouse);
-    simulation.main_loop();
-}
 
 int main() {
     srand(time(0));
-
     Mouse mouse;
-
-    std::thread simulation(startSimulation, &mouse);
-    mouse.runMaze();
-
-    simulation.join();
+    Simulator simulator(mouse);
+    simulator.main_loop();
     return 0;
 }

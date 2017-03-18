@@ -26,6 +26,7 @@ class Mouse {
 
     void mapMaze();
     void runMaze();
+    void stopMaze();
 
     // In millimeter per second.
     void setMappingSpeed(unsigned mmps);
@@ -57,4 +58,6 @@ class Mouse {
     int runningSpeed = 100;
 
     MappingStrategy mappingStrategy = EXHAUSTIVE;
+
+    bool running;
 };
