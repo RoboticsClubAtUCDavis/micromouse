@@ -129,9 +129,9 @@ class MouseDrawable : public sf::Transformable, public sf::Drawable {
 
 class Simulator : public sf::RenderWindow {
   public:
-    Simulator(Mouse &mouse, sf::ContextSettings settings)
+    Simulator(Mouse &mouse)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE,
-                           sf::Style::Default, settings)
+                           sf::Style::Default, sf::ContextSettings(0, 0, 8))
         , mouse(mouse) {
         try {
             mouse.maze = Maze::fromFile("test.maze");
@@ -201,9 +201,7 @@ class Simulator : public sf::RenderWindow {
 };
 
 void startSimulation(Mouse *mouse) {
-    sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
-    Simulator simulation(*mouse, settings);
+    Simulator simulation(*mouse);
     simulation.main_loop();
 }
 
