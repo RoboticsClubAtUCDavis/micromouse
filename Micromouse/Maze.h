@@ -32,11 +32,6 @@ class Maze {
 
     bool isWall(NodeCoordinate pos);
     bool isWall(CellCoordinate pos, Direction dir);
-    bool isBorder(NodeCoordinate pos);
-    bool isBorder(Node node);
-    bool withinBounds(NodeCoordinate pos);
-    bool withinBounds(Node node);
-
     void setWall(NodeCoordinate pos, bool wall = true);
     void setWall(CellCoordinate pos, Direction dir, bool wall = true);
 
@@ -45,6 +40,9 @@ class Maze {
     void setExplored(NodeCoordinate pos, bool explored = true);
     void setExplored(CellCoordinate pos, Direction dir, bool explored = true);
     
+    bool isBorder(NodeCoordinate pos);
+    bool withinBounds(NodeCoordinate pos);
+
     void generate(int seed = time(NULL));
 
     void reset();

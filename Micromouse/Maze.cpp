@@ -21,6 +21,10 @@ const NodeCoordinate Maze::NODE_START = CellCoordinate(0, 0);
 const NodeCoordinate Maze::NODE_FINISH =
     NodeCoordinate(Maze::NODE_COLS / 2, Maze::NODE_COLS / 2);
 
+Maze::Maze() {
+    reset();
+}
+
 void Maze::reset() {
     for (int y = 0; y < NODE_ROWS; y++) {
         for (int x = 0; x < NODE_COLS; x++) {
@@ -34,6 +38,22 @@ void Maze::reset() {
     }
     setWall(NodeCoordinate(NODE_COLS / 2, NODE_ROWS / 2), false);
     path.clear();
+}
+
+bool Maze::isWall(NodeCoordinate pos) {
+    return !getNode(pos);
+}
+
+bool Maze::isWall(CellCoordinate pos, Direction dir) {
+    return isWall(pos.toNode() + dir);
+}
+
+void Maze::setWall(NodeCoordinate pos, bool wall) {
+    getNode(pos).exists = !wall;
+}
+
+void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
+    setWall(pos.toNode() + dir, wall);
 }
 
 bool Maze::isExplored(NodeCoordinate pos) {
@@ -57,16 +77,8 @@ bool Maze::isBorder(NodeCoordinate pos) {
            pos.x == NODE_COLS - 1;
 }
 
-bool Maze::isBorder(Node node) {
-    return isBorder(node.pos);
-}
-
 bool Maze::withinBounds(NodeCoordinate pos) {
     return pos.x >= 0 && pos.x < NODE_COLS && pos.y >= 0 && pos.y < NODE_ROWS;
-}
-
-bool Maze::withinBounds(Node node) {
-    return withinBounds(node.pos);
 }
 
 void Maze::generate(int seed) {
@@ -167,26 +179,6 @@ Maze Maze::fromFile(std::string fileName) {
 #endif
 
     return maze;
-}
-
-Maze::Maze() {
-    reset();
-}
-
-bool Maze::isWall(NodeCoordinate pos) {
-    return !getNode(pos);
-}
-
-bool Maze::isWall(CellCoordinate pos, Direction dir) {
-    return isWall(pos.toNode() + dir);
-}
-
-void Maze::setWall(NodeCoordinate pos, bool wall) {
-    getNode(pos).exists = !wall;
-}
-
-void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
-    setWall(pos.toNode() + dir, wall);
 }
 
 bool Maze::scoreComparator(const Node *const &lhs, const Node *const &rhs) {
