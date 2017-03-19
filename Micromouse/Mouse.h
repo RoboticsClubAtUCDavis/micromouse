@@ -39,7 +39,8 @@ class Mouse {
 
   private:
     void moveTo(CellCoordinate position);
-    void followPath(const Path &path);
+    void followPath(const Path &path, bool useCaution);
+    void followPath(bool useCaution);
 
     // If `keepGoing` is true the mouse will not stop at the end of the
     // movement. If `useCaution` is true it will stop when a wall is
@@ -47,6 +48,13 @@ class Mouse {
     unsigned move(DirectionVector movement, bool keepGoing, bool useCaution);
 
     void mapMazeExhaustive();
+
+    void mapMazeStrategy3();
+
+    // Given one of the `NodeCoordinate`s in the `coordList` returns the
+    // `NodeCoordinate` that it is paired with.
+    NodeCoordinate findOtherNode(NodeCoordinateList &coordList,
+                                 NodeCoordinate pos);
 
     Maze maze;
     Hardware bot;
@@ -58,7 +66,7 @@ class Mouse {
     int mappingSpeed = 100;
     int runningSpeed = 100;
 
-    MappingStrategy mappingStrategy = EXHAUSTIVE;
+    MappingStrategy mappingStrategy = STRAT3;
 
     bool running;
 };

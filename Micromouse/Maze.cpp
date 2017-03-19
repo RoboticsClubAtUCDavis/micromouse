@@ -1,5 +1,6 @@
 #include "Maze.h"
 #include <algorithm>
+#include <assert.h>
 #include <cstdlib> //abs
 #include <set>
 #include <stdexcept>
@@ -10,7 +11,7 @@
 #include <iostream>
 #endif
 
-#define MAZE_DIAGONALS
+//#define MAZE_DIAGONALS
 
 using namespace std;
 
@@ -404,4 +405,57 @@ void Maze::constructPath(Node *start) {
 
 const Path &Maze::getPath() const {
     return path;
+}
+
+void Maze::findNodeCoordPairs(NodeCoordinateList &coordList) {
+    // This could be optimized by combining it with `Maze::constructPath` but I
+    // made it its own function for clarity.
+
+    // Require that the path start node is explored.
+    assert(isExplored(path.start));
+
+    // These are used to detect the transition between explored and unexplored
+    // nodes if the edge detectors are not equal then an edge is present.
+    bool edgeDetectorA;
+    bool edgeDetectorB = true;
+
+    NodeCoordinate posA = path.start;
+    NodeCoordinate posB;
+
+    for (auto &i : path) {
+        posB = posA;
+        posA = posA + i.direction;
+
+        edgeDetectorA = getNode(posA).explored;
+
+        if (edgeDetectorA != edgeDetectorB) {
+            if (edgeDetectorB) {
+                coordList.push_back(posB);
+            } else {
+                coordList.push_back(posA);
+            }
+        }
+
+        edgeDetectorB = edgeDetectorA;
+    }
+
+    // List must be even size since we assume they are pairs.
+    // Effectively requires that the path end node is explored.
+    assert(coordList.size() % 2 == 0);
+}
+
+void Maze::closeExcessFinishNodes() {
+    for (int y = -2; y <= 2; y++) {
+        for (int x = -2; x <= 2; x++) {
+            if (x >= -1 && x <= 1 && y >= -1 && y <= 1)
+                continue;
+
+            NodeCoordinate pos = Maze::NODE_FINISH + NodeCoordinate(x, y);
+
+            if (!isExplored(pos)) {
+                setWall(pos);
+                setExplored(pos);
+            }
+        }
+    }
 }

@@ -60,6 +60,18 @@ class Maze {
 
     const Path &getPath() const;
 
+    // Finds pairs of `NodeCoordinate` along the current `path` that mark the
+    // transitions from explored to unexplored and unexlpored to explored
+    // `Nodes`. The `NodeCoordinate` of the explored node is always the one
+    // used. Requires the start and end of the path to be explored.
+    // I could have made the pairs explicit but chose not to to make the
+    // overloading of `findPath` cleaner.
+    void findNodeCoordPairs(NodeCoordinateList &nodeList);
+
+    // After the entrance to the finish has been found this can be used to set
+    // the remaining unexplored nodes to walls.
+    void closeExcessFinishNodes();
+
     Node &getNode(NodeCoordinate pos);
 
   private:
