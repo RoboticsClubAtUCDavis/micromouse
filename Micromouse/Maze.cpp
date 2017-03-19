@@ -355,7 +355,7 @@ unsigned Maze::heuristic(NodeCoordinate start, NodeCoordinate end) {
         return (deltaY - deltaX) * MOVEMENT_COST +
                deltaX * MOVEMENT_COST_DIAGONAL;
 #else
-    return abs(start.x - end.x) + abs(start.y - end.y);
+    return (abs(start.x - end.x) + abs(start.y - end.y)) * MOVEMENT_COST;
 #endif // MAZE_DIAGONALS
 }
 
