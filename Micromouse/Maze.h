@@ -21,6 +21,8 @@ class Maze {
     static const int NODE_COLS = CELL_COLS * 2 + 1;
     static const CellCoordinate CELL_START;
     static const CellCoordinate CELL_FINISH;
+    static const NodeCoordinate NODE_START;
+    static const NodeCoordinate NODE_FINISH;
     static const unsigned MOVEMENT_COST = 100;
     static const unsigned MOVEMENT_COST_DIAGONAL = 141;
 

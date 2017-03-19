@@ -17,6 +17,9 @@ using namespace std;
 const CellCoordinate Maze::CELL_START = CellCoordinate(0, 0);
 const CellCoordinate Maze::CELL_FINISH =
     CellCoordinate(Maze::CELL_COLS / 2, Maze::CELL_ROWS / 2);
+const NodeCoordinate Maze::NODE_START = CellCoordinate(0, 0);
+const NodeCoordinate Maze::NODE_FINISH =
+    NodeCoordinate(Maze::NODE_COLS / 2, Maze::NODE_COLS / 2);
 
 void Maze::reset() {
     for (int y = 0; y < NODE_ROWS; y++) {
