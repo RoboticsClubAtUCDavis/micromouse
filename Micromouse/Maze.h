@@ -7,7 +7,11 @@
 #include "Path.h"
 #include <ctime>
 #include <string>
+#include <vector>
+
 //#define MAZE_DIAGONALS
+
+typedef std::vector<NodeCoordinate> NodeCoordinateList;
 
 class Maze {
   public:
@@ -38,11 +42,17 @@ class Maze {
 
     void reset();
 
-    // Returns a path from the `start` coordinate to the `end` coordinate
+    // Returns a path from the `start` coordinate to the `end` coordinate.
     // `facing` is the direction the mouse is currently facing. If given
     // paths that start in the same direction will be weighted more heavily.
     void findPath(NodeCoordinate start, NodeCoordinate end,
-                  Direction facing = NONE);
+                  bool exploredOnly = false, Direction facing = NONE);
+
+    // Same as the other `findPath` but if multiple end points are given the
+    // path to the closest is found.
+    void findPath(NodeCoordinate start, const NodeCoordinateList &ends,
+                  bool exploredOnly = false, Direction facing = NONE);
+
     const Path &getPath() const;
 
     Node &getNode(NodeCoordinate pos);

@@ -48,7 +48,7 @@ void Mouse::runMaze() {
         {
             std::lock_guard<std::mutex> lock(mtx);
             try {
-                maze.findPath(position, Maze::CELL_FINISH);
+                maze.findPath(position, Maze::CELL_FINISH, false, facing);
             } catch (const std::exception &e) {
                 Serial.printf("%s\n", e.what());
             }

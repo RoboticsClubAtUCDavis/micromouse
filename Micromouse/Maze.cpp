@@ -174,8 +174,13 @@ bool Maze::scoreComparator(const Node *const &lhs, const Node *const &rhs) {
     return lhs->fScore < rhs->fScore;
 }
 
-void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
+void Maze::findPath(NodeCoordinate start, NodeCoordinate end, bool exploredOnly,
                     Direction facing) {
+    findPath(start, NodeCoordinateList(1, end), exploredOnly, facing);
+}
+
+void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
+                    bool exploredOnly, Direction facing) {
     // Pathfinding is done from start to end.
     Node &startNode = getNode(start);
     startNode.direction = facing;
@@ -190,7 +195,13 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
 
     // The start node is 0 distance away.
     startNode.gScore = 0;
-    startNode.fScore = heuristic(start, end);
+
+    // Can only use the heuristic with a single end point.
+    if (ends.size() == 1) {
+        startNode.fScore = heuristic(start, ends[0]);
+    } else {
+        startNode.fScore = 0;
+    }
 
     // While there are nodes remaining to be evaluated.
     while (!openNodes.empty()) {
@@ -199,11 +210,13 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
         auto currentNodeItr = openNodes.begin();
         auto currentNode = *currentNodeItr;
 
-        // If the current node is the end node.
-        if (currentNode == &getNode(end)) {
-            // We are done. Construct the path.
-            constructPath(currentNode);
-            return;
+        // If the current node is any of the end nodes.
+        for (auto &i : ends) {
+            if (currentNode == &getNode(i)) {
+                // We are done. Construct the path.
+                constructPath(currentNode);
+                return;
+            }
         }
 
         // Set the current node as evaluated.
@@ -221,9 +234,10 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
                  ) {
             Node &adjacentNode = getAdjacentNode(currentNode, direction);
 
-            // If the adjacent node has already been evaluated or does not
-            // exist.
-            if (adjacentNode.evaluated || !adjacentNode.exists) {
+            // If the adjacent node has already been evaluated or does not exist
+            // or it is not explored and it requires explored.
+            if (adjacentNode.evaluated || !adjacentNode.exists ||
+                (exploredOnly && !adjacentNode.explored)) {
                 // Ignore the adjacent node.
                 continue;
             }
@@ -247,7 +261,13 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
             // This path is the best so far.
             adjacentNode.next = currentNode;
             adjacentNode.direction = direction;
-            auto heuristicScore = heuristic(adjacentNode.pos, end);
+
+            unsigned heuristicScore = 0;
+            // Can only use the heuristic with a single end point.
+            if (ends.size() == 1) {
+                heuristicScore = heuristic(adjacentNode.pos, ends[0]);
+            }
+
             adjacentNode.gScore = tentativeScore;
             adjacentNode.fScore = adjacentNode.gScore + heuristicScore;
         }
