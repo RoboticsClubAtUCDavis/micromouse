@@ -38,6 +38,11 @@ class Maze {
     void setWall(NodeCoordinate pos, bool wall = true);
     void setWall(CellCoordinate pos, Direction dir, bool wall = true);
 
+    bool isExplored(NodeCoordinate pos);
+    bool isExplored(CellCoordinate pos, Direction dir);
+    void setExplored(NodeCoordinate pos, bool explored = true);
+    void setExplored(CellCoordinate pos, Direction dir, bool explored = true);
+    
     void generate(int seed = time(NULL));
 
     void reset();

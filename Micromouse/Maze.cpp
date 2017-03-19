@@ -33,6 +33,22 @@ void Maze::reset() {
     path.clear();
 }
 
+bool Maze::isExplored(NodeCoordinate pos) {
+    return getNode(pos).explored;
+}
+
+bool Maze::isExplored(CellCoordinate pos, Direction dir) {
+    return isExplored(pos.toNode() + dir);
+}
+
+void Maze::setExplored(NodeCoordinate pos, bool explored) {
+    getNode(pos).explored = explored;
+}
+
+void Maze::setExplored(CellCoordinate pos, Direction dir, bool explored) {
+    setExplored(pos.toNode() + dir, explored);
+}
+
 bool Maze::isBorder(NodeCoordinate pos) {
     return pos.x == 0 || pos.y == 0 || pos.y == NODE_ROWS - 1 ||
            pos.x == NODE_COLS - 1;
