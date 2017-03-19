@@ -43,15 +43,15 @@ int Coordinate::hash() const {
     return x * HASH_CONST + y;
 }
 
-Coordinate Coordinate::operator*(int a) {
+Coordinate Coordinate::operator*(int a) const {
     return Coordinate(a * x, a * y);
 }
 
-Coordinate Coordinate::operator-(const Coordinate &a) {
+Coordinate Coordinate::operator-(const Coordinate &a) const {
     return Coordinate(x - a.x, y - a.y);
 }
 
-Coordinate Coordinate::operator+(const Coordinate &a) {
+Coordinate Coordinate::operator+(const Coordinate &a) const {
     return Coordinate(x + a.x, y + a.y);
 }
 
@@ -75,50 +75,50 @@ NodeCoordinate CellCoordinate::toNode(void) const {
     return NodeCoordinate(x * 2 + 1, y * 2 + 1);
 }
 
-bool NodeCoordinate::isCell() {
+bool NodeCoordinate::isCell() const {
     return x % 2 && y % 2;
 }
 
-bool NodeCoordinate::isPost() {
+bool NodeCoordinate::isPost() const {
     return !(x % 2 || y % 2);
 }
 
-NodeCoordinate NodeCoordinate::operator*(int a) {
+NodeCoordinate NodeCoordinate::operator*(const int a) const {
     return NodeCoordinate(a * x, a * y);
 }
 
-NodeCoordinate NodeCoordinate::operator-(NodeCoordinate a) {
+NodeCoordinate NodeCoordinate::operator-(const NodeCoordinate a) const {
     return NodeCoordinate(x - a.x, y - a.y);
 }
 
-NodeCoordinate NodeCoordinate::operator+(NodeCoordinate a) {
+NodeCoordinate NodeCoordinate::operator+(const NodeCoordinate a) const {
     return NodeCoordinate(x + a.x, y + a.y);
 }
 
-NodeCoordinate NodeCoordinate::operator+(Direction direction) {
+NodeCoordinate NodeCoordinate::operator+(const Direction direction) const {
     return *this + NodeCoordinate(direction);
 }
 
-CellCoordinate CellCoordinate::operator*(int a) {
+CellCoordinate CellCoordinate::operator*(const int a) const {
     return CellCoordinate(a * x, a * y);
 }
 
-CellCoordinate CellCoordinate::operator-(CellCoordinate a) {
+CellCoordinate CellCoordinate::operator-(const CellCoordinate a) const {
     return CellCoordinate(x - a.x, y - a.y);
 }
 
-CellCoordinate CellCoordinate::operator+(CellCoordinate a) {
+CellCoordinate CellCoordinate::operator+(const CellCoordinate a) const {
     return CellCoordinate(x + a.x, y + a.y);
 }
 
-CellCoordinate CellCoordinate::operator+(Direction direction) {
+CellCoordinate CellCoordinate::operator+(const Direction direction) const {
     return *this + CellCoordinate(direction);
 }
 
-NodeCoordinate NodeCoordinate::operator+(DirectionVector dirvect) {
+NodeCoordinate NodeCoordinate::operator+(const DirectionVector dirvect) const {
     return *this + NodeCoordinate(dirvect.direction) * dirvect.magnitude;
 }
 
-CellCoordinate CellCoordinate::operator+(DirectionVector dirvect) {
+CellCoordinate CellCoordinate::operator+(const DirectionVector dirvect) const {
     return *this + CellCoordinate(dirvect.direction) * dirvect.magnitude;
 }
