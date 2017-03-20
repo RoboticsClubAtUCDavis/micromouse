@@ -103,7 +103,6 @@ void Mouse::followPath(const Path &path, bool useCaution) {
 // functions and to `Hardware`.
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     std::unique_lock<std::mutex> lock(mtx);
-#endif
     if (useCaution) {
         bool pathBroken = false;
 
@@ -170,6 +169,7 @@ void Mouse::followPath(const Path &path, bool useCaution) {
             }
         }
     }
+#endif
 }
 
 void Mouse::followPath(bool useCaution) {
