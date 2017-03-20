@@ -202,6 +202,9 @@ void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
     std::unique_lock<std::mutex> lock(mtx);
 #endif
 
+    if (ends.empty())
+        return;
+
     // Pathfinding is done from start to end.
     Node &startNode = getNode(start);
     startNode.direction = facing;
