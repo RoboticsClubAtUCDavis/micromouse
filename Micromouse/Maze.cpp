@@ -7,8 +7,15 @@
 #include <vector>
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include <chrono>
 #include <fstream>
 #include <iostream>
+#include <mutex>
+#include <stdexcept>
+#include <thread>
+
+extern std::mutex mtx;
+extern float SIMULATION_SPEED;
 #endif
 
 //#define MAZE_DIAGONALS
@@ -193,6 +200,10 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end, bool exploredOnly,
 
 void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
                     bool exploredOnly, Direction facing) {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    std::unique_lock<std::mutex> lock(mtx);
+#endif
+
     // Pathfinding is done from start to end.
     Node &startNode = getNode(start);
     startNode.direction = facing;
@@ -227,6 +238,13 @@ void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
             if (currentNode == &getNode(i)) {
                 // We are done. Construct the path.
                 constructPath(currentNode);
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+                if (SIMULATION_SPEED < 1000.0f) {
+                    lock.unlock();
+                    std::this_thread::sleep_for(std::chrono::milliseconds(
+                        long(1000 / SIMULATION_SPEED)));
+                }
+#endif
                 return;
             }
         }
@@ -283,6 +301,15 @@ void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
             adjacentNode.gScore = tentativeScore;
             adjacentNode.fScore = adjacentNode.gScore + heuristicScore;
         }
+
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+        if (SIMULATION_SPEED < 10.0f) {
+            lock.unlock();
+            std::this_thread::sleep_for(
+                std::chrono::microseconds(long(5000 / SIMULATION_SPEED)));
+            lock.lock();
+        }
+#endif
     }
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     throw runtime_error("No path found");
@@ -419,6 +446,10 @@ void Maze::findNodeCoordPairs(NodeCoordinateList &coordList) {
     bool edgeDetectorA;
     bool edgeDetectorB = true;
 
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    std::lock_guard<std::mutex> lock(mtx);
+#endif
+
     NodeCoordinate posA = path.start;
     NodeCoordinate posB;
 
@@ -445,6 +476,9 @@ void Maze::findNodeCoordPairs(NodeCoordinateList &coordList) {
 }
 
 void Maze::closeExcessFinishNodes() {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    std::lock_guard<std::mutex> lock(mtx);
+#endif
     for (int y = -2; y <= 2; y++) {
         for (int x = -2; x <= 2; x++) {
             if (x >= -1 && x <= 1 && y >= -1 && y <= 1)

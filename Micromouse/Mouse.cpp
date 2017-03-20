@@ -10,6 +10,7 @@
 #include <thread>
 
 std::mutex mtx;
+extern float SIMULATION_SPEED;
 #endif
 
 Mouse::Mouse() : position(Maze::CELL_START) {
@@ -39,35 +40,28 @@ void Mouse::runMaze() {
 
 // TEMPORARY
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+    // Give time for the window to open
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
+    unsigned cycle = 0;
 
     running = true;
-
     while (running) {
+        if (++cycle % 100 == 0)
+            printf("Cycle %u\n", cycle);
 
-        position = Maze::CELL_START;
-        {
-            std::lock_guard<std::mutex> lock(mtx);
-            try {
-                maze.findPath(position, Maze::CELL_FINISH, false, facing);
-            } catch (const std::exception &e) {
-                Serial.printf("%s\n", e.what());
-            }
-        }
-        const Path &path = maze.getPath();
-
-        for (auto i = path.begin(); i != path.end(); ++i) {
-            {
-                std::lock_guard<std::mutex> lock(mtx);
-
-                position = position + *i;
-                facing = i->direction;
-            }
-            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        try {
+            mapMaze();
+        } catch (const std::exception &e) {
+            Serial.printf("%s\n", e.what());
         }
 
         std::lock_guard<std::mutex> lock(mtx);
-        maze.generate();
+        maze.reset();
+        virtualMaze.generate();
+        position = Maze::CELL_START;
+        facing = N;
     }
 #endif
 }
@@ -101,9 +95,81 @@ void Mouse::moveTo(CellCoordinate position) {
 }
 
 void Mouse::followPath(const Path &path, bool useCaution) {
-    (void)path;
-    (void)useCaution;
-    // TODO
+// TODO
+
+// TEMPORARY
+// This is just used to test mapping.
+// Many of the actions here need to be delaged to the proper helper
+// functions and to `Hardware`.
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    std::unique_lock<std::mutex> lock(mtx);
+#endif
+    if (useCaution) {
+        bool pathBroken = false;
+
+        for (auto &i : path) {
+            NodeCoordinate nextPos = position + i.direction;
+
+            Direction direction = Direction((int(facing) + int(W)) % NONE);
+
+            for (int i = 0; i < 3; i++) {
+                maze.setExplored(position + direction);
+
+                if (virtualMaze.isWall(position + direction)) {
+                    maze.setWall(position + direction);
+                    if (position + direction == nextPos) {
+                        pathBroken = true;
+                    }
+                } else {
+                    if (maze.withinBounds(position +
+                                          DirectionVector(direction, 2))) {
+                        maze.setExplored(position +
+                                         DirectionVector(direction, 2));
+                    }
+                }
+
+                if (direction == facing) {
+                    for (size_t mag = 1; mag <= 8; mag++) {
+                        maze.setExplored(position +
+                                         DirectionVector(direction, mag));
+
+                        if (virtualMaze.isWall(
+                                position + DirectionVector(direction, mag))) {
+                            maze.setWall(position +
+                                         DirectionVector(direction, mag));
+                            break;
+                        }
+                    }
+                }
+
+                direction = Direction((int(direction) + 2) % NONE);
+            }
+
+            if (pathBroken) {
+                return;
+            }
+
+            position = position + i;
+            facing = i.direction;
+            if (SIMULATION_SPEED < 1000.0f) {
+                lock.unlock();
+                std::this_thread::sleep_for(
+                    std::chrono::milliseconds(long(300 / SIMULATION_SPEED)));
+                lock.lock();
+            }
+        }
+    } else {
+        for (auto &i : path) {
+            position = position + i;
+            facing = i.direction;
+            if (SIMULATION_SPEED < 10.0f) {
+                lock.unlock();
+                std::this_thread::sleep_for(
+                    std::chrono::milliseconds(long(300 / SIMULATION_SPEED)));
+                lock.lock();
+            }
+        }
+    }
 }
 
 void Mouse::followPath(bool useCaution) {
@@ -145,9 +211,14 @@ void Mouse::mapMazeStrategy3() {
     NodeCoordinateList coordList;
     bool foundFinish = false;
 
-    // Set the start and finish nodes as explored.
-    maze.setExplored(Maze::NODE_START);
-    maze.setExplored(Maze::NODE_FINISH);
+    {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+        std::lock_guard<std::mutex> lock(mtx);
+#endif
+        // Set the start and finish nodes as explored.
+        maze.setExplored(Maze::NODE_START);
+        maze.setExplored(Maze::NODE_FINISH);
+    }
 
     while (true) {
         // Find a path from start to finish using explored and unexplored

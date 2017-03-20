@@ -12,6 +12,8 @@
 #include <stdexcept>
 #include <thread>
 
+float SIMULATION_SPEED = 5.0f;
+
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
 
@@ -132,16 +134,14 @@ class Simulator : public sf::RenderWindow {
     Simulator(Mouse &mouse)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE,
                            sf::Style::Default, sf::ContextSettings(0, 0, 8))
-        , mouse(mouse)
-        , mouse_thread(&Mouse::runMaze, &mouse) {
-
+        , mouse(mouse) {
         try {
-            mouse.maze = Maze::fromFile("test.maze");
+            mouse.virtualMaze = Maze::fromFile("2.maze");
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
 
-        this->setFramerateLimit(60);
+        this->setFramerateLimit(120);
     }
 
     bool keyPress(sf::Keyboard::Key key) {
@@ -154,8 +154,14 @@ class Simulator : public sf::RenderWindow {
     }
 
     void main_loop(void) {
+        // Wait until after the mouse maze has been initialized by the
+        // simulation to start the thread.
+        mouse_thread = std::thread(&Mouse::runMaze, &mouse);
+
         while (isOpen()) {
             if (keyPress(sf::Keyboard::R)) {
+                // These destroy the path the the mouse is iterating over.
+                // Not thread safe.
                 // mouse.maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
                 //                                   rand() % Maze::CELL_ROWS),
                 //                    CellCoordinate(rand() % Maze::CELL_COLS,
@@ -179,8 +185,8 @@ class Simulator : public sf::RenderWindow {
                                                    event.size.height)));
             }
 
-            std::lock_guard<std::mutex> lock(mtx);
-            render();
+            if (SIMULATION_SPEED < 1000.0f)
+                render();
         }
     }
 
@@ -192,13 +198,22 @@ class Simulator : public sf::RenderWindow {
     }
 
     void render(void) {
+        std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+
         clear(sf::Color::Black);
+
         MazeDrawable entity(mouse.maze);
         MouseDrawable mouseEntity(mouse);
         entity.setScale(mazeSize());
         mouseEntity.setScale(mazeSize());
+
+        lock.lock();
         draw(entity);
         draw(mouseEntity);
+        lock.unlock();
+
+        // Display includes the delay needed to achieved the set framerate.
+        // We don't want the mutex locked for the long delay.
         display();
     }
 

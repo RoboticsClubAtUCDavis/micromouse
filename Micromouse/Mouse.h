@@ -57,6 +57,7 @@ class Mouse {
                                  NodeCoordinate pos);
 
     Maze maze;
+    Maze virtualMaze;
     Hardware bot;
 
     NodeCoordinate position;
