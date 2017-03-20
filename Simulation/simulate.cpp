@@ -40,9 +40,32 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
         states.transform *= getTransform();
 
         sf::RectangleShape cell(sf::Vector2f(1, 1));
-        cell.setFillColor(maze.getNode(pos).evaluated
-                              ? sf::Color(255, 255, 150, 20)
-                              : sf::Color(255, 255, 255, 10));
+
+        enum States { DEFAULT, EXPLORED, EVALUATED, EXP_AND_EVAL };
+
+        int state = 0;
+        state |= maze.isExplored(pos);
+        state <<= 1;
+        state |= maze.getNode(pos).evaluated;
+
+        sf::Color c;
+        switch (state) {
+            case EXPLORED:
+                c = sf::Color(255, 255, 150, 40);
+                break;
+            case EVALUATED:
+                c = sf::Color(150, 255, 255, 40);
+                break;
+            case EXP_AND_EVAL:
+                c = sf::Color(255, 170, 170, 35);
+                break;
+            case DEFAULT:
+            default:
+                c = sf::Color(255, 255, 255, 5);
+                break;
+        }
+
+        cell.setFillColor(c);
         target.draw(cell, states);
 
         if (maze.isWall(pos, N))
@@ -81,7 +104,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
             }
         }
 
-        drawPath(target, states, maze.getPath());
+        drawPath(target, states, maze.getPath(), maze);
     }
 
     sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
@@ -93,11 +116,30 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     void drawPath(sf::RenderTarget &target, sf::RenderStates states,
-                  const Path &path) const {
+                  const Path &path, Maze &maze) const {
+
+        enum States { UNEXPLORED, EXPLORED };
+
         NodeCoordinate node = path.start;
+
         for (auto &i : path) {
             NodeCoordinate nextNode = node + i;
-            target.draw(line(node, nextNode, sf::Color::Green), states);
+
+            int state = 0;
+            state |= maze.getNode(node).explored;
+
+            sf::Color color;
+            switch (state) {
+                case EXPLORED:
+                    color = sf::Color::Green;
+                    break;
+                case UNEXPLORED:
+                default:
+                    color = sf::Color(255, 225, 100);
+                    break;
+            }
+
+            target.draw(line(node, nextNode, color), states);
             node = nextNode;
         }
     }
