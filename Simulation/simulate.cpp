@@ -5,6 +5,7 @@
 #include "../Micromouse/Maze.h"
 #include "../Micromouse/Mouse.h"
 #include "../Micromouse/Node.h"
+#include "simulate.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -12,7 +13,6 @@
 #include <stdexcept>
 #include <thread>
 
-float SIMULATION_SPEED = 5.0f;
 
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);

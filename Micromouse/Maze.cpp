@@ -13,9 +13,7 @@
 #include <mutex>
 #include <stdexcept>
 #include <thread>
-
-extern std::mutex mtx;
-extern float SIMULATION_SPEED;
+#include "../Simulation/simulate.h"
 #endif
 
 //#define MAZE_DIAGONALS

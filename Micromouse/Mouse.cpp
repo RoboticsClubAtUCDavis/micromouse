@@ -8,9 +8,11 @@
 #include <mutex>
 #include <stdexcept>
 #include <thread>
+#include "../Simulation/simulate.h"
 
+// Not sure why Travis does not like when this is in simulate.cpp
+float SIMULATION_SPEED = 1.0f;
 std::mutex mtx;
-extern float SIMULATION_SPEED;
 #endif
 
 Mouse::Mouse() : position(Maze::CELL_START) {
