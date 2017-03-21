@@ -7,13 +7,13 @@
 #include <vector>
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include "../Simulation/simulate.h"
 #include <chrono>
 #include <fstream>
 #include <iostream>
 #include <mutex>
 #include <stdexcept>
 #include <thread>
-#include "../Simulation/simulate.h"
 #endif
 
 //#define MAZE_DIAGONALS
@@ -233,6 +233,7 @@ void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
         sort(openNodes.begin(), openNodes.end(), Maze::scoreComparator);
         auto currentNodeItr = openNodes.begin();
         auto currentNode = *currentNodeItr;
+        path.cost = currentNode->fScore;
 
         // If the current node is any of the end nodes.
         for (auto &i : ends) {
@@ -421,6 +422,7 @@ unsigned Maze::heuristic(NodeCoordinate start, NodeCoordinate end) {
 
 void Maze::constructPath(Node *start) {
     path.clear();
+    path.cost = start->gScore;
 
     const Node *i;
     // while there is more to the path to traverse

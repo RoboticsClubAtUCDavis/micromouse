@@ -6,7 +6,7 @@
 
 class Path {
   public:
-    Path() : start(0, 0) {
+    Path() : start(0, 0), cost(0) {
     }
     std::vector<DirectionVector>::const_reverse_iterator begin() const;
     std::vector<DirectionVector>::const_reverse_iterator end() const;
@@ -14,6 +14,7 @@ class Path {
     void push_back(DirectionVector vec);
     void clear();
     NodeCoordinate start;
+    unsigned cost;
 
   private:
     std::vector<DirectionVector> directions;

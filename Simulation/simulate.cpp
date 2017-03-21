@@ -20,6 +20,47 @@ sf::Vector2f nodeVector(NodeCoordinate c) {
     return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * NODE_SIZE;
 }
 
+void HSVtoRGB(float &fR, float &fG, float &fB, float fH, float fS, float fV) {
+    float fC = fV * fS; // Chroma
+    float fHPrime = fmod(fH / 60.0, 6);
+    float fX = fC * (1 - fabs(fmod(fHPrime, 2) - 1));
+    float fM = fV - fC;
+
+    if (0 <= fHPrime && fHPrime < 1) {
+        fR = fC;
+        fG = fX;
+        fB = 0;
+    } else if (1 <= fHPrime && fHPrime < 2) {
+        fR = fX;
+        fG = fC;
+        fB = 0;
+    } else if (2 <= fHPrime && fHPrime < 3) {
+        fR = 0;
+        fG = fC;
+        fB = fX;
+    } else if (3 <= fHPrime && fHPrime < 4) {
+        fR = 0;
+        fG = fX;
+        fB = fC;
+    } else if (4 <= fHPrime && fHPrime < 5) {
+        fR = fX;
+        fG = 0;
+        fB = fC;
+    } else if (5 <= fHPrime && fHPrime < 6) {
+        fR = fC;
+        fG = 0;
+        fB = fX;
+    } else {
+        fR = 0;
+        fG = 0;
+        fB = 0;
+    }
+
+    fR += fM;
+    fG += fM;
+    fB += fM;
+}
+
 class CellDrawable : public sf::Transformable, public sf::Drawable {
   public:
     CellDrawable(Maze &maze, Maze &virtualMaze, CellCoordinate pos)
@@ -48,16 +89,21 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
         state <<= 1;
         state |= maze.isExplored(pos);
 
+        float r, g, b, h, s = 1.0f, v = 1.0f;
+        HSVtoRGB(r, g, b,
+                 maze.getNode(pos).gScore / float(maze.getPath().cost) * 360,
+                 1.0f, 1.0f);
+
         sf::Color c;
         switch (state) {
             case EXPLORED:
-                c = sf::Color(150, 255, 255, 40);
+                c = sf::Color(150, 200, 200, 40);
                 break;
             case EVALUATED:
-                c = sf::Color(255, 255, 150, 40);
+                c = sf::Color(r * 255, g * 255, b * 255, 30);
                 break;
             case EXP_AND_EVAL:
-                c = sf::Color(255, 170, 170, 35);
+                c = sf::Color(r * 255, g * 255, b * 255, 70);
                 break;
             case DEFAULT:
             default:
@@ -189,7 +235,7 @@ class Simulator : public sf::RenderWindow {
                            sf::Style::Default, sf::ContextSettings(0, 0, 8))
         , mouse(mouse) {
         try {
-            mouse.virtualMaze = Maze::fromFile("2.maze");
+            mouse.virtualMaze = Maze::fromFile("1.maze");
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
