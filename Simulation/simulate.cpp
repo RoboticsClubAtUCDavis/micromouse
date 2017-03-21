@@ -44,17 +44,17 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
         enum States { DEFAULT, EXPLORED, EVALUATED, EXP_AND_EVAL };
 
         int state = 0;
-        state |= maze.isExplored(pos);
-        state <<= 1;
         state |= maze.getNode(pos).evaluated;
+        state <<= 1;
+        state |= maze.isExplored(pos);
 
         sf::Color c;
         switch (state) {
             case EXPLORED:
-                c = sf::Color(255, 255, 150, 40);
+                c = sf::Color(150, 255, 255, 40);
                 break;
             case EVALUATED:
-                c = sf::Color(150, 255, 255, 40);
+                c = sf::Color(255, 255, 150, 40);
                 break;
             case EXP_AND_EVAL:
                 c = sf::Color(255, 170, 170, 35);
