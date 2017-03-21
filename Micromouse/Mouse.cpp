@@ -101,7 +101,7 @@ void Mouse::followPath(const Path &path, bool useCaution) {
 
 // TEMPORARY
 // This is just used to test mapping.
-// Many of the actions here need to be delaged to the proper helper
+// Many of the actions here need to be delegated to the proper helper
 // functions and to `Hardware`.
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     std::unique_lock<std::mutex> lock(mtx);
