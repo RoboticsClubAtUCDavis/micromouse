@@ -13,7 +13,6 @@
 #include <stdexcept>
 #include <thread>
 
-
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
 
@@ -213,6 +212,12 @@ class Simulator : public sf::RenderWindow {
                 // 7));
             } else if (keyPress(sf::Keyboard::Space)) {
                 // mouse.maze.generate();
+            } else if (keyPress(sf::Keyboard::Up)) {
+                std::unique_lock<std::mutex> lock(mtx);
+                SIMULATION_SPEED *= 1.5f;
+            } else if (keyPress(sf::Keyboard::Down)) {
+                std::unique_lock<std::mutex> lock(mtx);
+                SIMULATION_SPEED /= 1.5f;
             }
 
             sf::Event event;
