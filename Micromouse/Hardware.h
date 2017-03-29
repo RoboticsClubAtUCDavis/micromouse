@@ -2,7 +2,9 @@
 #include "Direction.h"
 #include "Led.h"
 #include "Motor.h"
+#include "PIDController.h"
 #include "RangeFinder.h"
+#include <Arduino.h>
 
 enum Relation { LEFT, FRONT, RIGHT, NO_RELATION };
 
@@ -60,6 +62,27 @@ class Hardware {
     Motor leftMotor;
     Motor rightMotor;
     Led led;
+
+    class DeltaTime : public PIDController::Delta {
+      public:
+        DeltaTime() : previousTime(micros()){};
+
+        unsigned operator()() const {
+            auto deltaTime = micros() - previousTime;
+            previousTime += deltaTime;
+            return deltaTime;
+        }
+
+      private:
+        mutable unsigned long previousTime;
+    };
+
+    DeltaTime deltaTime;
+
+    PIDController speedPID;
+    PIDController distancePID;
+    PIDController leftPID;
+    PIDController rightPID;
 
     // Max speed in mmps.
     unsigned speed = 100;
