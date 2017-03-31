@@ -11,6 +11,7 @@ class Node {
 
     NodeCoordinate pos;
     bool exists;
+    bool explored;
 
     // These are used for pathfinding
     unsigned gScore;

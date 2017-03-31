@@ -5,6 +5,7 @@
 #include "../Micromouse/Maze.h"
 #include "../Micromouse/Mouse.h"
 #include "../Micromouse/Node.h"
+#include "simulate.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -38,9 +39,32 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
         states.transform *= getTransform();
 
         sf::RectangleShape cell(sf::Vector2f(1, 1));
-        cell.setFillColor(maze.getNode(pos).evaluated
-                              ? sf::Color(255, 255, 150, 20)
-                              : sf::Color(255, 255, 255, 10));
+
+        enum States { DEFAULT, EXPLORED, EVALUATED, EXP_AND_EVAL };
+
+        int state = 0;
+        state |= maze.getNode(pos).evaluated;
+        state <<= 1;
+        state |= maze.isExplored(pos);
+
+        sf::Color c;
+        switch (state) {
+            case EXPLORED:
+                c = sf::Color(150, 255, 255, 40);
+                break;
+            case EVALUATED:
+                c = sf::Color(255, 255, 150, 40);
+                break;
+            case EXP_AND_EVAL:
+                c = sf::Color(255, 170, 170, 35);
+                break;
+            case DEFAULT:
+            default:
+                c = sf::Color(255, 255, 255, 5);
+                break;
+        }
+
+        cell.setFillColor(c);
         target.draw(cell, states);
 
         if (maze.isWall(pos, N))
@@ -79,7 +103,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
             }
         }
 
-        drawPath(target, states, maze.getPath());
+        drawPath(target, states, maze.getPath(), maze);
     }
 
     sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
@@ -91,11 +115,30 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     void drawPath(sf::RenderTarget &target, sf::RenderStates states,
-                  const Path &path) const {
+                  const Path &path, Maze &maze) const {
+
+        enum States { UNEXPLORED, EXPLORED };
+
         NodeCoordinate node = path.start;
+
         for (auto &i : path) {
             NodeCoordinate nextNode = node + i;
-            target.draw(line(node, nextNode, sf::Color::Green), states);
+
+            int state = 0;
+            state |= maze.getNode(node).explored;
+
+            sf::Color color;
+            switch (state) {
+                case EXPLORED:
+                    color = sf::Color::Green;
+                    break;
+                case UNEXPLORED:
+                default:
+                    color = sf::Color(255, 225, 100);
+                    break;
+            }
+
+            target.draw(line(node, nextNode, color), states);
             node = nextNode;
         }
     }
@@ -132,16 +175,14 @@ class Simulator : public sf::RenderWindow {
     Simulator(Mouse &mouse)
         : sf::RenderWindow(sf::VideoMode(800, 600), WINDOW_TITLE,
                            sf::Style::Default, sf::ContextSettings(0, 0, 8))
-        , mouse(mouse)
-        , mouse_thread(&Mouse::runMaze, &mouse) {
-
+        , mouse(mouse) {
         try {
-            mouse.maze = Maze::fromFile("test.maze");
+            mouse.virtualMaze = Maze::fromFile("2.maze");
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
 
-        this->setFramerateLimit(60);
+        this->setFramerateLimit(120);
     }
 
     bool keyPress(sf::Keyboard::Key key) {
@@ -154,8 +195,14 @@ class Simulator : public sf::RenderWindow {
     }
 
     void main_loop(void) {
+        // Wait until after the mouse maze has been initialized by the
+        // simulation to start the thread.
+        mouse_thread = std::thread(&Mouse::runMaze, &mouse);
+
         while (isOpen()) {
             if (keyPress(sf::Keyboard::R)) {
+                // These destroy the path the the mouse is iterating over.
+                // Not thread safe.
                 // mouse.maze.findPath(CellCoordinate(rand() % Maze::CELL_COLS,
                 //                                   rand() % Maze::CELL_ROWS),
                 //                    CellCoordinate(rand() % Maze::CELL_COLS,
@@ -165,6 +212,12 @@ class Simulator : public sf::RenderWindow {
                 // 7));
             } else if (keyPress(sf::Keyboard::Space)) {
                 // mouse.maze.generate();
+            } else if (keyPress(sf::Keyboard::Up)) {
+                std::unique_lock<std::mutex> lock(mtx);
+                SIMULATION_SPEED *= 1.5f;
+            } else if (keyPress(sf::Keyboard::Down)) {
+                std::unique_lock<std::mutex> lock(mtx);
+                SIMULATION_SPEED /= 1.5f;
             }
 
             sf::Event event;
@@ -179,8 +232,8 @@ class Simulator : public sf::RenderWindow {
                                                    event.size.height)));
             }
 
-            std::lock_guard<std::mutex> lock(mtx);
-            render();
+            if (SIMULATION_SPEED < 1000.0f)
+                render();
         }
     }
 
@@ -192,13 +245,22 @@ class Simulator : public sf::RenderWindow {
     }
 
     void render(void) {
+        std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+
         clear(sf::Color::Black);
+
         MazeDrawable entity(mouse.maze);
         MouseDrawable mouseEntity(mouse);
         entity.setScale(mazeSize());
         mouseEntity.setScale(mazeSize());
+
+        lock.lock();
         draw(entity);
         draw(mouseEntity);
+        lock.unlock();
+
+        // Display includes the delay needed to achieved the set framerate.
+        // We don't want the mutex locked for the long delay.
         display();
     }
 

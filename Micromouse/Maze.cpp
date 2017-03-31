@@ -1,22 +1,35 @@
 #include "Maze.h"
 #include <algorithm>
+#include <assert.h>
 #include <cstdlib> //abs
 #include <set>
 #include <stdexcept>
 #include <vector>
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include <chrono>
 #include <fstream>
 #include <iostream>
+#include <mutex>
+#include <stdexcept>
+#include <thread>
+#include "../Simulation/simulate.h"
 #endif
 
-#define MAZE_DIAGONALS
+//#define MAZE_DIAGONALS
 
 using namespace std;
 
 const CellCoordinate Maze::CELL_START = CellCoordinate(0, 0);
 const CellCoordinate Maze::CELL_FINISH =
     CellCoordinate(Maze::CELL_COLS / 2, Maze::CELL_ROWS / 2);
+const NodeCoordinate Maze::NODE_START = CellCoordinate(0, 0);
+const NodeCoordinate Maze::NODE_FINISH =
+    NodeCoordinate(Maze::NODE_COLS / 2, Maze::NODE_COLS / 2);
+
+Maze::Maze() {
+    reset();
+}
 
 void Maze::reset() {
     for (int y = 0; y < NODE_ROWS; y++) {
@@ -33,21 +46,45 @@ void Maze::reset() {
     path.clear();
 }
 
+bool Maze::isWall(NodeCoordinate pos) {
+    return !getNode(pos);
+}
+
+bool Maze::isWall(CellCoordinate pos, Direction dir) {
+    return isWall(pos.toNode() + dir);
+}
+
+void Maze::setWall(NodeCoordinate pos, bool wall) {
+    getNode(pos).exists = !wall;
+}
+
+void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
+    setWall(pos.toNode() + dir, wall);
+}
+
+bool Maze::isExplored(NodeCoordinate pos) {
+    return getNode(pos).explored;
+}
+
+bool Maze::isExplored(CellCoordinate pos, Direction dir) {
+    return isExplored(pos.toNode() + dir);
+}
+
+void Maze::setExplored(NodeCoordinate pos, bool explored) {
+    getNode(pos).explored = explored;
+}
+
+void Maze::setExplored(CellCoordinate pos, Direction dir, bool explored) {
+    setExplored(pos.toNode() + dir, explored);
+}
+
 bool Maze::isBorder(NodeCoordinate pos) {
     return pos.x == 0 || pos.y == 0 || pos.y == NODE_ROWS - 1 ||
            pos.x == NODE_COLS - 1;
 }
 
-bool Maze::isBorder(Node node) {
-    return isBorder(node.pos);
-}
-
 bool Maze::withinBounds(NodeCoordinate pos) {
     return pos.x >= 0 && pos.x < NODE_COLS && pos.y >= 0 && pos.y < NODE_ROWS;
-}
-
-bool Maze::withinBounds(Node node) {
-    return withinBounds(node.pos);
 }
 
 void Maze::generate(int seed) {
@@ -150,49 +187,45 @@ Maze Maze::fromFile(std::string fileName) {
     return maze;
 }
 
-Maze::Maze() {
-    reset();
-}
-
-bool Maze::isWall(NodeCoordinate pos) {
-    return !getNode(pos);
-}
-
-bool Maze::isWall(CellCoordinate pos, Direction dir) {
-    return isWall(pos.toNode() + dir);
-}
-
-void Maze::setWall(NodeCoordinate pos, bool wall) {
-    getNode(pos).exists = !wall;
-}
-
-void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
-    setWall(pos.toNode() + dir, wall);
-}
-
 bool Maze::scoreComparator(const Node *const &lhs, const Node *const &rhs) {
     return lhs->fScore < rhs->fScore;
 }
 
-void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
+void Maze::findPath(NodeCoordinate start, NodeCoordinate end, bool exploredOnly,
                     Direction facing) {
-    // Pathfinding is done from end to start
-    Node &endNode = getNode(end);
+    findPath(start, NodeCoordinateList(1, end), exploredOnly, facing);
+}
+
+void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
+                    bool exploredOnly, Direction facing) {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    std::unique_lock<std::mutex> lock(mtx);
+#endif
+
+    if (ends.empty())
+        return;
+
+    // Pathfinding is done from start to end.
+    Node &startNode = getNode(start);
+    startNode.direction = facing;
 
     // The nodes that still need to be evaluated.
-    // Initially insert the end node.
+    // Initially insert the start node.
     vector<Node *> openNodes;
-    openNodes.push_back(&endNode);
+    openNodes.push_back(&startNode);
 
     // Reset any metadata from previous pathfinding.
     resetNodePathData();
 
-    // Invert `facing` since pathfinding is done in reverse.
-    facing = DirOp::invert(facing);
+    // The start node is 0 distance away.
+    startNode.gScore = 0;
 
-    // The end node is 0 distance away.
-    endNode.gScore = 0;
-    endNode.fScore = heuristic(end, start);
+    // Can only use the heuristic with a single end point.
+    if (ends.size() == 1) {
+        startNode.fScore = heuristic(start, ends[0]);
+    } else {
+        startNode.fScore = 0;
+    }
 
     // While there are nodes remaining to be evaluated.
     while (!openNodes.empty()) {
@@ -201,11 +234,20 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
         auto currentNodeItr = openNodes.begin();
         auto currentNode = *currentNodeItr;
 
-        // If the current node is the start node.
-        if (currentNode == &getNode(start)) {
-            // We are done. Construct the path.
-            constructPath(currentNode);
-            return;
+        // If the current node is any of the end nodes.
+        for (auto &i : ends) {
+            if (currentNode == &getNode(i)) {
+                // We are done. Construct the path.
+                constructPath(currentNode);
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+                if (SIMULATION_SPEED < 1000.0f) {
+                    lock.unlock();
+                    std::this_thread::sleep_for(std::chrono::milliseconds(
+                        long(1000 / SIMULATION_SPEED)));
+                }
+#endif
+                return;
+            }
         }
 
         // Set the current node as evaluated.
@@ -223,9 +265,10 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
                  ) {
             Node &adjacentNode = getAdjacentNode(currentNode, direction);
 
-            // If the adjacent node has already been evaluated or does not
-            // exist.
-            if (adjacentNode.evaluated || !adjacentNode.exists) {
+            // If the adjacent node has already been evaluated or does not exist
+            // or it is not explored and it requires explored.
+            if (adjacentNode.evaluated || !adjacentNode.exists ||
+                (exploredOnly && !adjacentNode.explored)) {
                 // Ignore the adjacent node.
                 continue;
             }
@@ -233,12 +276,6 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
             auto tentativeScore =
                 currentNode->gScore +
                 calculateMovementCost(currentNode->direction, direction);
-
-            // If the adjacent node is the start node, add a penalty for paths
-            // that do not start in the direction the mouse is facing.
-            if (&adjacentNode == &getNode(start)) {
-                tentativeScore += calculateMovementCost(direction, facing);
-            }
 
             // If adjacent node not in openNodes.
             if (find(openNodes.begin(), openNodes.end(), &adjacentNode) ==
@@ -255,10 +292,25 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end,
             // This path is the best so far.
             adjacentNode.next = currentNode;
             adjacentNode.direction = direction;
-            auto heuristicScore = heuristic(adjacentNode.pos, start);
+
+            unsigned heuristicScore = 0;
+            // Can only use the heuristic with a single end point.
+            if (ends.size() == 1) {
+                heuristicScore = heuristic(adjacentNode.pos, ends[0]);
+            }
+
             adjacentNode.gScore = tentativeScore;
             adjacentNode.fScore = adjacentNode.gScore + heuristicScore;
         }
+
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+        if (SIMULATION_SPEED < 10.0f) {
+            lock.unlock();
+            std::this_thread::sleep_for(
+                std::chrono::microseconds(long(5000 / SIMULATION_SPEED)));
+            lock.lock();
+        }
+#endif
     }
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     throw runtime_error("No path found");
@@ -363,21 +415,82 @@ unsigned Maze::heuristic(NodeCoordinate start, NodeCoordinate end) {
         return (deltaY - deltaX) * MOVEMENT_COST +
                deltaX * MOVEMENT_COST_DIAGONAL;
 #else
-    return abs(start.x - end.x) + abs(start.y - end.y);
+    return (abs(start.x - end.x) + abs(start.y - end.y)) * MOVEMENT_COST;
 #endif // MAZE_DIAGONALS
 }
 
 void Maze::constructPath(Node *start) {
     path.clear();
-    path.start = start->pos;
 
+    const Node *i;
     // while there is more to the path to traverse
-    for (const Node *i = start; i->next; i = i->next) {
-        // Invert the directions since pathfinding was done in reverse.
-        path.push_back(DirectionVector(DirOp::invert(i->direction), 1));
+    for (i = start; i->next; i = i->next) {
+        path.push_back(DirectionVector(i->direction, 1));
     }
+
+    path.start = i->pos;
 }
 
 const Path &Maze::getPath() const {
     return path;
+}
+
+void Maze::findNodeCoordPairs(NodeCoordinateList &coordList) {
+    // This could be optimized by combining it with `Maze::constructPath` but I
+    // made it its own function for clarity.
+
+    // Require that the path start node is explored.
+    assert(isExplored(path.start));
+
+    // These are used to detect the transition between explored and unexplored
+    // nodes if the edge detectors are not equal then an edge is present.
+    bool edgeDetectorA;
+    bool edgeDetectorB = true;
+
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    std::lock_guard<std::mutex> lock(mtx);
+#endif
+
+    NodeCoordinate posA = path.start;
+    NodeCoordinate posB;
+
+    for (auto &i : path) {
+        posB = posA;
+        posA = posA + i.direction;
+
+        edgeDetectorA = getNode(posA).explored;
+
+        if (edgeDetectorA != edgeDetectorB) {
+            if (edgeDetectorB) {
+                coordList.push_back(posB);
+            } else {
+                coordList.push_back(posA);
+            }
+        }
+
+        edgeDetectorB = edgeDetectorA;
+    }
+
+    // List must be even size since we assume they are pairs.
+    // Effectively requires that the path end node is explored.
+    assert(coordList.size() % 2 == 0);
+}
+
+void Maze::closeExcessFinishNodes() {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    std::lock_guard<std::mutex> lock(mtx);
+#endif
+    for (int y = -2; y <= 2; y++) {
+        for (int x = -2; x <= 2; x++) {
+            if (x >= -1 && x <= 1 && y >= -1 && y <= 1)
+                continue;
+
+            NodeCoordinate pos = Maze::NODE_FINISH + NodeCoordinate(x, y);
+
+            if (!isExplored(pos)) {
+                setWall(pos);
+                setExplored(pos);
+            }
+        }
+    }
 }
