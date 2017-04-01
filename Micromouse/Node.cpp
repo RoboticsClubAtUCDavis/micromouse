@@ -3,11 +3,11 @@
 
 using namespace std;
 
-Node::Node(void) : pos(NodeCoordinate(0, 0)), exists(false) {
+Node::Node(void) : pos(NodeCoordinate(0, 0)), exists(false), explored(false) {
     resetPathData();
 }
 
-Node::Node(NodeCoordinate pos) : pos(pos), exists(true) {
+Node::Node(NodeCoordinate pos) : pos(pos), exists(true), explored(false) {
     resetPathData();
 }
 

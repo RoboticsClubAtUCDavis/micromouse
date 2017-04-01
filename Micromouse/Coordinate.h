@@ -10,9 +10,9 @@ class Coordinate {
     int hash() const;
 
   public:
-    Coordinate operator*(int a);
-    Coordinate operator-(const Coordinate &a);
-    Coordinate operator+(const Coordinate &a);
+    Coordinate operator*(int a) const;
+    Coordinate operator-(const Coordinate &a) const;
+    Coordinate operator+(const Coordinate &a) const;
     bool operator<(const Coordinate &a) const;
     bool operator==(const Coordinate &a) const;
     bool operator!=(const Coordinate &a) const;
@@ -26,24 +26,24 @@ class NodeCoordinate : public Coordinate {
   public:
     NodeCoordinate(int x = 0, int y = 0) : Coordinate(x, y){};
     explicit NodeCoordinate(Direction d) : Coordinate(d){};
-    bool isCell();
-    bool isPost();
-    NodeCoordinate operator*(int a);
-    NodeCoordinate operator-(NodeCoordinate a);
-    NodeCoordinate operator+(NodeCoordinate a);
-    NodeCoordinate operator+(Direction direction);
-    NodeCoordinate operator+(DirectionVector dirvect);
+    bool isCell() const;
+    bool isPost() const;
+    NodeCoordinate operator*(const int a) const;
+    NodeCoordinate operator-(const NodeCoordinate a) const;
+    NodeCoordinate operator+(const NodeCoordinate a) const;
+    NodeCoordinate operator+(const Direction direction) const;
+    NodeCoordinate operator+(const DirectionVector dirvect) const;
 };
 
 class CellCoordinate : public Coordinate {
   public:
     CellCoordinate(int x = 0, int y = 0) : Coordinate(x, y){};
     explicit CellCoordinate(Direction d) : Coordinate(d){};
-    CellCoordinate operator*(int a);
-    CellCoordinate operator-(CellCoordinate a);
-    CellCoordinate operator+(CellCoordinate a);
-    CellCoordinate operator+(Direction direction);
-    CellCoordinate operator+(DirectionVector dirvect);
+    CellCoordinate operator*(const int a) const;
+    CellCoordinate operator-(const CellCoordinate a) const;
+    CellCoordinate operator+(const CellCoordinate a) const;
+    CellCoordinate operator+(const Direction direction) const;
+    CellCoordinate operator+(const DirectionVector dirvect) const;
     operator NodeCoordinate() const;
     NodeCoordinate toNode(void) const;
 };
