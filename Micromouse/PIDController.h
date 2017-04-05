@@ -10,7 +10,6 @@ class PIDController {
         };
     };
 
-    PIDController();
     PIDController(float p, float i, float d, const Delta &delta,
                   float initialError, float maxIntegralError,
                   float derivativeSmoothing = 0.0f);
