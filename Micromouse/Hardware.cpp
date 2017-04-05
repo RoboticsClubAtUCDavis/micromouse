@@ -3,10 +3,10 @@
 #include "UltrasonicSensor.h"
 
 Hardware::Hardware()
-    : speedPID(1.0f, 1.0f, 1.0f, deltaTime, 0.0f, 100.0f)
-    , distancePID(1.0f, 1.0f, 1.0f, deltaTime, 0.0f, 100.0f)
-    , leftPID(1.0f, 1.0f, 1.0f, deltaTime, 0.0f, 100.0f)
-    , rightPID(1.0f, 1.0f, 1.0f, deltaTime, 0.0f, 100.0f) {
+    : speedPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
+    , distancePID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
+    , leftPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
+    , rightPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f) {
 
     initRangeFinders();
     // TODO init rest of components.
@@ -72,4 +72,14 @@ void Hardware::initRangeFinders() {
     for (auto i : rangeFinders) {
         i->loadCalibration();
     }
+}
+
+unsigned Hardware::DeltaTime::operator()() {
+    auto deltaTime = micros() - previousTime;
+    previousTime += deltaTime;
+    return deltaTime;
+}
+
+void Hardware::DeltaTime::reset() {
+    previousTime = micros();
 }

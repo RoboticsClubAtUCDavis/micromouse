@@ -2,13 +2,11 @@
 #include <algorithm>
 #include <assert.h>
 
-PIDController::PIDController(float p, float i, float d, const Delta &getDelta,
-                             float initialError, float maxIntegralError,
-                             float derivativeSmoothing)
+PIDController::PIDController(float p, float i, float d, float initialError,
+                             float maxIntegralError, float derivativeSmoothing)
     : P(p)
     , I(i)
     , D(d)
-    , getDelta(getDelta)
     , maxIntegralError(maxIntegralError)
     , derivativeSmoothing(derivativeSmoothing)
     , integratedError(0.0f)
@@ -21,9 +19,7 @@ PIDController::PIDController(float p, float i, float d, const Delta &getDelta,
     assert(maxIntegralError > 0.0f);
 }
 
-float PIDController::getCorrection(float currentError) {
-
-    unsigned delta = getDelta();
+float PIDController::getCorrection(float currentError, unsigned delta) {
 
     integratedError += currentError * delta;
 

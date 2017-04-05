@@ -63,18 +63,14 @@ class Hardware {
     Motor rightMotor;
     Led led;
 
-    class DeltaTime : public PIDController::Delta {
+    class DeltaTime {
       public:
         DeltaTime() : previousTime(micros()){};
-
-        unsigned operator()() const {
-            auto deltaTime = micros() - previousTime;
-            previousTime += deltaTime;
-            return deltaTime;
-        }
+        unsigned operator()();
+        void reset();
 
       private:
-        mutable unsigned long previousTime;
+        unsigned long previousTime;
     };
 
     DeltaTime deltaTime;
