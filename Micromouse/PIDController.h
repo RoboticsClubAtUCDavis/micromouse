@@ -12,9 +12,9 @@ class PIDController {
     const float P;
     const float I;
     const float D;
+    const float maxIntegralError;
+    const float derivativeSmoothing;
 
-    float maxIntegralError;
-    float derivativeSmoothing;
     float integratedError;
     float previousError;
 };
