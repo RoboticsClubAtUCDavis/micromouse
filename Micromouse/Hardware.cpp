@@ -2,7 +2,12 @@
 #include "IRSensor.h"
 #include "UltrasonicSensor.h"
 
-Hardware::Hardware() {
+Hardware::Hardware()
+    : speedPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
+    , distancePID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
+    , leftPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
+    , rightPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f) {
+
     initRangeFinders();
     // TODO init rest of components.
 }
@@ -13,20 +18,21 @@ Hardware::~Hardware() {
     }
 }
 
-//unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
+// unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution)
+// {
 //    // TODO
 //    return 0;
 //}
 
-//void Hardware::rotate(int deg) {
+// void Hardware::rotate(int deg) {
 //    // TODO
 //}
 
-//void Hardware::checkWall(Relation relation) {
+// void Hardware::checkWall(Relation relation) {
 //    // TODO
 //}
 
-//bool Hardware::isWall(Relation relation) {
+// bool Hardware::isWall(Relation relation) {
 //    // TODO
 //    return false;
 //}
@@ -35,7 +41,7 @@ void Hardware::setSpeed(unsigned mmps) {
     speed = mmps;
 }
 
-//void Hardware::calibrateMotors() {
+// void Hardware::calibrateMotors() {
 //    // TODO
 //}
 
@@ -66,4 +72,14 @@ void Hardware::initRangeFinders() {
     for (auto i : rangeFinders) {
         i->loadCalibration();
     }
+}
+
+unsigned Hardware::DeltaTime::operator()() {
+    auto deltaTime = micros() - previousTime;
+    previousTime += deltaTime;
+    return deltaTime;
+}
+
+void Hardware::DeltaTime::reset() {
+    previousTime = micros();
 }
