@@ -22,7 +22,8 @@ sf::Vector2f nodeVector(NodeCoordinate c) {
 
 class CellDrawable : public sf::Transformable, public sf::Drawable {
   public:
-    CellDrawable(Maze &maze, Maze &virtualMaze, CellCoordinate pos) : maze(maze), virtualMaze(virtualMaze), pos(pos) {
+    CellDrawable(Maze &maze, Maze &virtualMaze, CellCoordinate pos)
+        : maze(maze), virtualMaze(virtualMaze), pos(pos) {
     }
 
   private:
@@ -71,22 +72,22 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
 
         if (maze.isWall(pos, N))
             target.draw(line(0, 0, 1, 0), states);
-	else if (virtualMaze.isWall(pos, N))
+        else if (virtualMaze.isWall(pos, N))
             target.draw(line(0, 0, 1, 0, hidden_c), states);
 
         if (maze.isWall(pos, S))
             target.draw(line(0, 1, 1, 1), states);
-	else if (virtualMaze.isWall(pos, S))
+        else if (virtualMaze.isWall(pos, S))
             target.draw(line(0, 1, 1, 1, hidden_c), states);
 
         if (maze.isWall(pos, E))
             target.draw(line(1, 0, 1, 1), states);
-	else if (virtualMaze.isWall(pos, E))
+        else if (virtualMaze.isWall(pos, E))
             target.draw(line(1, 0, 1, 1, hidden_c), states);
 
         if (maze.isWall(pos, W))
             target.draw(line(0, 0, 0, 1), states);
-	else if (virtualMaze.isWall(pos, W))
+        else if (virtualMaze.isWall(pos, W))
             target.draw(line(0, 0, 0, 1, hidden_c), states);
     }
 
@@ -96,7 +97,8 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
 
 class MazeDrawable : public sf::Transformable, public sf::Drawable {
   public:
-    MazeDrawable(Maze &maze, Maze &virtualMaze) : maze(maze), virtualMaze(virtualMaze) {
+    MazeDrawable(Maze &maze, Maze &virtualMaze)
+        : maze(maze), virtualMaze(virtualMaze) {
     }
 
   private:
