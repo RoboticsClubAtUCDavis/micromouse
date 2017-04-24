@@ -22,7 +22,8 @@ sf::Vector2f nodeVector(NodeCoordinate c) {
 
 class CellDrawable : public sf::Transformable, public sf::Drawable {
   public:
-    CellDrawable(Maze &maze, CellCoordinate pos) : maze(maze), pos(pos) {
+    CellDrawable(Maze &maze, Maze &virtualMaze, CellCoordinate pos)
+        : maze(maze), virtualMaze(virtualMaze), pos(pos) {
     }
 
   private:
@@ -67,26 +68,37 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
         cell.setFillColor(c);
         target.draw(cell, states);
 
+        auto hidden_c = sf::Color(255, 255, 255, 20);
+
         if (maze.isWall(pos, N))
             target.draw(line(0, 0, 1, 0), states);
+        else if (virtualMaze.isWall(pos, N))
+            target.draw(line(0, 0, 1, 0, hidden_c), states);
 
         if (maze.isWall(pos, S))
             target.draw(line(0, 1, 1, 1), states);
+        else if (virtualMaze.isWall(pos, S))
+            target.draw(line(0, 1, 1, 1, hidden_c), states);
 
         if (maze.isWall(pos, E))
             target.draw(line(1, 0, 1, 1), states);
+        else if (virtualMaze.isWall(pos, E))
+            target.draw(line(1, 0, 1, 1, hidden_c), states);
 
         if (maze.isWall(pos, W))
             target.draw(line(0, 0, 0, 1), states);
+        else if (virtualMaze.isWall(pos, W))
+            target.draw(line(0, 0, 0, 1, hidden_c), states);
     }
 
-    Maze &maze;
+    Maze &maze, &virtualMaze;
     CellCoordinate pos;
 };
 
 class MazeDrawable : public sf::Transformable, public sf::Drawable {
   public:
-    MazeDrawable(Maze &maze) : maze(maze) {
+    MazeDrawable(Maze &maze, Maze &virtualMaze)
+        : maze(maze), virtualMaze(virtualMaze) {
     }
 
   private:
@@ -96,7 +108,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         for (int row = 0; row < Maze::CELL_ROWS; row++) {
             for (int col = 0; col < Maze::CELL_COLS; col++) {
                 CellCoordinate pos(col, row);
-                CellDrawable cell(maze, pos);
+                CellDrawable cell(maze, virtualMaze, pos);
                 cell.setPosition(nodeVector(pos.toNode() + NW));
                 cell.setScale(sf::Vector2f(NODE_SIZE, NODE_SIZE) * 2.f);
                 target.draw(cell, states);
@@ -143,7 +155,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         }
     }
 
-    Maze &maze;
+    Maze &maze, &virtualMaze;
 };
 
 class MouseDrawable : public sf::Transformable, public sf::Drawable {
@@ -249,7 +261,7 @@ class Simulator : public sf::RenderWindow {
 
         clear(sf::Color::Black);
 
-        MazeDrawable entity(mouse.maze);
+        MazeDrawable entity(mouse.maze, mouse.virtualMaze);
         MouseDrawable mouseEntity(mouse);
         entity.setScale(mazeSize());
         mouseEntity.setScale(mazeSize());
