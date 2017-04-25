@@ -12,6 +12,7 @@
 #include <mutex>
 #include <stdexcept>
 #include <thread>
+#include <cmath>
 
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
