@@ -7,13 +7,13 @@
 #include <vector>
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
-#include "../Simulation/simulate.h"
 #include <chrono>
 #include <fstream>
 #include <iostream>
 #include <mutex>
 #include <stdexcept>
 #include <thread>
+#include "../Simulation/simulate.h"
 #endif
 
 //#define MAZE_DIAGONALS
