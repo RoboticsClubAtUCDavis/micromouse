@@ -90,7 +90,7 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
         state <<= 1;
         state |= maze.isExplored(pos);
 
-        float r, g, b, h, s = 1.0f, v = 1.0f;
+        float r, g, b;
         HSVtoRGB(r, g, b,
                  maze.getNode(pos).gScore / float(maze.getPath().cost) * 360,
                  1.0f, 1.0f);
