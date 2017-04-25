@@ -15,6 +15,7 @@
 
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
+bool colorGradient = true;
 
 sf::Vector2f nodeVector(NodeCoordinate c) {
     return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * NODE_SIZE;
@@ -100,10 +101,12 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
                 c = sf::Color(150, 200, 200, 40);
                 break;
             case EVALUATED:
-                c = sf::Color(r * 255, g * 255, b * 255, 30);
+                colorGradient ? c = sf::Color(r * 255, g * 255, b * 255, 20)
+                              : c = sf::Color(255, 255, 150, 40);
                 break;
             case EXP_AND_EVAL:
-                c = sf::Color(r * 255, g * 255, b * 255, 70);
+                colorGradient ? c = sf::Color(r * 255, g * 255, b * 255, 70)
+                              : c = sf::Color(255, 170, 170, 35);
                 break;
             case DEFAULT:
             default:
@@ -276,6 +279,8 @@ class Simulator : public sf::RenderWindow {
             } else if (keyPress(sf::Keyboard::Down)) {
                 std::unique_lock<std::mutex> lock(mtx);
                 SIMULATION_SPEED /= 1.5f;
+            } else if (keyPress(sf::Keyboard::G)) {
+                colorGradient = !colorGradient;
             }
 
             sf::Event event;
