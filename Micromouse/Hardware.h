@@ -35,8 +35,8 @@ class Hardware {
     static const float COUNT_PER_MM;
     static const float MM_PER_COUNT;
 
-    static const unsigned Hardware::MM_PER_NODE;
-    static const unsigned Hardware::COUNT_PER_NODE;
+    static const unsigned MM_PER_NODE;
+    static const unsigned COUNT_PER_NODE;
 
     Hardware();
     ~Hardware();

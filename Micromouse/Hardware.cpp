@@ -29,6 +29,8 @@ Hardware::~Hardware() {
 unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
     // TODO: `keepGoing` and `useCaution` are ignored. We should test that this
     // works before adding more cases.
+    (void)keepGoing;
+    (void)useCaution;
 
     // Times 2 since two wheels. This prevents dividing by 2 later on.
     auto targetCounts = unsigned(2 * mm * COUNT_PER_MM);
@@ -39,6 +41,8 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
     float rightSpeedFactor = 0.0f;
 
     while (true) {
+        unsigned dtime = deltaTime();
+
         traveledCounts += leftMotor.getCounts() + rightMotor.getCounts();
 
         leftMotor.resetCounts();
@@ -48,13 +52,14 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
         float avgSPC =
             leftMotor.getSecondsPerCount() + rightMotor.getSecondsPerCount();
 
-        float speedCorr = speedPID.getCorrection(secondsPerCount - avgSPC);
+        float speedCorr =
+            speedPID.getCorrection(secondsPerCount - avgSPC, dtime);
 
         leftSpeedFactor += speedCorr;
         rightSpeedFactor += speedCorr;
 
         float leftGap = rangeFinders[LEFT]->getDistance();
-        float leftGapCorr = leftPID.getCorrection(LEFT_GAP - leftGap);
+        float leftGapCorr = leftPID.getCorrection(LEFT_GAP - leftGap, dtime);
 
         if (leftGapCorr > 0) {
             leftSpeedFactor -= leftGapCorr;
@@ -63,7 +68,8 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
         }
 
         float rightGap = rangeFinders[RIGHT]->getDistance();
-        float rightGapCorr = rightPID.getCorrection(RIGHT_GAP - rightGap);
+        float rightGapCorr =
+            rightPID.getCorrection(RIGHT_GAP - rightGap, dtime);
 
         if (rightGapCorr > 0) {
             rightSpeedFactor -= rightGapCorr;
@@ -73,7 +79,7 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
 
         if (targetCounts - traveledCounts < COUNT_PER_NODE * 2) {
             float distanceCorr =
-                distancePID.getCorrection(targetCounts - traveledCounts);
+                distancePID.getCorrection(targetCounts - traveledCounts, dtime);
 
             if (avgSPC < 0.001f && std::fabs(distanceCorr) < 0.1f) {
                 leftMotor.off();
