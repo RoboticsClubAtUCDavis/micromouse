@@ -6,7 +6,8 @@
 const float Hardware::COUNT_PER_MM = 7.23957f;
 const float Hardware::MM_PER_COUNT = 1.0f / Hardware::COUNT_PER_MM;
 const unsigned Hardware::MM_PER_NODE = 90;
-const unsigned Hardware::COUNT_PER_NODE = Hardware::COUNT_PER_MM * Hardware::MM_PER_NODE;
+const unsigned Hardware::COUNT_PER_NODE =
+    Hardware::COUNT_PER_MM * Hardware::MM_PER_NODE;
 
 Hardware::Hardware()
     : speedPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
@@ -26,52 +27,55 @@ Hardware::~Hardware() {
 }
 
 unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
+    // TODO: `keepGoing` and `useCaution` are ignored. We should test that this
+    // works before adding more cases.
+
+    // Times 2 since two wheels. This prevents dividing by 2 later on.
     auto targetCounts = unsigned(2 * mm * COUNT_PER_MM);
-    unsigned traveledCounts =
-        leftMotor.getCounts() + rightMotor.getCounts();
+    unsigned traveledCounts = 0;
 
     // [-1.0,1.0]
     float leftSpeedFactor = 0.0f;
     float rightSpeedFactor = 0.0f;
 
-    // SPC := seconds per count
-
     while (true) {
-        float avgSPC = (leftMotor.getSPC() + rightMotor.getSPC()) / 2.0f;
-        float speedCorr =
-            speedPID.getCorrection(secondsPerCount - avgSPC);
+        traveledCounts += leftMotor.getCounts() + rightMotor.getCounts();
+
+        leftMotor.resetCounts();
+        rightMotor.resetCounts();
+
+        // `secondsPerCount` is doubled to account for not dividing by two here.
+        float avgSPC =
+            leftMotor.getSecondsPerCount() + rightMotor.getSecondsPerCount();
+
+        float speedCorr = speedPID.getCorrection(secondsPerCount - avgSPC);
 
         leftSpeedFactor += speedCorr;
         rightSpeedFactor += speedCorr;
 
         float leftGap = rangeFinders[LEFT]->getDistance();
         float leftGapCorr = leftPID.getCorrection(LEFT_GAP - leftGap);
-        if (leftGapCorr > 0)
-        {
+
+        if (leftGapCorr > 0) {
             leftSpeedFactor -= leftGapCorr;
-        }
-        else
-        {
+        } else {
             rightSpeedFactor += leftGapCorr;
         }
 
         float rightGap = rangeFinders[RIGHT]->getDistance();
         float rightGapCorr = rightPID.getCorrection(RIGHT_GAP - rightGap);
-        if (rightGapCorr > 0)
-        {
+
+        if (rightGapCorr > 0) {
             rightSpeedFactor -= rightGapCorr;
-        }
-        else
-        {
+        } else {
             leftSpeedFactor += rightGapCorr;
         }
 
-        if (targetCounts - traveledCounts < COUNT_PER_NODE * 2 )
-        {
-            float distanceCorr = distancePID.getCorrection(targetCounts - traveledCounts);
+        if (targetCounts - traveledCounts < COUNT_PER_NODE * 2) {
+            float distanceCorr =
+                distancePID.getCorrection(targetCounts - traveledCounts);
 
-            if (avgSPC > 0.001f && std::fabs( distanceCorr ) < 0.1f )
-            {
+            if (avgSPC < 0.001f && std::fabs(distanceCorr) < 0.1f) {
                 leftMotor.off();
                 rightMotor.off();
                 return traveledCounts * MM_PER_COUNT;
@@ -80,9 +84,12 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
 
         leftMotor.setSpeed(leftSpeedFactor);
         rightMotor.setSpeed(rightSpeedFactor);
+
+        // Loop approximately every 0.5mm traveled.
+        // We will want to try a range of values here to find the best.
+        delayMicroseconds(avgSPC * 1E6f / 2.0f * COUNT_PER_MM / 2.0f);
     }
 
-    // TODO
     return 0;
 }
 
@@ -100,7 +107,8 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
 //}
 
 void Hardware::setSpeed(unsigned mmps) {
-    secondsPerCount = MM_PER_COUNT / mmps;
+    // Times 2 since two wheels. This prevents dividing by 2 later on.
+    secondsPerCount = MM_PER_COUNT / mmps * 2;
 }
 
 // void Hardware::calibrateMotors() {
