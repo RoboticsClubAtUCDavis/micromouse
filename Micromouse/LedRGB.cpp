@@ -18,7 +18,7 @@ void LedRGB::setRGB(unsigned r, unsigned g, unsigned b) {
 }
 
 void LedRGB::setBrightness(unsigned percent) {
-    brightness = percent / 100;
+    brightness = percent / 100.0;
     redLed.setBrightness(redBrightness * brightness);
     greenLed.setBrightness(greenBrightness * brightness);
     blueLed.setBrightness(blueBrightness * brightness);
