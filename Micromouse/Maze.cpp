@@ -7,13 +7,13 @@
 #include <vector>
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include "../Simulation/simulate.h"
 #include <chrono>
 #include <fstream>
 #include <iostream>
 #include <mutex>
 #include <stdexcept>
 #include <thread>
-#include "../Simulation/simulate.h"
 #endif
 
 //#define MAZE_DIAGONALS
@@ -230,8 +230,8 @@ void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
     // While there are nodes remaining to be evaluated.
     while (!openNodes.empty()) {
         // Get the open node with lowest score.
-        sort(openNodes.begin(), openNodes.end(), Maze::scoreComparator);
-        auto currentNodeItr = openNodes.begin();
+        auto currentNodeItr = min_element(openNodes.begin(), openNodes.end(),
+                                          Maze::scoreComparator);
         auto currentNode = *currentNodeItr;
         path.cost = currentNode->fScore;
 
