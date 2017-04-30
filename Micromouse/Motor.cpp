@@ -1,5 +1,6 @@
 #include "Motor.h"
 #include <Arduino.h>
+#include <cmath>
 
 Motor::Motor(void) : Motor(0, 0, 0, 0, 0) {
 }
@@ -41,7 +42,18 @@ void Motor::setSpeed(float speed) {
 
 long Motor::getCounts(void) {
 #if defined(__MK66FX1M0__) || defined(__MK20DX256__)
-    return encoder.read();
+    long counts = encoder.read();
+
+    if (counts != lastCounts) {
+        long time = micros();
+
+        secondsPerCount = (time - lastMicros) /
+                          (1E6f /*usec->sec*/ * abs(counts - lastCounts));
+        lastCounts = counts;
+        lastMicros = time;
+    }
+
+    return counts;
 #else
     // TODO: May not be the behavior we want
     return 0;
@@ -51,6 +63,10 @@ void Motor::resetCounts(void) {
 #if defined(__MK66FX1M0__) || defined(__MK20DX256__)
     encoder.write(0);
 #endif
+}
+
+float Motor::getSecondsPerCount(void) {
+    return secondsPerCount;
 }
 
 Motor::~Motor() {
