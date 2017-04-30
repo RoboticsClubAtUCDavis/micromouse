@@ -7,5 +7,14 @@ class IRSensor : public RangeFinder {
         : RangeFinder(pin, minRange, maxRange){};
     ~IRSensor() = default;
 
-    float getDistance();
+    float getDistance() const;
+    bool calibrate();
+    bool loadCalibration();
+
+  private:
+    unsigned readSensor(unsigned samples = 1, unsigned delay = 40) const;
+    float calcDistance(unsigned sensorVal) const;
+
+    float a, b, c;
+    unsigned lowerBound, upperBound;
 };
