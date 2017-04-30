@@ -97,22 +97,18 @@ bool IRSensor::loadCalibration() {
 }
 
 unsigned IRSensor::readSensor(unsigned samples, unsigned delay) const {
-    if (samples <= 1) {
-        return analogRead(DATA_PIN);
-    } else {
-        unsigned val = 0;
+    unsigned val = 0;
 
-        for (size_t i = 0;; i++) {
-            val += analogRead(DATA_PIN);
+    for (size_t i = 0;; i++) {
+        val += analogRead(DATA_PIN);
 
-            if (i >= samples)
-                break;
+        if (i >= samples)
+            break;
 
-            ::delay(delay);
-        }
-
-        return val / samples;
+        ::delay(delay);
     }
+
+    return val / samples;
 }
 
 float IRSensor::calcDistance(unsigned sensorVal) const {
