@@ -99,6 +99,7 @@
     <ClInclude Include="Hardware.h" />
     <ClInclude Include="IRSensor.h" />
     <ClInclude Include="Led.h" />
+    <ClInclude Include="LedRGB.h" />
     <ClInclude Include="Motor.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="Mouse.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="Hardware.cpp" />
     <ClCompile Include="IRSensor.cpp" />
     <ClCompile Include="Led.cpp" />
+    <ClCompile Include="LedRGB.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />

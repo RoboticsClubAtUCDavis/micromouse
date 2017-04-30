@@ -16,8 +16,6 @@ std::mutex mtx;
 #endif
 
 Mouse::Mouse() : position(Maze::CELL_START) {
-    pinMode(13, OUTPUT);
-    digitalWrite(13, HIGH);
     Serial.printf("Mouse Created!");
 }
 

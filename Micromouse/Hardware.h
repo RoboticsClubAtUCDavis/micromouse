@@ -20,14 +20,24 @@ class Hardware {
     // ...
     // ...
     // static const unsigned RANGE_FINDER_FRONT_PIN = 18
+    static const unsigned LED_PIN = 13;
 
     static const unsigned NUM_RANGE_FINDERS = 3;
-    static const unsigned IRSENSOR_LEFT_MIN_DISTANCE = 20;
-    static const unsigned IRSENSOR_LEFT_MAX_DISTANCE = 150;
-    static const unsigned IRSENSOR_RIGHT_MIN_DISTANCE = 20;
-    static const unsigned IRSENSOR_RIGHT_MAX_DISTANCE = 150;
-    static const unsigned ULTRASONIC_MIN_DISTANCE = 20;
-    static const unsigned ULTRASONIC_MAX_DISTANCE = 1000;
+    static const unsigned IRSENSOR_LEFT_MIN_DISTANCE = 20;   // mm
+    static const unsigned IRSENSOR_LEFT_MAX_DISTANCE = 150;  // mm
+    static const unsigned IRSENSOR_RIGHT_MIN_DISTANCE = 20;  // mm
+    static const unsigned IRSENSOR_RIGHT_MAX_DISTANCE = 150; // mm
+    static const unsigned ULTRASONIC_MIN_DISTANCE = 20;      // mm
+    static const unsigned ULTRASONIC_MAX_DISTANCE = 1000;    // mm
+
+    static const unsigned LEFT_GAP = 40;  // mm
+    static const unsigned RIGHT_GAP = 40; // mm
+
+    static const float COUNT_PER_MM;
+    static const float MM_PER_COUNT;
+
+    static const unsigned MM_PER_NODE;
+    static const unsigned COUNT_PER_NODE;
 
     Hardware();
     ~Hardware();
@@ -81,5 +91,6 @@ class Hardware {
     PIDController rightPID;
 
     // Max speed in mmps.
-    unsigned speed = 100;
+    unsigned speed;
+    float secondsPerCount;
 };
