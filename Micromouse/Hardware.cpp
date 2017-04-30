@@ -10,11 +10,12 @@ const unsigned Hardware::COUNT_PER_NODE =
     Hardware::COUNT_PER_MM * Hardware::MM_PER_NODE;
 
 Hardware::Hardware()
-    : speedPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
+    : led(Hardware::LED_PIN)
+    , speedPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
     , distancePID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
     , leftPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
     , rightPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f) {
-
+    led.turnOn();
     setSpeed(100 /*mmps*/);
     initRangeFinders();
     // TODO init rest of components.
