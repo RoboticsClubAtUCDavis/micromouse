@@ -9,13 +9,11 @@ class RangeFinder {
     // Max distance for sensor in mm.
     const unsigned MAX_RANGE;
 
-    // These may need to be virtual.
-    // Going to try to avoid it.
-    bool calibrate(/*TODO*/);
-    bool loadCalibration(/*TODO*/);
-    void saveCalibration(/*TODO*/);
+    virtual bool calibrate(/*TODO*/);
+    virtual bool loadCalibration(/*TODO*/);
+    virtual void saveCalibration(/*TODO*/);
 
-    virtual float getDistance() = 0;
+    virtual float getDistance() const = 0;
     virtual ~RangeFinder() = default;
 
   protected:

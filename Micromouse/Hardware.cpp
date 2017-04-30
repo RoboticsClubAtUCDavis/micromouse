@@ -47,13 +47,22 @@ void Hardware::setSpeed(unsigned mmps) {
 
 void Hardware::calibrateRangeFinders() {
     for (auto i : rangeFinders) {
-        i->calibrate();
+        if (i->calibrate()) {
+            i->saveCalibration();
+        } else {
+            Serial.printf("Error during calibration\n");
+            break;
+        }
     }
 }
 
 void Hardware::calibrateRangeFinder(Relation relation) {
     if (relation != NO_RELATION) {
-        rangeFinders[relation]->calibrate();
+        if (rangeFinders[relation]->calibrate()) {
+            rangeFinders[relation]->saveCalibration();
+        } else {
+            Serial.printf("Error during calibration\n");
+        }
     }
 }
 

@@ -7,5 +7,5 @@ class UltrasonicSensor : public RangeFinder {
         : RangeFinder(pin, minRange, maxRange){};
     ~UltrasonicSensor() = default;
 
-    float getDistance();
+    float getDistance() const;
 };
