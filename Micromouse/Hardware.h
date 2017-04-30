@@ -20,6 +20,7 @@ class Hardware {
     // ...
     // ...
     // static const unsigned RANGE_FINDER_FRONT_PIN = 18
+    static const unsigned LED_PIN = 13;
 
     static const unsigned NUM_RANGE_FINDERS = 3;
     static const unsigned IRSENSOR_LEFT_MIN_DISTANCE = 20;   // mm
