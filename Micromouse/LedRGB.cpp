@@ -35,5 +35,3 @@ void LedRGB::turnOff() {
     greenLed.turnOff();
     blueLed.turnOff();
 }
-
-
