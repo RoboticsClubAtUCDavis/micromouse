@@ -17,3 +17,16 @@ Direction DirOp::invert(Direction direction) {
     else
         return static_cast<Direction>((direction + S) % NONE);
 }
+
+int DirOp::angleDiffAbs(Direction d1, Direction d2) {
+    return (d2 - d1) * 45;
+}
+
+int DirOp::angleDiff(Direction d1, Direction d2) {
+    int angle = DirOp::angleDiffAbs(d1, d2);
+    if (angle > 180)
+        angle -= 360;
+    else if (angle < -180)
+        angle += 360;
+    return angle;
+}
