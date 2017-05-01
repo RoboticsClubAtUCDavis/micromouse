@@ -162,6 +162,7 @@ void Mouse::followPath(const Path &path, bool useCaution) {
 
 #else
     for (auto &i : path) {
+        // TODO: have `keepGoing` be conditional based on next movement
         move(i, false, useCaution);
         // TODO
     }
