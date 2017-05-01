@@ -46,3 +46,10 @@ SCENARIO("DirectionVectors behave correctly") {
         REQUIRE(directionVector.magnitude == 7);
     }
 }
+
+SCENARIO("angleDiff") {
+    REQUIRE(DirOp::angleDiff(N, NE) == 45);
+    REQUIRE(DirOp::angleDiff(N, NW) == -45);
+    REQUIRE(DirOp::angleDiff(N, S) == 180);
+    REQUIRE(DirOp::angleDiff(NW, N) == 45);
+}
