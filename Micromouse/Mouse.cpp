@@ -4,11 +4,11 @@
 #include <cstdio>
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+#include "../Simulation/simulate.h"
 #include <chrono>
 #include <mutex>
 #include <stdexcept>
 #include <thread>
-#include "../Simulation/simulate.h"
 
 // Not sure why Travis does not like when this is in simulate.cpp
 float SIMULATION_SPEED = 1.0f;
@@ -148,26 +148,23 @@ void Mouse::followPath(const Path &path, bool useCaution) {
                 return;
             }
 
-            position = position + i;
-            facing = i.direction;
-            if (SIMULATION_SPEED < 1000.0f) {
-                lock.unlock();
-                std::this_thread::sleep_for(
-                    std::chrono::milliseconds(long(300 / SIMULATION_SPEED)));
-                lock.lock();
-            }
+            lock.unlock();
+            move(i, false, useCaution);
+            lock.lock();
         }
     } else {
         for (auto &i : path) {
-            position = position + i;
-            facing = i.direction;
-            if (SIMULATION_SPEED < 10.0f) {
-                lock.unlock();
-                std::this_thread::sleep_for(
-                    std::chrono::milliseconds(long(300 / SIMULATION_SPEED)));
-                lock.lock();
-            }
+            lock.unlock();
+            move(i, false, useCaution);
+            lock.lock();
         }
+    }
+
+#else
+    for (auto &i : path) {
+        // TODO: have `keepGoing` be conditional based on next movement
+        move(i, false, useCaution);
+        // TODO
     }
 #endif
 }
@@ -178,10 +175,33 @@ void Mouse::followPath(bool useCaution) {
 
 unsigned Mouse::move(DirectionVector movement, bool keepGoing,
                      bool useCaution) {
-    (void)movement;
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     (void)keepGoing;
     (void)useCaution;
-    // TODO
+
+    std::unique_lock<std::mutex> lock(mtx);
+
+    lock.unlock();
+    if (SIMULATION_SPEED < 10.0f) {
+        std::this_thread::sleep_for(
+            std::chrono::milliseconds(long(300 / SIMULATION_SPEED)));
+    }
+    lock.lock();
+#else
+    // TODO: Need better error handling with sensors to keep in correct
+    // position;
+    // It could be in Hardware, but probably here since Hardware doesn't know
+    // about cells
+    //
+    // XXX diagonals will need to be handled, if we implement them
+    bot.rotate(DirOp::angleDiff(facing, movement.direction));
+    // XXX if diagonals are implemented, the distance also needs adjustment
+    bot.moveForward(movement.magnitude * 90, keepGoing, useCaution);
+#endif
+
+    position = position + movement;
+    facing = movement.direction;
+
     return 0;
 }
 

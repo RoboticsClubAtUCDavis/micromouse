@@ -41,7 +41,7 @@ class Mouse {
 
     // If `keepGoing` is true the mouse will not stop at the end of the
     // movement. If `useCaution` is true it will stop when a wall is
-    // encountered. Returns the total number of nodes traveled.
+    // encountered. Returns the number of nodes it was unable to move.
     unsigned move(DirectionVector movement, bool keepGoing, bool useCaution);
 
     void mapMazeExhaustive();
