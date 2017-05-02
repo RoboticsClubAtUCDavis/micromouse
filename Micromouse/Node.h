@@ -19,4 +19,5 @@ class Node {
     Node *next;
     Direction direction;
     bool evaluated;
+    bool touched;
 };

@@ -6,20 +6,29 @@
 #include "../Micromouse/Mouse.h"
 #include "../Micromouse/Node.h"
 #include "simulate.h"
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <mutex>
 #include <stdexcept>
 #include <thread>
-#include <cmath>
 
 const std::string WINDOW_TITLE = "Micromouse simulator";
 const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
 bool colorGradient = true;
+bool vectorField = true;
 
 sf::Vector2f nodeVector(NodeCoordinate c) {
     return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * NODE_SIZE;
+}
+
+sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
+                     sf::Color color = sf::Color::White) {
+    sf::VertexArray line(sf::Lines, 2);
+    line[0] = sf::Vertex(nodeVector(c1), color);
+    line[1] = sf::Vertex(nodeVector(c2), color);
+    return line;
 }
 
 void HSVtoRGB(float &fR, float &fG, float &fB, float fH, float fS, float fV) {
@@ -139,6 +148,26 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
             target.draw(line(0, 0, 0, 1), states);
         else if (virtualMaze.isWall(pos, W))
             target.draw(line(0, 0, 0, 1, hidden_c), states);
+
+        Node &node = maze.getNode(pos);
+        if (node.direction >= 0 && node.direction < Direction::NONE &&
+            vectorField) {
+            auto vec_c = node.touched ? sf::Color(255, 255, 50, 120)
+                                        : sf::Color(255, 255, 255, 110);
+
+            sf::ConvexShape triangleBody;
+            triangleBody.setPointCount(3);
+            triangleBody.setPoint(0, sf::Vector2f(0.5f, 0.0f));
+            triangleBody.setPoint(1, sf::Vector2f(0.2f, 1.0f));
+            triangleBody.setPoint(2, sf::Vector2f(0.8f, 1.0f));
+            triangleBody.setOrigin(sf::Vector2f(0.5f, 0.5f));
+            triangleBody.setPosition(nodeVector(pos));
+            triangleBody.setRotation(node.direction * 45.0f);
+            triangleBody.setFillColor(vec_c);
+            triangleBody.setScale(sf::Vector2f(NODE_SIZE, NODE_SIZE * 1.5f) *
+                                  0.3f);
+            target.draw(triangleBody, states.transform * getInverseTransform());
+        }
     }
 
     Maze &maze, &virtualMaze;
@@ -166,14 +195,6 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
         }
 
         drawPath(target, states, maze.getPath(), maze);
-    }
-
-    sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
-                         sf::Color color = sf::Color::White) const {
-        sf::VertexArray line(sf::Lines, 2);
-        line[0] = sf::Vertex(nodeVector(c1), color);
-        line[1] = sf::Vertex(nodeVector(c2), color);
-        return line;
     }
 
     void drawPath(sf::RenderTarget &target, sf::RenderStates states,
@@ -282,6 +303,8 @@ class Simulator : public sf::RenderWindow {
                 SIMULATION_SPEED /= 1.5f;
             } else if (keyPress(sf::Keyboard::G)) {
                 colorGradient = !colorGradient;
+            } else if (keyPress(sf::Keyboard::V)) {
+                vectorField = !vectorField;
             }
 
             sf::Event event;
