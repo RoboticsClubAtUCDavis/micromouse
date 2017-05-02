@@ -20,5 +20,6 @@ void Node::resetPathData() {
     fScore = numeric_limits<unsigned>::max();
     next = nullptr;
     evaluated = false;
-    direction = NONE;
+    // direction = NONE; // No affect on subsequent pathfinding
+    touched = false;
 }

@@ -293,6 +293,7 @@ void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
             // This path is the best so far.
             adjacentNode.next = currentNode;
             adjacentNode.direction = direction;
+            adjacentNode.touched = true;
 
             unsigned heuristicScore = 0;
             // Can only use the heuristic with a single end point.
