@@ -14,6 +14,15 @@ class Mouse {
   public:
     enum MappingStrategy { EXHAUSTIVE, STRAT2, STRAT3 };
 
+    enum class TestMode {
+        TEST_MOTOR_SINGLE,
+        TEST_MOTOR_PAIR,
+        TEST_MOVEMENT,
+        TEST_ROTATE,
+        TEST_RANGE_FINDER_SINGLE,
+        TEST_RANGE_FINDER_ALL
+    };
+
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     friend class Simulator;
     friend class MouseDrawable;
@@ -25,6 +34,8 @@ class Mouse {
 
     void mapMaze();
     void runMaze();
+
+    void testMode(TestMode mode);
 
     // In millimeter per second.
     void setMappingSpeed(unsigned mmps);

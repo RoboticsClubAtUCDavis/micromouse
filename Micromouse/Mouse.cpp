@@ -19,6 +19,32 @@ Mouse::Mouse() : position(Maze::CELL_START) {
     Serial.printf("Mouse Created!");
 }
 
+void Mouse::testMode(TestMode mode) {
+    switch (mode) {
+        case TestMode::TEST_MOTOR_SINGLE:
+            bot.testMotorSingle();
+            break;
+        case TestMode::TEST_MOTOR_PAIR:
+            bot.testMotorPair();
+            break;
+        case TestMode::TEST_MOVEMENT:
+            bot.testMovement();
+            break;
+        case TestMode::TEST_ROTATE:
+            bot.testRotate();
+            break;
+        case TestMode::TEST_RANGE_FINDER_SINGLE:
+            bot.testRangeFinderSingle(LEFT);
+            bot.testRangeFinderSingle(RIGHT);
+            break;
+        case TestMode::TEST_RANGE_FINDER_ALL:
+            bot.testRangeFindersAll();
+            break;
+        default:
+            break;
+    }
+}
+
 void Mouse::mapMaze() {
     switch (mappingStrategy) {
         case Mouse::EXHAUSTIVE:

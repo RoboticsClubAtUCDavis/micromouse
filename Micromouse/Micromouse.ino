@@ -29,7 +29,8 @@ int _write() {
 void setup() {
     Serial.begin(9600);
     delay(2000);
-    Mouse t;
+    Mouse mouse;
+    // mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);
 }
 
 void loop() {

@@ -65,6 +65,14 @@ class Hardware {
     void calibrateRangeFinders();
     void calibrateRangeFinder(Relation relation);
 
+    void testMotorSingle();
+    void testMotorPair();
+    void testMovement();
+    void testRotate();
+    void testRangeFinderSingle(Relation relation, unsigned iterations = 100,
+                               unsigned delay = 50);
+    void testRangeFindersAll(unsigned iterations = 100, unsigned delay = 50);
+
   private:
     void initRangeFinders();
 
