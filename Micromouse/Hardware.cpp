@@ -2,6 +2,7 @@
 #include "IRSensor.h"
 #include "UltrasonicSensor.h"
 #include <cmath>
+#include <limits>
 
 const float Hardware::COUNT_PER_MM = 7.23957f;
 const float Hardware::MM_PER_COUNT = 1.0f / Hardware::COUNT_PER_MM;
@@ -100,9 +101,10 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
     return 0;
 }
 
-// void Hardware::rotate(int deg) {
-//    // TODO
-//}
+void Hardware::rotate(int deg) {
+    (void)deg;
+    // TODO
+}
 
 // void Hardware::checkWall(Relation relation) {
 //    // TODO
@@ -140,6 +142,116 @@ void Hardware::calibrateRangeFinder(Relation relation) {
         } else {
             Serial.printf("Error during calibration\n");
         }
+    }
+}
+
+void Hardware::testMotorSingle() {
+    Serial.printf("Testing LeftMotor\n");
+    leftMotor.setSpeed(0.1f);
+    delay(2000);
+    leftMotor.setSpeed(0.0f);
+    delay(2000);
+    leftMotor.setSpeed(0.5f);
+    delay(2000);
+    leftMotor.setSpeed(0.0f);
+    delay(2000);
+    leftMotor.setSpeed(-1.0f);
+    delay(2000);
+    leftMotor.off();
+
+    delay(2000);
+
+    Serial.printf("Testing RightMotor\n");
+    rightMotor.setSpeed(0.1f);
+    delay(2000);
+    rightMotor.setSpeed(0.0f);
+    delay(2000);
+    rightMotor.setSpeed(0.5f);
+    delay(2000);
+    rightMotor.setSpeed(0.0f);
+    delay(2000);
+    rightMotor.setSpeed(-1.0f);
+    delay(2000);
+    rightMotor.off();
+}
+
+void Hardware::testMotorPair() {
+    Serial.printf("Testing Motor Pair\n");
+    leftMotor.setSpeed(0.1f);
+    rightMotor.setSpeed(0.1f);
+    delay(2000);
+    leftMotor.setSpeed(0.0f);
+    rightMotor.setSpeed(0.0f);
+    delay(2000);
+    leftMotor.setSpeed(0.5f);
+    rightMotor.setSpeed(0.5f);
+    delay(2000);
+    leftMotor.setSpeed(0.0f);
+    rightMotor.setSpeed(0.0f);
+    delay(2000);
+    leftMotor.setSpeed(-1.0f);
+    rightMotor.setSpeed(-1.0f);
+    delay(2000);
+    leftMotor.off();
+    rightMotor.off();
+}
+
+void Hardware::testMovement() {
+    Serial.printf("Testing Movement\n");
+
+    moveForward(10, false, false);
+    delay(2000);
+    moveForward(100, false, false);
+    delay(2000);
+    moveForward(1000, false, false);
+    delay(2000);
+}
+
+void Hardware::testRotate() {
+    Serial.printf("Testing Rotate\n");
+
+    rotate(10);
+    delay(2000);
+    rotate(100);
+    delay(2000);
+    rotate(360);
+    delay(2000);
+    rotate(-10);
+    delay(2000);
+    rotate(-180);
+    delay(2000);
+    rotate(-360);
+    delay(2000);
+}
+
+void Hardware::testRangeFinderSingle(Relation relation, unsigned iterations,
+                                     unsigned delay) {
+    Serial.printf("Testing Rangefinder %u\n", relation);
+
+    if (iterations == 0) {
+        iterations = std::numeric_limits<unsigned>::max();
+    }
+
+    for (size_t i = 0; i < iterations; i++) {
+        auto dist = rangeFinders[relation]->getDistance();
+        Serial.printf("%u\n", dist);
+        ::delay(delay);
+    }
+}
+
+void Hardware::testRangeFindersAll(unsigned iterations, unsigned delay) {
+    Serial.printf("Testing All Rangefinders \n");
+
+    if (iterations == 0) {
+        iterations = std::numeric_limits<unsigned>::max();
+    }
+
+    for (size_t i = 0; i < iterations; i++) {
+        auto distLeft = rangeFinders[LEFT]->getDistance();
+        auto distFront = rangeFinders[FRONT]->getDistance();
+        auto distRight = rangeFinders[RIGHT]->getDistance();
+        Serial.printf("%u, %u, %u\n", distLeft, distFront, distRight);
+        ::delay(delay);
     }
 }
 
