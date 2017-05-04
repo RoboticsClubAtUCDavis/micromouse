@@ -135,9 +135,9 @@ void Mouse::followPath(const Path &path, bool useCaution) {
         for (auto &i : path) {
             NodeCoordinate nextPos = position + i.direction;
 
-            Direction direction = Direction((int(facing) + int(W)) % NONE);
+            Direction direction = Direction((int(facing) + int(NW)) % NONE);
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 6; i++) {
                 maze.setExplored(position + direction);
 
                 if (virtualMaze.isWall(position + direction)) {
@@ -167,7 +167,7 @@ void Mouse::followPath(const Path &path, bool useCaution) {
                     }
                 }
 
-                direction = Direction((int(direction) + 2) % NONE);
+                direction = Direction((int(direction) + 1) % NONE);
             }
 
             if (pathBroken) {

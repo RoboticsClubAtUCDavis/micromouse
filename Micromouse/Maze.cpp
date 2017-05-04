@@ -16,7 +16,7 @@
 #include <thread>
 #endif
 
-//#define MAZE_DIAGONALS
+#define MAZE_DIAGONALS
 
 using namespace std;
 
