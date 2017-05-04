@@ -56,6 +56,9 @@ void Mouse::mapMaze() {
         case Mouse::STRAT3:
             mapMazeStrategy3();
             break;
+        case Mouse::BFS:
+            mapMazeBFS();
+            break;
         default:
             break;
     }
@@ -208,7 +211,7 @@ unsigned Mouse::move(DirectionVector movement, bool keepGoing,
     std::unique_lock<std::mutex> lock(mtx);
 
     lock.unlock();
-    if (SIMULATION_SPEED < 10.0f) {
+    if (SIMULATION_SPEED < 1000.0f) {
         std::this_thread::sleep_for(
             std::chrono::milliseconds(long(300 / SIMULATION_SPEED)));
     }
@@ -319,4 +322,45 @@ void Mouse::mapMazeStrategy3() {
 // exit point for the inner loop
 FINISH_MAPPING:
     return;
+}
+
+void Mouse::mapMazeBFS() {
+    NodeCoordinateList coordList;
+
+    {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+        std::lock_guard<std::mutex> lock(mtx);
+#endif
+        // Set the start and finish nodes as explored.
+        maze.setExplored(Maze::NODE_START);
+        maze.setExplored(Maze::NODE_FINISH);
+    }
+
+    while (true) {
+        // Find a path from start to finish using explored and unexplored
+        // nodes.
+        maze.findPath(Maze::NODE_START, Maze::NODE_FINISH, false, facing);
+
+        // Make a list of all coordinates where the path transitions from
+        // explored to unxplored or unexplored to explored nodes.
+        // They will always come in pairs.
+        maze.findNodeCoordPairs(coordList);
+
+        // If the shortest path was completely contained within explored
+        // nodes then the list is empty and we can stop mapping.
+        if (coordList.size() == 0)
+            break;
+
+        // Travel to the nearest node we just found by only pathfinding on
+        // explored nodes to guarantee we can get there safely.
+        maze.findPath(position, coordList, true, facing);
+        followPath(false);
+
+        // Attempt to travel to the finish.
+        // Stop if the path is blocked.
+        maze.findPath(position, Maze::NODE_FINISH, false, facing);
+        followPath(true);
+
+        coordList.clear();
+    }
 }
