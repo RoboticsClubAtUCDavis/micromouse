@@ -46,11 +46,11 @@ void Maze::reset() {
     path.clear();
 }
 
-bool Maze::isWall(NodeCoordinate pos) {
+bool Maze::isWall(NodeCoordinate pos) const {
     return !getNode(pos);
 }
 
-bool Maze::isWall(CellCoordinate pos, Direction dir) {
+bool Maze::isWall(CellCoordinate pos, Direction dir) const {
     return isWall(pos.toNode() + dir);
 }
 
@@ -62,11 +62,11 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
     setWall(pos.toNode() + dir, wall);
 }
 
-bool Maze::isExplored(NodeCoordinate pos) {
+bool Maze::isExplored(NodeCoordinate pos) const {
     return getNode(pos).explored;
 }
 
-bool Maze::isExplored(CellCoordinate pos, Direction dir) {
+bool Maze::isExplored(CellCoordinate pos, Direction dir) const {
     return isExplored(pos.toNode() + dir);
 }
 
@@ -323,6 +323,14 @@ void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
 }
 
 Node &Maze::getNode(NodeCoordinate pos) {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    if (!withinBounds(pos))
+        throw out_of_range("Coordinate out of range.");
+#endif
+    return maze[pos.y][pos.x];
+}
+
+const Node &Maze::getNode(NodeCoordinate pos) const {
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     if (!withinBounds(pos))
         throw out_of_range("Coordinate out of range.");

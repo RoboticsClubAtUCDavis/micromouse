@@ -38,13 +38,13 @@ class Maze {
 
     Maze();
 
-    bool isWall(NodeCoordinate pos);
-    bool isWall(CellCoordinate pos, Direction dir);
+    bool isWall(NodeCoordinate pos) const;
+    bool isWall(CellCoordinate pos, Direction dir) const;
     void setWall(NodeCoordinate pos, bool wall = true);
     void setWall(CellCoordinate pos, Direction dir, bool wall = true);
 
-    bool isExplored(NodeCoordinate pos);
-    bool isExplored(CellCoordinate pos, Direction dir);
+    bool isExplored(NodeCoordinate pos) const;
+    bool isExplored(CellCoordinate pos, Direction dir) const;
     void setExplored(NodeCoordinate pos, bool explored = true);
     void setExplored(CellCoordinate pos, Direction dir, bool explored = true);
 
@@ -75,7 +75,8 @@ class Maze {
     // the remaining unexplored nodes to walls.
     void closeExcessFinishNodes();
 
-    Node &getNode(NodeCoordinate pos);
+	Node &getNode(NodeCoordinate pos);
+	const Node &getNode(NodeCoordinate pos) const;
 
   private:
     static bool scoreComparator(const Node *const &lhs, const Node *const &rhs);
