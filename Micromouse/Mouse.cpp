@@ -66,6 +66,9 @@ void Mouse::mapMaze() {
             break;
     }
 
+    maze.findPath(position, Maze::NODE_START, true, facing);
+    followPath(false);
+
     Serial.printf("Mapping Complete - Movements: %4u, TotalCost: %6u \n\n",
                   totalMovements, totalMovementCost);
 }
