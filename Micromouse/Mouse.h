@@ -78,7 +78,7 @@ class Mouse {
     int mappingSpeed = 100;
     int runningSpeed = 100;
 
-    MappingStrategy mappingStrategy = BFS;
+    MappingStrategy mappingStrategy = STRAT3;
 
     bool running;
 

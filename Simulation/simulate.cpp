@@ -153,7 +153,7 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
         if (node.direction >= 0 && node.direction < Direction::NONE &&
             vectorField) {
             auto vec_c = node.touched ? sf::Color(255, 255, 50, 120)
-                                        : sf::Color(255, 255, 255, 110);
+                                      : sf::Color(255, 255, 255, 110);
 
             sf::ConvexShape triangleBody;
             triangleBody.setPointCount(3);
@@ -260,7 +260,8 @@ class Simulator : public sf::RenderWindow {
                            sf::Style::Default, sf::ContextSettings(0, 0, 8))
         , mouse(mouse) {
         try {
-            mouse.virtualMaze = Maze::fromFile("2.maze");
+            // mouse.virtualMaze = Maze::fromFile("2.maze");
+            mouse.virtualMaze = Maze::generate();
         } catch (const std::exception &e) {
             std::cout << e.what();
         }

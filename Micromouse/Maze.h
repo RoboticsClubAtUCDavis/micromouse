@@ -27,6 +27,10 @@ class Maze {
     static const unsigned MOVEMENT_COST_DIAGONAL = 141;
 
     static Maze fromFile(std::string fileName);
+    static Maze generate(int seed = time(NULL));
+
+    static bool withinBounds(NodeCoordinate pos);
+    static bool isBorder(NodeCoordinate pos);
 
     static unsigned calculateMovementCost(Direction currentDirection,
                                           Direction nextDirection,
@@ -34,20 +38,15 @@ class Maze {
 
     Maze();
 
-    bool isWall(NodeCoordinate pos);
-    bool isWall(CellCoordinate pos, Direction dir);
+    bool isWall(NodeCoordinate pos) const;
+    bool isWall(CellCoordinate pos, Direction dir) const;
     void setWall(NodeCoordinate pos, bool wall = true);
     void setWall(CellCoordinate pos, Direction dir, bool wall = true);
 
-    bool isExplored(NodeCoordinate pos);
-    bool isExplored(CellCoordinate pos, Direction dir);
+    bool isExplored(NodeCoordinate pos) const;
+    bool isExplored(CellCoordinate pos, Direction dir) const;
     void setExplored(NodeCoordinate pos, bool explored = true);
     void setExplored(CellCoordinate pos, Direction dir, bool explored = true);
-
-    bool isBorder(NodeCoordinate pos);
-    bool withinBounds(NodeCoordinate pos);
-
-    void generate(int seed = time(NULL));
 
     void reset();
 
@@ -76,7 +75,8 @@ class Maze {
     // the remaining unexplored nodes to walls.
     void closeExcessFinishNodes();
 
-    Node &getNode(NodeCoordinate pos);
+	Node &getNode(NodeCoordinate pos);
+	const Node &getNode(NodeCoordinate pos) const;
 
   private:
     static bool scoreComparator(const Node *const &lhs, const Node *const &rhs);
@@ -86,6 +86,9 @@ class Maze {
     void resetNodePathData();
     unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
     void constructPath(Node *start);
+
+	NodeCoordinate removeRandomWall();
+	unsigned countWalls(NodeCoordinateList coords) const;
 
     Path path;
     Node maze[NODE_ROWS][NODE_COLS];

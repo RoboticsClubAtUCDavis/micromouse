@@ -1,7 +1,9 @@
 #include "Maze.h"
+#include <Arduino.h>
 #include <algorithm>
 #include <assert.h>
 #include <cstdlib> //abs
+#include <limits>
 #include <set>
 #include <stdexcept>
 #include <vector>
@@ -46,11 +48,11 @@ void Maze::reset() {
     path.clear();
 }
 
-bool Maze::isWall(NodeCoordinate pos) {
+bool Maze::isWall(NodeCoordinate pos) const {
     return !getNode(pos);
 }
 
-bool Maze::isWall(CellCoordinate pos, Direction dir) {
+bool Maze::isWall(CellCoordinate pos, Direction dir) const {
     return isWall(pos.toNode() + dir);
 }
 
@@ -62,11 +64,11 @@ void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
     setWall(pos.toNode() + dir, wall);
 }
 
-bool Maze::isExplored(NodeCoordinate pos) {
+bool Maze::isExplored(NodeCoordinate pos) const {
     return getNode(pos).explored;
 }
 
-bool Maze::isExplored(CellCoordinate pos, Direction dir) {
+bool Maze::isExplored(CellCoordinate pos, Direction dir) const {
     return isExplored(pos.toNode() + dir);
 }
 
@@ -87,65 +89,130 @@ bool Maze::withinBounds(NodeCoordinate pos) {
     return pos.x >= 0 && pos.x < NODE_COLS && pos.y >= 0 && pos.y < NODE_ROWS;
 }
 
-void Maze::generate(int seed) {
-    reset();
+Maze Maze::generate(int seed) {
+    Maze maze;
     srand(seed);
-    vector<CellCoordinate> backtrackStack;
-    set<CellCoordinate> unvisited;
-    backtrackStack.reserve(CELL_COLS * CELL_ROWS);
 
-    for (int y = 0; y < CELL_ROWS; y++) {
-        for (int x = 0; x < CELL_COLS; x++) {
-            unvisited.insert(CellCoordinate(x, y));
-            setWall(CellCoordinate(x, y).toNode() + N);
-            setWall(CellCoordinate(x, y).toNode() + E);
-            setWall(CellCoordinate(x, y).toNode() + W);
-            setWall(CellCoordinate(x, y).toNode() + S);
-        }
-    }
-    CellCoordinate currentCell = CellCoordinate(0, 0);
-    CellCoordinate centerFour =
-        CellCoordinate(CELL_COLS / 2 - 1, CELL_ROWS / 2 - 1);
-    unvisited.erase(centerFour);
-    unvisited.erase(centerFour + N);
-    unvisited.erase(centerFour + E);
-    unvisited.erase(centerFour + NE);
+    while (true) {
+        vector<CellCoordinate> backtrackStack;
+        set<CellCoordinate> unvisited;
+        backtrackStack.reserve(CELL_COLS * CELL_ROWS);
 
-    unvisited.erase(currentCell);
-    vector<Direction> neighbors;
-    neighbors.reserve(4);
-    while (unvisited.size() > 0) {
-        for (Direction direction = Direction::N; direction != Direction::NONE;
-             direction = static_cast<Direction>(direction + 2)) {
-            if (withinBounds(currentCell + direction) &&
-                unvisited.find(currentCell + direction) != unvisited.end()) {
-                neighbors.push_back(direction);
+        for (int y = 0; y < CELL_ROWS; y++) {
+            for (int x = 0; x < CELL_COLS; x++) {
+                unvisited.insert(CellCoordinate(x, y));
+                maze.setWall(CellCoordinate(x, y), N);
+                maze.setWall(CellCoordinate(x, y), E);
+                maze.setWall(CellCoordinate(x, y), W);
+                maze.setWall(CellCoordinate(x, y), S);
             }
         }
 
-        if (neighbors.size() > 0) {
-            Direction wallDir = neighbors[rand() % neighbors.size()];
-            CellCoordinate chosen = currentCell + wallDir;
-            backtrackStack.push_back(currentCell);
-            setWall(currentCell.toNode() + wallDir, false);
-            currentCell = chosen;
-            unvisited.erase(currentCell);
-        } else {
-            currentCell = backtrackStack.back();
-            backtrackStack.pop_back();
+        CellCoordinate currentCell = Maze::CELL_START;
+
+        unvisited.erase(CELL_FINISH);
+        unvisited.erase(CELL_FINISH + S);
+        unvisited.erase(CELL_FINISH + W);
+        unvisited.erase(CELL_FINISH + SW);
+
+        unvisited.erase(currentCell);
+
+        vector<Direction> neighbors;
+        while (unvisited.size() > 0) {
+            for (Direction direction = Direction::N;
+                 direction != Direction::NONE;
+                 direction = static_cast<Direction>(direction + 2)) {
+                if (withinBounds(currentCell + direction) &&
+                    unvisited.find(currentCell + direction) !=
+                        unvisited.end()) {
+                    neighbors.push_back(direction);
+                }
+            }
+
+            if (neighbors.size() > 0) {
+                Direction wallDir = neighbors[rand() % neighbors.size()];
+                CellCoordinate chosen = currentCell + wallDir;
+                backtrackStack.push_back(currentCell);
+                maze.setWall(currentCell.toNode() + wallDir, false);
+                currentCell = chosen;
+                unvisited.erase(currentCell);
+            } else {
+                currentCell = backtrackStack.back();
+                backtrackStack.pop_back();
+            }
+            neighbors.clear();
         }
-        neighbors.clear();
+
+        maze.setWall(NODE_FINISH + N, false);
+        maze.setWall(NODE_FINISH + E, false);
+        maze.setWall(NODE_FINISH + W, false);
+        maze.setWall(NODE_FINISH + S, false);
+
+        NodeCoordinate goalEntrances[] = {
+            NodeCoordinate(SE) + E, NodeCoordinate(SE) + S,
+            NodeCoordinate(SW) + S, NodeCoordinate(SW) + W,
+            NodeCoordinate(NE) + E, NodeCoordinate(NE) + N,
+            NodeCoordinate(NW) + N, NodeCoordinate(NW) + W};
+
+        maze.setWall(Maze::NODE_FINISH + goalEntrances[rand() % 8], false);
+        maze.findPath(NODE_START, NODE_FINISH);
+
+        if (maze.path.size() > 150)
+            break;
+
+        // maze.reset();
     }
-    NodeCoordinate centerNode = centerFour.toNode() + NE;
-    setWall(centerNode + N, false);
-    setWall(centerNode + E, false);
-    setWall(centerNode + W, false);
-    setWall(centerNode + S, false);
-    NodeCoordinate goalEntrances[] = {
-        NodeCoordinate(SE) + E, NodeCoordinate(SE) + S, NodeCoordinate(SW) + S,
-        NodeCoordinate(SW) + W, NodeCoordinate(NE) + E, NodeCoordinate(NE) + N,
-        NodeCoordinate(NW) + N, NodeCoordinate(NW) + W};
-    setWall(centerNode + goalEntrances[rand() % 8], false);
+
+    float currentSimulationSpeed = SIMULATION_SPEED;
+    SIMULATION_SPEED = numeric_limits<float>::infinity();
+
+    int removalAttempts = 30;
+    // 30 + 3d20 expected value = 61.5
+    removalAttempts += rand() % 20 + 1;
+    removalAttempts += rand() % 20 + 1;
+    removalAttempts += rand() % 20 + 1;
+
+    unsigned minPathLength = rand() % 30 + 90;
+
+    const NodeCoordinateList finishWalls{
+        NodeCoordinate(NODE_FINISH.x - 2, NODE_FINISH.y - 1),
+        NodeCoordinate(NODE_FINISH.x - 2, NODE_FINISH.y + 1),
+        NodeCoordinate(NODE_FINISH.x + 2, NODE_FINISH.y - 1),
+        NodeCoordinate(NODE_FINISH.x + 2, NODE_FINISH.y + 1),
+        NodeCoordinate(NODE_FINISH.x - 1, NODE_FINISH.y + 2),
+        NodeCoordinate(NODE_FINISH.x + 1, NODE_FINISH.y + 2),
+        NodeCoordinate(NODE_FINISH.x - 1, NODE_FINISH.y - 2),
+        NodeCoordinate(NODE_FINISH.x + 1, NODE_FINISH.y - 2)};
+
+    for (int removals = 0; removals < removalAttempts; removals++) {
+        NodeCoordinate removal = maze.removeRandomWall();
+
+        // If it failed to find a wall to remove.
+        if (removal == NodeCoordinate()) {
+            continue;
+        }
+
+        // If the wall it found was a finish wall.
+        if (maze.countWalls(finishWalls) < 7) {
+            maze.setWall(removal);
+            continue;
+        }
+
+        // If the wall removed makes the path too short.
+        maze.findPath(NODE_START, NODE_FINISH);
+        if (maze.path.size() < minPathLength) {
+            maze.setWall(removal);
+            continue;
+        }
+
+        // Serial.printf("Removed Wall (%2i, %2i), Shortest Path: %u\n",
+        // removal.x,
+        //              removal.y, maze.path.size());
+    }
+
+    SIMULATION_SPEED = currentSimulationSpeed;
+
+    return maze;
 }
 
 Maze Maze::fromFile(std::string fileName) {
@@ -199,7 +266,12 @@ void Maze::findPath(NodeCoordinate start, NodeCoordinate end, bool exploredOnly,
 void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
                     bool exploredOnly, Direction facing) {
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
-    std::unique_lock<std::mutex> lock(mtx);
+    std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+    // A bit of a hack, didn't feel like refactoring to give each maze its own
+    // mutex.
+    if (SIMULATION_SPEED != numeric_limits<float>::infinity()) {
+        lock.lock();
+    }
 #endif
 
     if (ends.empty())
@@ -327,6 +399,14 @@ Node &Maze::getNode(NodeCoordinate pos) {
     return maze[pos.y][pos.x];
 }
 
+const Node &Maze::getNode(NodeCoordinate pos) const {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    if (!withinBounds(pos))
+        throw out_of_range("Coordinate out of range.");
+#endif
+    return maze[pos.y][pos.x];
+}
+
 Node &Maze::getAdjacentNode(Node *node, Direction direction) {
     return getNode(node->pos + direction);
 }
@@ -433,6 +513,71 @@ void Maze::constructPath(Node *start) {
     }
 
     path.start = i->pos;
+}
+
+NodeCoordinate Maze::removeRandomWall() {
+    // A better way to implement this is to collect all the walls that could be
+    // removed and then select randomly from that. This works well enough since
+    // it is only needed for simulation.
+
+    for (size_t tries = 0; tries < 1000; tries++) {
+
+        // Pick a random x coordinate.
+        NodeCoordinate candidate{rand() % (NODE_COLS - 2) + 1, 0};
+
+        if (candidate.x % 2 == 0) {
+            // Pick a random y coordinate such that it where a wall could be.
+            candidate.y = 2 * (rand() % ((NODE_ROWS - 1) / 2)) + 1;
+
+            NodeCoordinateList a{
+                NodeCoordinate(candidate.x - 1, candidate.y + 1),
+                NodeCoordinate(candidate.x + 0, candidate.y + 2),
+                NodeCoordinate(candidate.x + 1, candidate.y + 1)};
+
+            NodeCoordinateList b{
+                NodeCoordinate(candidate.x - 1, candidate.y - 1),
+                NodeCoordinate(candidate.x + 0, candidate.y - 2),
+                NodeCoordinate(candidate.x + 1, candidate.y - 1)};
+
+            // if it is a wall and removing doesnt violate the requirements for
+            // a valid maze.
+            if (isWall(candidate) && countWalls(a) > 0 && countWalls(b) > 0) {
+                setWall(candidate, false);
+                return candidate;
+            }
+        } else {
+            // Pick a random y coordinate such that it where a wall could be.
+            candidate.y = 2 * (rand() % ((NODE_ROWS - 3) / 2)) + 2;
+
+            NodeCoordinateList a{
+                NodeCoordinate(candidate.x - 1, candidate.y + 1),
+                NodeCoordinate(candidate.x - 2, candidate.y + 0),
+                NodeCoordinate(candidate.x - 1, candidate.y - 1)};
+
+            NodeCoordinateList b{
+                NodeCoordinate(candidate.x + 1, candidate.y + 1),
+                NodeCoordinate(candidate.x + 2, candidate.y + 0),
+                NodeCoordinate(candidate.x + 1, candidate.y - 1)};
+
+            // if it is a wall and removing doesnt violate the requirements for
+            // a valid maze.
+            if (isWall(candidate) && countWalls(a) > 0 && countWalls(b) > 0) {
+                setWall(candidate, false);
+                return candidate;
+            }
+        }
+    }
+
+    return NodeCoordinate();
+}
+
+unsigned Maze::countWalls(NodeCoordinateList coords) const {
+    unsigned count = 0;
+    for (const auto &c : coords) {
+        if (withinBounds(c) && isWall(c))
+            count++;
+    }
+    return count;
 }
 
 const Path &Maze::getPath() const {

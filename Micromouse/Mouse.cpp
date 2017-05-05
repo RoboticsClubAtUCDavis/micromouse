@@ -16,7 +16,7 @@ std::mutex mtx;
 #endif
 
 Mouse::Mouse() : position(Maze::CELL_START) {
-    Serial.printf("Mouse Created!");
+    Serial.printf("Mouse Created!\n");
 }
 
 void Mouse::testMode(TestMode mode) {
@@ -66,6 +66,9 @@ void Mouse::mapMaze() {
             break;
     }
 
+    maze.findPath(position, Maze::NODE_START, true, facing);
+    followPath(false);
+
     Serial.printf("Mapping Complete - Movements: %4u, TotalCost: %6u \n\n",
                   totalMovements, totalMovementCost);
 }
@@ -77,7 +80,7 @@ void Mouse::runMaze() {
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
 
     // Give time for the window to open
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     unsigned cycle = 0;
 
@@ -92,9 +95,10 @@ void Mouse::runMaze() {
             Serial.printf("%s\n", e.what());
         }
 
+        Maze newMaze = Maze::generate(cycle);
         std::lock_guard<std::mutex> lock(mtx);
+        virtualMaze = newMaze;
         maze.reset();
-        virtualMaze.generate();
         position = Maze::CELL_START;
         facing = N;
     }
