@@ -87,6 +87,9 @@ class Maze {
     unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
     void constructPath(Node *start);
 
+	NodeCoordinate removeRandomWall();
+	unsigned countWalls(NodeCoordinateList coords) const;
+
     Path path;
     Node maze[NODE_ROWS][NODE_COLS];
 };

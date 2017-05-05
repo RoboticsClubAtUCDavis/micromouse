@@ -92,9 +92,10 @@ void Mouse::runMaze() {
             Serial.printf("%s\n", e.what());
         }
 
+        Maze newMaze = Maze::generate(cycle);
         std::lock_guard<std::mutex> lock(mtx);
+        virtualMaze = newMaze;
         maze.reset();
-        virtualMaze = Maze::generate();
         position = Maze::CELL_START;
         facing = N;
     }
