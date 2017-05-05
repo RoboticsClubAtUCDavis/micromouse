@@ -142,7 +142,7 @@ Maze Maze::generate(int seed) {
             }
             neighbors.clear();
         }
-        NodeCoordinate centerNode = Maze::NODE_FINISH;
+
         maze.setWall(NODE_FINISH + N, false);
         maze.setWall(NODE_FINISH + E, false);
         maze.setWall(NODE_FINISH + W, false);
@@ -172,7 +172,7 @@ Maze Maze::generate(int seed) {
     removalAttempts += rand() % 20 + 1;
     removalAttempts += rand() % 20 + 1;
 
-    int minPathLength = rand() % 30 + 90;
+    unsigned minPathLength = rand() % 30 + 90;
 
     const NodeCoordinateList finishWalls{
         NodeCoordinate(NODE_FINISH.x - 2, NODE_FINISH.y - 1),
