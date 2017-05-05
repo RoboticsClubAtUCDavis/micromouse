@@ -27,6 +27,10 @@ class Maze {
     static const unsigned MOVEMENT_COST_DIAGONAL = 141;
 
     static Maze fromFile(std::string fileName);
+    static Maze generate(int seed = time(NULL));
+
+    static bool withinBounds(NodeCoordinate pos);
+    static bool isBorder(NodeCoordinate pos);
 
     Maze();
 
@@ -39,11 +43,6 @@ class Maze {
     bool isExplored(CellCoordinate pos, Direction dir);
     void setExplored(NodeCoordinate pos, bool explored = true);
     void setExplored(CellCoordinate pos, Direction dir, bool explored = true);
-    
-    bool isBorder(NodeCoordinate pos);
-    bool withinBounds(NodeCoordinate pos);
-
-    void generate(int seed = time(NULL));
 
     void reset();
 

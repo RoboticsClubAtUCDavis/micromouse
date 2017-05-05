@@ -88,7 +88,7 @@ void Mouse::runMaze() {
 
         std::lock_guard<std::mutex> lock(mtx);
         maze.reset();
-        virtualMaze.generate();
+        virtualMaze = Maze::generate();
         position = Maze::CELL_START;
         facing = N;
     }

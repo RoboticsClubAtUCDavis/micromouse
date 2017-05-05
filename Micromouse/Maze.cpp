@@ -87,8 +87,9 @@ bool Maze::withinBounds(NodeCoordinate pos) {
     return pos.x >= 0 && pos.x < NODE_COLS && pos.y >= 0 && pos.y < NODE_ROWS;
 }
 
-void Maze::generate(int seed) {
-    reset();
+Maze Maze::generate(int seed) {
+    Maze maze;
+
     srand(seed);
     vector<CellCoordinate> backtrackStack;
     set<CellCoordinate> unvisited;
@@ -97,10 +98,10 @@ void Maze::generate(int seed) {
     for (int y = 0; y < CELL_ROWS; y++) {
         for (int x = 0; x < CELL_COLS; x++) {
             unvisited.insert(CellCoordinate(x, y));
-            setWall(CellCoordinate(x, y).toNode() + N);
-            setWall(CellCoordinate(x, y).toNode() + E);
-            setWall(CellCoordinate(x, y).toNode() + W);
-            setWall(CellCoordinate(x, y).toNode() + S);
+            maze.setWall(CellCoordinate(x, y), N);
+            maze.setWall(CellCoordinate(x, y), E);
+            maze.setWall(CellCoordinate(x, y), W);
+            maze.setWall(CellCoordinate(x, y), S);
         }
     }
     CellCoordinate currentCell = CellCoordinate(0, 0);
@@ -127,7 +128,7 @@ void Maze::generate(int seed) {
             Direction wallDir = neighbors[rand() % neighbors.size()];
             CellCoordinate chosen = currentCell + wallDir;
             backtrackStack.push_back(currentCell);
-            setWall(currentCell.toNode() + wallDir, false);
+            maze.setWall(currentCell.toNode() + wallDir, false);
             currentCell = chosen;
             unvisited.erase(currentCell);
         } else {
@@ -137,15 +138,17 @@ void Maze::generate(int seed) {
         neighbors.clear();
     }
     NodeCoordinate centerNode = centerFour.toNode() + NE;
-    setWall(centerNode + N, false);
-    setWall(centerNode + E, false);
-    setWall(centerNode + W, false);
-    setWall(centerNode + S, false);
+    maze.setWall(centerNode + N, false);
+    maze.setWall(centerNode + E, false);
+    maze.setWall(centerNode + W, false);
+    maze.setWall(centerNode + S, false);
     NodeCoordinate goalEntrances[] = {
         NodeCoordinate(SE) + E, NodeCoordinate(SE) + S, NodeCoordinate(SW) + S,
         NodeCoordinate(SW) + W, NodeCoordinate(NE) + E, NodeCoordinate(NE) + N,
         NodeCoordinate(NW) + N, NodeCoordinate(NW) + W};
-    setWall(centerNode + goalEntrances[rand() % 8], false);
+    maze.setWall(centerNode + goalEntrances[rand() % 8], false);
+
+    return maze;
 }
 
 Maze Maze::fromFile(std::string fileName) {
