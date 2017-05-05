@@ -32,6 +32,10 @@ class Maze {
     static bool withinBounds(NodeCoordinate pos);
     static bool isBorder(NodeCoordinate pos);
 
+    static unsigned calculateMovementCost(Direction currentDirection,
+                                          Direction nextDirection,
+                                          unsigned distance = 1);
+
     Maze();
 
     bool isWall(NodeCoordinate pos);
@@ -79,8 +83,6 @@ class Maze {
     Node &getAdjacentNode(Node *node, Direction direction);
 
     void resetNodePathData();
-    unsigned calculateMovementCost(Direction currentDirection,
-                                   Direction nextDirection);
     unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
     void constructPath(Node *start);
 

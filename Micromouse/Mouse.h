@@ -81,4 +81,7 @@ class Mouse {
     MappingStrategy mappingStrategy = BFS;
 
     bool running;
+
+    unsigned totalMovementCost = 0;
+    unsigned totalMovements = 0;
 };
