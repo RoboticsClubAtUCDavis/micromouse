@@ -16,7 +16,7 @@ std::mutex mtx;
 #endif
 
 Mouse::Mouse() : position(Maze::CELL_START) {
-    Serial.printf("Mouse Created!");
+    Serial.printf("Mouse Created!\n");
 }
 
 void Mouse::testMode(TestMode mode) {
@@ -77,7 +77,7 @@ void Mouse::runMaze() {
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
 
     // Give time for the window to open
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     unsigned cycle = 0;
 
