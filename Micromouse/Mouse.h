@@ -12,7 +12,7 @@ class MouseDrawable;
 
 class Mouse {
   public:
-    enum MappingStrategy { EXHAUSTIVE, STRAT2, STRAT3 };
+    enum MappingStrategy { EXHAUSTIVE, STRAT2, STRAT3, BFS };
 
     enum class TestMode {
         TEST_MOTOR_SINGLE,
@@ -58,6 +58,7 @@ class Mouse {
     void mapMazeExhaustive();
 
     void mapMazeStrategy3();
+    void mapMazeBFS();
 
     // Given one of the `NodeCoordinate`s in the `coordList` returns the
     // `NodeCoordinate` that it is paired with.
@@ -77,7 +78,7 @@ class Mouse {
     int mappingSpeed = 100;
     int runningSpeed = 100;
 
-    MappingStrategy mappingStrategy = STRAT3;
+    MappingStrategy mappingStrategy = BFS;
 
     bool running;
 };
