@@ -28,6 +28,10 @@ class Maze {
 
     static Maze fromFile(std::string fileName);
 
+    static unsigned calculateMovementCost(Direction currentDirection,
+                                          Direction nextDirection,
+                                          unsigned distance = 1);
+
     Maze();
 
     bool isWall(NodeCoordinate pos);
@@ -39,7 +43,7 @@ class Maze {
     bool isExplored(CellCoordinate pos, Direction dir);
     void setExplored(NodeCoordinate pos, bool explored = true);
     void setExplored(CellCoordinate pos, Direction dir, bool explored = true);
-    
+
     bool isBorder(NodeCoordinate pos);
     bool withinBounds(NodeCoordinate pos);
 
@@ -80,8 +84,6 @@ class Maze {
     Node &getAdjacentNode(Node *node, Direction direction);
 
     void resetNodePathData();
-    unsigned calculateMovementCost(Direction currentDirection,
-                                   Direction nextDirection);
     unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
     void constructPath(Node *start);
 

@@ -80,4 +80,7 @@ class Mouse {
     MappingStrategy mappingStrategy = STRAT3;
 
     bool running;
+
+    unsigned totalMovementCost = 0;
+    unsigned totalMovements = 0;
 };
