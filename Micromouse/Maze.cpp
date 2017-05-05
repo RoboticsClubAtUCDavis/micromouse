@@ -344,20 +344,21 @@ void Maze::resetNodePathData() {
 }
 
 unsigned Maze::calculateMovementCost(Direction currentDirection,
-                                     Direction nextDirection) {
+                                     Direction nextDirection,
+                                     unsigned distance) {
     unsigned cost;
     switch (nextDirection) {
         case N:
         case E:
         case S:
         case W:
-            cost = MOVEMENT_COST;
+            cost = MOVEMENT_COST * distance;
             break;
         case NE:
         case SE:
         case SW:
         case NW:
-            cost = MOVEMENT_COST_DIAGONAL;
+            cost = MOVEMENT_COST_DIAGONAL * distance;
             break;
         default:
             cost = 0;

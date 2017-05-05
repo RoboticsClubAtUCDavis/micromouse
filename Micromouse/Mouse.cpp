@@ -46,6 +46,9 @@ void Mouse::testMode(TestMode mode) {
 }
 
 void Mouse::mapMaze() {
+    totalMovementCost = 0;
+    totalMovements = 0;
+
     switch (mappingStrategy) {
         case Mouse::EXHAUSTIVE:
             mapMazeExhaustive();
@@ -62,6 +65,9 @@ void Mouse::mapMaze() {
         default:
             break;
     }
+
+    Serial.printf("Mapping Complete - Movements: %4u, TotalCost: %6u \n\n",
+                  totalMovements, totalMovementCost);
 }
 
 void Mouse::runMaze() {
@@ -227,6 +233,10 @@ unsigned Mouse::move(DirectionVector movement, bool keepGoing,
     // XXX if diagonals are implemented, the distance also needs adjustment
     bot.moveForward(movement.magnitude * 90, keepGoing, useCaution);
 #endif
+
+    totalMovementCost += Maze::calculateMovementCost(facing, movement.direction,
+                                                     movement.magnitude);
+    totalMovements++;
 
     position = position + movement;
     facing = movement.direction;
