@@ -83,6 +83,7 @@ void Mouse::runMaze() {
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     unsigned cycle = 0;
+    auto seed = uint16_t(time(NULL));
 
     running = true;
     while (running) {
@@ -95,7 +96,7 @@ void Mouse::runMaze() {
             Serial.printf("%s\n", e.what());
         }
 
-        Maze newMaze = Maze::generate(cycle);
+        Maze newMaze = Maze::generate(seed + cycle);
         std::lock_guard<std::mutex> lock(mtx);
         virtualMaze = newMaze;
         maze.reset();

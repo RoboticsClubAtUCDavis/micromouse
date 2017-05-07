@@ -124,8 +124,9 @@ bool Maze::withinBounds(NodeCoordinate pos) {
     return pos.x >= 0 && pos.x < NODE_COLS && pos.y >= 0 && pos.y < NODE_ROWS;
 }
 
-Maze Maze::generate(int seed) {
+Maze Maze::generate(uint16_t seed) {
     Maze maze;
+	Serial.printf("Generate Maze - seed: %4X\n", seed);
     srand(seed);
 
     while (true) {

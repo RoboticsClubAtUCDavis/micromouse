@@ -8,6 +8,7 @@
 #include <ctime>
 #include <string>
 #include <vector>
+#include <stdint.h>
 
 //#define MAZE_DIAGONALS
 
@@ -27,7 +28,7 @@ class Maze {
     static const unsigned MOVEMENT_COST_DIAGONAL = 141;
 
     static Maze fromFile(std::string fileName);
-    static Maze generate(int seed = time(NULL));
+    static Maze generate(uint16_t seed = uint16_t(time(NULL)));
 
     static bool withinBounds(NodeCoordinate pos);
     static bool isBorder(NodeCoordinate pos);
