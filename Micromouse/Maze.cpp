@@ -78,7 +78,7 @@ void Maze::setWall(NodeCoordinate pos, Direction dir, bool wall) {
 
 void Maze::setWall(Relation rel, NodeCoordinate pos, Direction facing,
                    bool wall) {
-    setWall(pos + DirOp::relToDir(rel, facing));
+    setWall(pos + DirOp::relToDir(rel, facing), wall);
 }
 
 bool Maze::isExplored(NodeCoordinate pos) const {
@@ -112,7 +112,7 @@ void Maze::setExplored(NodeCoordinate pos, Direction dir, bool explored) {
 
 void Maze::setExplored(Relation rel, NodeCoordinate pos, Direction facing,
                        bool explored) {
-    setExplored(pos + DirOp::relToDir(rel, facing));
+    setExplored(pos + DirOp::relToDir(rel, facing), explored);
 }
 
 bool Maze::isBorder(NodeCoordinate pos) {
