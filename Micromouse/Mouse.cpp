@@ -399,6 +399,10 @@ void Mouse::mapMazeBFS() {
         maze.findPath(position, Maze::NODE_FINISH, false, facing);
         followPath(true);
 
+        if (position == Maze::NODE_FINISH) {
+            maze.closeExcessFinishNodes();
+        }
+
         coordList.clear();
     }
 }
