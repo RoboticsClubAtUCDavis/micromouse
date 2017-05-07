@@ -1,8 +1,11 @@
 #pragma once
 
 enum Direction { N, NE, E, SE, S, SW, W, NW, NONE };
+const Direction DIRECTIONS[] = {N, NE, E, SE, S, SW, E, NW};
+const Direction DIRECTIONS_CARDINAL[] = {N, E, S, W};
 
 enum Relation { LEFT, FRONT, RIGHT, NO_RELATION };
+const Relation RELATIONS[] = {LEFT, FRONT, RIGHT};
 
 namespace DirOp {
 Direction invert(Direction direction);

@@ -119,9 +119,7 @@ Maze Maze::generate(int seed) {
 
         vector<Direction> neighbors;
         while (unvisited.size() > 0) {
-            for (Direction direction = Direction::N;
-                 direction != Direction::NONE;
-                 direction = static_cast<Direction>(direction + 2)) {
+            for (auto direction : DIRECTIONS_CARDINAL) {
                 if (withinBounds(currentCell + direction) &&
                     unvisited.find(currentCell + direction) !=
                         unvisited.end()) {
@@ -328,14 +326,13 @@ void Maze::findPath(NodeCoordinate start, const NodeCoordinateList &ends,
         openNodes.erase(currentNodeItr);
         currentNode->evaluated = true;
 
-        // For each node adjacent to the current node.
-        for (Direction direction = Direction::N; direction != Direction::NONE;
 #ifdef MAZE_DIAGONALS
-             direction = static_cast<Direction>(direction + 1)
+        // For each node adjacent to the current node. All directions
+        for (auto direction : DIRECTIONS) {
 #else
-             direction = static_cast<Direction>(direction + 2)
+        // For each node adjacent to the current node. Cardinal directions
+        for (auto direction : DIRECTIONS_CARDINAL) {
 #endif // MAZE_DIAGONALS
-                 ) {
             Node &adjacentNode = getAdjacentNode(currentNode, direction);
 
             // If the adjacent node has already been evaluated or does not exist
