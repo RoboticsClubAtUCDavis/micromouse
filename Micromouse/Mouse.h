@@ -12,7 +12,9 @@ class MouseDrawable;
 
 class Mouse {
   public:
-    enum MappingStrategy { EXHAUSTIVE, STRAT2, STRAT3, BFS, DFS };
+    // update array in Mouse.cpp too!
+    enum MappingStrategy { STRAT3, BFS, DFS, NO_STRAT };
+    static const MappingStrategy MAP_STRATS[NO_STRAT];
 
     enum class TestMode {
         TEST_MOTOR_SINGLE,
@@ -32,7 +34,13 @@ class Mouse {
 
     Mouse();
 
-    void mapMaze();
+    struct MappingScore {
+        unsigned moves;
+        unsigned cost;
+    };
+
+    MappingScore mapMaze();
+
     void runMaze();
 
     void testMode(TestMode mode);
@@ -56,11 +64,13 @@ class Mouse {
     unsigned move(DirectionVector movement, bool keepGoing, bool useCaution);
     unsigned move(Relation relation, bool keepGoing, bool useCaution);
 
-    void mapMazeExhaustive();
-
     void mapMazeStrategy3();
     void mapMazeBFS();
     void mapMazeDFS();
+
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+    void rankMappingStrategies(const unsigned cycles);
+#endif
 
     // Given one of the `NodeCoordinate`s in the `coordList` returns the
     // `NodeCoordinate` that it is paired with.

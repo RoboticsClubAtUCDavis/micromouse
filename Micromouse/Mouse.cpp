@@ -6,6 +6,7 @@
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
 #include "../Simulation/simulate.h"
+#include <algorithm>
 #include <chrono>
 #include <mutex>
 #include <stdexcept>
@@ -15,6 +16,9 @@
 float SIMULATION_SPEED = 1.0f;
 std::mutex mtx;
 #endif
+
+const Mouse::MappingStrategy Mouse::MAP_STRATS[Mouse::NO_STRAT] = {
+    Mouse::STRAT3, Mouse::BFS, Mouse::DFS};
 
 Mouse::Mouse() : position(Maze::CELL_START) {
     Serial.printf("Mouse Created!\n");
@@ -46,17 +50,11 @@ void Mouse::testMode(TestMode mode) {
     }
 }
 
-void Mouse::mapMaze() {
+Mouse::MappingScore Mouse::mapMaze() {
     totalMovementCost = 0;
     totalMovements = 0;
 
     switch (mappingStrategy) {
-        case Mouse::EXHAUSTIVE:
-            mapMazeExhaustive();
-            break;
-        case Mouse::STRAT2:
-            // TODO
-            break;
         case Mouse::STRAT3:
             mapMazeStrategy3();
             break;
@@ -75,6 +73,8 @@ void Mouse::mapMaze() {
 
     Serial.printf("Mapping Complete - Movements: %4u, TotalCost: %6u \n\n",
                   totalMovements, totalMovementCost);
+
+    return MappingScore{totalMovements, totalMovementCost};
 }
 
 void Mouse::runMaze() {
@@ -270,10 +270,6 @@ unsigned Mouse::move(DirectionVector movement, bool keepGoing,
 unsigned Mouse::move(Relation relation, bool keepGoing, bool useCaution) {
     return move(DirectionVector(DirOp::relToDir(relation, facing), 1),
                 keepGoing, useCaution);
-}
-
-void Mouse::mapMazeExhaustive() {
-    // TODO
 }
 
 NodeCoordinate Mouse::findOtherNode(NodeCoordinateList &coordList,
@@ -486,3 +482,68 @@ void Mouse::mapMazeDFS() {
         // nodes then the list is empty and we can stop mapping.
     } while (coordList.size() > 0);
 }
+
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+void Mouse::rankMappingStrategies(const unsigned cycles) {
+    // Give time for the window to open
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+
+    auto seed = uint16_t(time(NULL));
+
+    struct MappingScoreStats {
+        MappingScore min{std::numeric_limits<unsigned>::max(),
+                         std::numeric_limits<unsigned>::max()};
+        MappingScore max{0, 0};
+        MappingScore avg{0, 0};
+    };
+
+    std::vector<MappingScoreStats> stats{NO_STRAT, MappingScoreStats{}};
+
+    Maze newMaze = virtualMaze;
+
+    running = true;
+
+    for (size_t i = 0; i < cycles && running; i++) {
+        for (auto strategy : MAP_STRATS) {
+
+            mappingStrategy = strategy;
+            MappingScore results;
+
+            try {
+                results = mapMaze();
+            } catch (const std::exception &e) {
+                Serial.printf("%s\n", e.what());
+            }
+
+            stats[strategy].avg.moves += results.moves;
+            stats[strategy].avg.cost += results.cost;
+
+            stats[strategy].min.cost =
+                std::min(stats[strategy].min.cost, results.cost);
+            stats[strategy].min.moves =
+                std::min(stats[strategy].min.moves, results.moves);
+
+            stats[strategy].max.cost =
+                std::max(stats[strategy].max.cost, results.cost);
+            stats[strategy].max.moves =
+                std::max(stats[strategy].max.moves, results.moves);
+
+            std::lock_guard<std::mutex> lock(mtx);
+            maze.reset();
+            virtualMaze = newMaze;
+            position = Maze::CELL_START;
+            facing = N;
+        }
+
+        newMaze = Maze::generate(seed + i);
+    }
+
+    for (auto strategy : MAP_STRATS) {
+        Serial.printf("S:%i, Moves:(%4u, %4u, %4u) Costs:(%6u, %6u, %6u) \n", strategy,
+                      stats[strategy].min.moves, stats[strategy].max.moves,
+                      stats[strategy].avg.moves / cycles,
+                      stats[strategy].min.cost, stats[strategy].max.cost,
+                      stats[strategy].avg.cost / cycles);
+    }
+}
+#endif

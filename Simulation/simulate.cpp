@@ -260,8 +260,8 @@ class Simulator : public sf::RenderWindow {
                            sf::Style::Default, sf::ContextSettings(0, 0, 8))
         , mouse(mouse) {
         try {
-            // mouse.virtualMaze = Maze::fromFile("2.maze");
-            mouse.virtualMaze = Maze::generate();
+            mouse.virtualMaze = Maze::fromFile("1.maze");
+            // mouse.virtualMaze = Maze::generate();
         } catch (const std::exception &e) {
             std::cout << e.what();
         }
@@ -281,7 +281,7 @@ class Simulator : public sf::RenderWindow {
     void main_loop(void) {
         // Wait until after the mouse maze has been initialized by the
         // simulation to start the thread.
-        mouse_thread = std::thread(&Mouse::runMaze, &mouse);
+        mouse_thread = std::thread(&Mouse::rankMappingStrategies, &mouse, 10);
 
         while (isOpen()) {
             if (keyPress(sf::Keyboard::R)) {

@@ -126,7 +126,7 @@ bool Maze::withinBounds(NodeCoordinate pos) {
 
 Maze Maze::generate(uint16_t seed) {
     Maze maze;
-	Serial.printf("Generate Maze - seed: %4X\n", seed);
+    Serial.printf("Generate Maze - seed: %4X\n", seed);
     srand(seed);
 
     while (true) {
