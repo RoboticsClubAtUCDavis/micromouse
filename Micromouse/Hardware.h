@@ -6,8 +6,6 @@
 #include "RangeFinder.h"
 #include <Arduino.h>
 
-enum Relation { LEFT, FRONT, RIGHT, NO_RELATION };
-
 class Hardware {
   public:
     // PIN DEFINITIONS
