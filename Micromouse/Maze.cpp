@@ -56,12 +56,29 @@ bool Maze::isWall(CellCoordinate pos, Direction dir) const {
     return isWall(pos.toNode() + dir);
 }
 
+bool Maze::isWall(NodeCoordinate pos, Direction dir) const {
+    return isWall(pos + dir);
+}
+
+bool Maze::isWall(Relation rel, NodeCoordinate pos, Direction facing) const {
+    return isWall(pos + DirOp::relToDir(rel, facing));
+}
+
 void Maze::setWall(NodeCoordinate pos, bool wall) {
     getNode(pos).exists = !wall;
 }
 
 void Maze::setWall(CellCoordinate pos, Direction dir, bool wall) {
     setWall(pos.toNode() + dir, wall);
+}
+
+void Maze::setWall(NodeCoordinate pos, Direction dir, bool wall) {
+    setWall(pos + dir, wall);
+}
+
+void Maze::setWall(Relation rel, NodeCoordinate pos, Direction facing,
+                   bool wall) {
+    setWall(pos + DirOp::relToDir(rel, facing));
 }
 
 bool Maze::isExplored(NodeCoordinate pos) const {
@@ -72,12 +89,30 @@ bool Maze::isExplored(CellCoordinate pos, Direction dir) const {
     return isExplored(pos.toNode() + dir);
 }
 
+bool Maze::isExplored(NodeCoordinate pos, Direction dir) const {
+    return isExplored(pos + dir);
+}
+
+bool Maze::isExplored(Relation rel, NodeCoordinate pos,
+                      Direction facing) const {
+    return isExplored(pos + DirOp::relToDir(rel, facing));
+}
+
 void Maze::setExplored(NodeCoordinate pos, bool explored) {
     getNode(pos).explored = explored;
 }
 
 void Maze::setExplored(CellCoordinate pos, Direction dir, bool explored) {
     setExplored(pos.toNode() + dir, explored);
+}
+
+void Maze::setExplored(NodeCoordinate pos, Direction dir, bool explored) {
+    setExplored(pos + dir, explored);
+}
+
+void Maze::setExplored(Relation rel, NodeCoordinate pos, Direction facing,
+                       bool explored) {
+    setExplored(pos + DirOp::relToDir(rel, facing));
 }
 
 bool Maze::isBorder(NodeCoordinate pos) {

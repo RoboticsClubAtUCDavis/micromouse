@@ -40,13 +40,25 @@ class Maze {
 
     bool isWall(NodeCoordinate pos) const;
     bool isWall(CellCoordinate pos, Direction dir) const;
+    bool isWall(NodeCoordinate pos, Direction dir) const;
+    bool isWall(Relation rel, NodeCoordinate pos, Direction facing) const;
+
     void setWall(NodeCoordinate pos, bool wall = true);
     void setWall(CellCoordinate pos, Direction dir, bool wall = true);
+    void setWall(NodeCoordinate pos, Direction dir, bool wall = true);
+    void setWall(Relation rel, NodeCoordinate pos, Direction facing,
+                 bool wall = true);
 
     bool isExplored(NodeCoordinate pos) const;
     bool isExplored(CellCoordinate pos, Direction dir) const;
+    bool isExplored(NodeCoordinate pos, Direction dir) const;
+    bool isExplored(Relation rel, NodeCoordinate pos, Direction facing) const;
+
     void setExplored(NodeCoordinate pos, bool explored = true);
     void setExplored(CellCoordinate pos, Direction dir, bool explored = true);
+    void setExplored(NodeCoordinate pos, Direction dir, bool explored = true);
+    void setExplored(Relation rel, NodeCoordinate pos, Direction facing,
+                     bool explored = true);
 
     void reset();
 
