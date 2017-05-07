@@ -88,8 +88,8 @@ class Maze {
     // the remaining unexplored nodes to walls.
     void closeExcessFinishNodes();
 
-	Node &getNode(NodeCoordinate pos);
-	const Node &getNode(NodeCoordinate pos) const;
+    Node &getNode(NodeCoordinate pos);
+    const Node &getNode(NodeCoordinate pos) const;
 
   private:
     static bool scoreComparator(const Node *const &lhs, const Node *const &rhs);
@@ -100,8 +100,8 @@ class Maze {
     unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
     void constructPath(Node *start);
 
-	NodeCoordinate removeRandomWall();
-	unsigned countWalls(NodeCoordinateList coords) const;
+    NodeCoordinate removeRandomWall();
+    unsigned countWalls(NodeCoordinateList coords) const;
 
     Path path;
     Node maze[NODE_ROWS][NODE_COLS];
