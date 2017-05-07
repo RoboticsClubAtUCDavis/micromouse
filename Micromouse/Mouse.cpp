@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <assert.h>
 #include <cstdio>
+#include <stack>
 
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
 #include "../Simulation/simulate.h"
@@ -62,6 +63,9 @@ void Mouse::mapMaze() {
         case Mouse::BFS:
             mapMazeBFS();
             break;
+        case Mouse::DFS:
+            mapMazeDFS();
+            break;
         default:
             break;
     }
@@ -83,6 +87,7 @@ void Mouse::runMaze() {
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
     unsigned cycle = 0;
+    auto seed = uint16_t(time(NULL));
 
     running = true;
     while (running) {
@@ -95,7 +100,7 @@ void Mouse::runMaze() {
             Serial.printf("%s\n", e.what());
         }
 
-        Maze newMaze = Maze::generate(cycle);
+        Maze newMaze = Maze::generate(seed + cycle);
         std::lock_guard<std::mutex> lock(mtx);
         virtualMaze = newMaze;
         maze.reset();
@@ -214,23 +219,26 @@ void Mouse::followPath(bool useCaution) {
 
 unsigned Mouse::move(DirectionVector movement, bool keepGoing,
                      bool useCaution) {
+
 #if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     (void)keepGoing;
     (void)useCaution;
 
-    std::unique_lock<std::mutex> lock(mtx);
-
-    lock.unlock();
     if (SIMULATION_SPEED < 1000.0f) {
         std::this_thread::sleep_for(
             std::chrono::milliseconds(long(300 / SIMULATION_SPEED)));
     }
-    lock.lock();
+
+    std::unique_lock<std::mutex> lock(mtx);
+
+    for (auto relation : RELATIONS) {
+        maze.setExplored(position + DirOp::relToDir(relation, facing));
+    }
 #else
     // TODO: Need better error handling with sensors to keep in correct
     // position;
-    // It could be in Hardware, but probably here since Hardware doesn't know
-    // about cells
+    // It could be in Hardware, but probably here since Hardware doesn't
+    // know about cells
     //
     // XXX diagonals will need to be handled, if we implement them
     bot.rotate(DirOp::angleDiff(facing, movement.direction));
@@ -245,7 +253,23 @@ unsigned Mouse::move(DirectionVector movement, bool keepGoing,
     position = position + movement;
     facing = movement.direction;
 
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+
+    for (auto relation : RELATIONS) {
+        if (virtualMaze.isWall(position + DirOp::relToDir(relation, facing)))
+            maze.setWall(position + DirOp::relToDir(relation, facing));
+    }
+
+    maze.setExplored(position);
+    maze.getNode(position).visited = true;
+#endif
+
     return 0;
+}
+
+unsigned Mouse::move(Relation relation, bool keepGoing, bool useCaution) {
+    return move(DirectionVector(DirOp::relToDir(relation, facing), 1),
+                keepGoing, useCaution);
 }
 
 void Mouse::mapMazeExhaustive() {
@@ -377,4 +401,84 @@ void Mouse::mapMazeBFS() {
 
         coordList.clear();
     }
+}
+
+void Mouse::mapMazeDFS() {
+    NodeCoordinateList coordList;
+    std::stack<NodeCoordinate> intersections;
+
+    {
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
+        std::lock_guard<std::mutex> lock(mtx);
+#endif
+        // Set the start and finish nodes as explored.
+        maze.setExplored(Maze::NODE_START);
+        maze.setExplored(Maze::NODE_FINISH);
+
+        for (auto relation : RELATIONS) {
+            if (virtualMaze.isWall(position, DirOp::relToDir(relation, facing)))
+                maze.setWall(position, DirOp::relToDir(relation, facing));
+        }
+
+        maze.setExplored(position);
+        maze.getNode(position).visited = true;
+    }
+
+    do {
+        coordList.clear();
+
+        bool isWall[NO_RELATION];
+        isWall[LEFT] = maze.isWall(LEFT, position, facing);
+        isWall[FRONT] = maze.isWall(FRONT, position, facing);
+        isWall[RIGHT] = maze.isWall(RIGHT, position, facing);
+
+        bool isExplored[NO_RELATION];
+        isExplored[LEFT] = maze.isExplored(LEFT, position, facing);
+        isExplored[FRONT] = maze.isExplored(FRONT, position, facing);
+        isExplored[RIGHT] = maze.isExplored(RIGHT, position, facing);
+
+        // Favor going straight.
+        if (!isWall[FRONT] && !isExplored[FRONT]) {
+            if (!isWall[LEFT] && !isExplored[LEFT]) {
+                intersections.push(position + DirOp::relToDir(LEFT, facing));
+            }
+
+            if (!isWall[RIGHT] && !isExplored[RIGHT]) {
+                intersections.push(position + DirOp::relToDir(RIGHT, facing));
+            }
+
+            move(FRONT, false, false);
+        } else if (!isWall[RIGHT] && !isExplored[RIGHT]) {
+            if (!isWall[LEFT] && !isExplored[LEFT]) {
+                intersections.push(position + DirOp::relToDir(LEFT, facing));
+            }
+
+            move(RIGHT, false, false);
+        } else if (!isWall[LEFT] && !isExplored[LEFT]) {
+            move(LEFT, false, false);
+        }
+        // All three directions have a wall or have been explored.
+        // Backtrack to last intersection.
+        else {
+            NodeCoordinate dest;
+
+            do {
+                dest = intersections.top();
+                intersections.pop();
+            } while (maze.getNode(dest).visited);
+
+            maze.findPath(position, dest, true, facing);
+            followPath(false);
+        }
+        // Find a path from start to finish using explored and unexplored
+        // nodes.
+        maze.findPath(Maze::NODE_START, Maze::NODE_FINISH, false, facing);
+
+        // Make a list of all coordinates where the path transitions from
+        // explored to unxplored or unexplored to explored nodes.
+        maze.findNodeCoordPairs(coordList);
+
+        // If the shortest path was completely contained within explored
+        // nodes then the list is empty and we can stop mapping.
+    } while (coordList.size() > 0);
 }

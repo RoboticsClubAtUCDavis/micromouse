@@ -11,7 +11,12 @@ class Node {
 
     NodeCoordinate pos;
     bool exists;
-    bool explored;
+
+    // True := The state of the node has been observed
+    bool explored = false;
+
+    // True := The bot has entered this node
+    bool visited = false;
 
     // These are used for pathfinding
     unsigned gScore;

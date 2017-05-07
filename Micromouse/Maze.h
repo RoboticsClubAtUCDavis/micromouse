@@ -8,6 +8,7 @@
 #include <ctime>
 #include <string>
 #include <vector>
+#include <stdint.h>
 
 //#define MAZE_DIAGONALS
 
@@ -27,7 +28,7 @@ class Maze {
     static const unsigned MOVEMENT_COST_DIAGONAL = 141;
 
     static Maze fromFile(std::string fileName);
-    static Maze generate(int seed = time(NULL));
+    static Maze generate(uint16_t seed = uint16_t(time(NULL)));
 
     static bool withinBounds(NodeCoordinate pos);
     static bool isBorder(NodeCoordinate pos);
@@ -40,13 +41,25 @@ class Maze {
 
     bool isWall(NodeCoordinate pos) const;
     bool isWall(CellCoordinate pos, Direction dir) const;
+    bool isWall(NodeCoordinate pos, Direction dir) const;
+    bool isWall(Relation rel, NodeCoordinate pos, Direction facing) const;
+
     void setWall(NodeCoordinate pos, bool wall = true);
     void setWall(CellCoordinate pos, Direction dir, bool wall = true);
+    void setWall(NodeCoordinate pos, Direction dir, bool wall = true);
+    void setWall(Relation rel, NodeCoordinate pos, Direction facing,
+                 bool wall = true);
 
     bool isExplored(NodeCoordinate pos) const;
     bool isExplored(CellCoordinate pos, Direction dir) const;
+    bool isExplored(NodeCoordinate pos, Direction dir) const;
+    bool isExplored(Relation rel, NodeCoordinate pos, Direction facing) const;
+
     void setExplored(NodeCoordinate pos, bool explored = true);
     void setExplored(CellCoordinate pos, Direction dir, bool explored = true);
+    void setExplored(NodeCoordinate pos, Direction dir, bool explored = true);
+    void setExplored(Relation rel, NodeCoordinate pos, Direction facing,
+                     bool explored = true);
 
     void reset();
 
@@ -75,8 +88,8 @@ class Maze {
     // the remaining unexplored nodes to walls.
     void closeExcessFinishNodes();
 
-	Node &getNode(NodeCoordinate pos);
-	const Node &getNode(NodeCoordinate pos) const;
+    Node &getNode(NodeCoordinate pos);
+    const Node &getNode(NodeCoordinate pos) const;
 
   private:
     static bool scoreComparator(const Node *const &lhs, const Node *const &rhs);
@@ -87,8 +100,8 @@ class Maze {
     unsigned heuristic(NodeCoordinate start, NodeCoordinate end);
     void constructPath(Node *start);
 
-	NodeCoordinate removeRandomWall();
-	unsigned countWalls(NodeCoordinateList coords) const;
+    NodeCoordinate removeRandomWall();
+    unsigned countWalls(NodeCoordinateList coords) const;
 
     Path path;
     Node maze[NODE_ROWS][NODE_COLS];

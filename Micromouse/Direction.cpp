@@ -30,3 +30,16 @@ int DirOp::angleDiff(Direction d1, Direction d2) {
         angle += 360;
     return angle;
 }
+
+Direction DirOp::relToDir(Relation relation, Direction direction) {
+    switch (relation) {
+        case LEFT:
+            return Direction((int(direction) + int(W)) % NONE);
+        case FRONT:
+            return direction;
+        case RIGHT:
+            return Direction((int(direction) + int(E)) % NONE);
+        default:
+            return NONE;
+    }
+}

@@ -12,7 +12,7 @@ class MouseDrawable;
 
 class Mouse {
   public:
-    enum MappingStrategy { EXHAUSTIVE, STRAT2, STRAT3, BFS };
+    enum MappingStrategy { EXHAUSTIVE, STRAT2, STRAT3, BFS, DFS };
 
     enum class TestMode {
         TEST_MOTOR_SINGLE,
@@ -54,11 +54,13 @@ class Mouse {
     // movement. If `useCaution` is true it will stop when a wall is
     // encountered. Returns the number of nodes it was unable to move.
     unsigned move(DirectionVector movement, bool keepGoing, bool useCaution);
+    unsigned move(Relation relation, bool keepGoing, bool useCaution);
 
     void mapMazeExhaustive();
 
     void mapMazeStrategy3();
     void mapMazeBFS();
+    void mapMazeDFS();
 
     // Given one of the `NodeCoordinate`s in the `coordList` returns the
     // `NodeCoordinate` that it is paired with.
@@ -78,7 +80,7 @@ class Mouse {
     int mappingSpeed = 100;
     int runningSpeed = 100;
 
-    MappingStrategy mappingStrategy = STRAT3;
+    MappingStrategy mappingStrategy = DFS;
 
     bool running;
 

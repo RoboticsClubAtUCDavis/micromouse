@@ -24,7 +24,7 @@ class CellCoordinate;
 
 class NodeCoordinate : public Coordinate {
   public:
-    NodeCoordinate(int x = 0, int y = 0) : Coordinate(x, y){};
+    explicit NodeCoordinate(int x = 0, int y = 0) : Coordinate(x, y){};
     explicit NodeCoordinate(Direction d) : Coordinate(d){};
     bool isCell() const;
     bool isPost() const;
@@ -37,7 +37,7 @@ class NodeCoordinate : public Coordinate {
 
 class CellCoordinate : public Coordinate {
   public:
-    CellCoordinate(int x = 0, int y = 0) : Coordinate(x, y){};
+    explicit CellCoordinate(int x = 0, int y = 0) : Coordinate(x, y){};
     explicit CellCoordinate(Direction d) : Coordinate(d){};
     CellCoordinate operator*(const int a) const;
     CellCoordinate operator-(const CellCoordinate a) const;
