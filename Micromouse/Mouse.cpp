@@ -545,11 +545,11 @@ void Mouse::rankMappingStrategies(const unsigned cycles) {
     }
 
     for (auto strategy : MAP_STRATS) {
-        Serial.printf("S:%i, Moves:(%4u, %4u, %4u) Costs:(%6u, %6u, %6u) \n", strategy,
-                      stats[strategy].min.moves, stats[strategy].max.moves,
-                      stats[strategy].avg.moves / cycles,
-                      stats[strategy].min.cost, stats[strategy].max.cost,
-                      stats[strategy].avg.cost / cycles);
+        Serial.printf(
+            "S:%i, Moves:(%4u, %4u, %4u) Costs:(%6u, %6u, %6u) \n", strategy,
+            stats[strategy].min.moves, stats[strategy].max.moves,
+            stats[strategy].avg.moves / cycles, stats[strategy].min.cost,
+            stats[strategy].max.cost, stats[strategy].avg.cost / cycles);
     }
 }
 #endif
