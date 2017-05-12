@@ -1,5 +1,8 @@
-#include "RangeFinder.h"
 #include <Arduino.h>
+#undef min
+#undef max
+
+#include "RangeFinder.h"
 #include <assert.h>
 
 RangeFinder::RangeFinder() : DATA_PIN(0), MIN_RANGE(0), MAX_RANGE(0) {

@@ -1,21 +1,27 @@
-#include "Motor.h"
 #include <Arduino.h>
+#undef min
+#undef max
+
+#include "Motor.h"
 #include <cmath>
 
 Motor::Motor(void) : Motor(0, 0, 0, 0, 0) {
 }
 
-Motor::Motor(unsigned en, unsigned in1, unsigned in2, unsigned enc1,
-             unsigned enc2)
+Motor::Motor(unsigned en, unsigned in1, unsigned in2, unsigned encA,
+             unsigned encB)
     : en(en)
     , in1(in1)
     , in2(in2)
 #if defined(__MK66FX1M0__) || defined(__MK20DX256__)
-    , encoder(enc1, enc2)
-#endif
+    , encoder(encA, encB) {
+#else
 {
-    (void)enc1;
-    (void)enc2;
+    // Just so the pins are passed to our mock Teensy
+    pinMode(encA, INPUT);
+    pinMode(encB, INPUT);
+#endif
+
     pinMode(en, OUTPUT);
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);

@@ -153,7 +153,7 @@ void mock::Teensy::analogWrite(uint8_t pin, int val) {
 uint8_t mock::Teensy::digitalRead(uint8_t pin) {
     Pin &p = pins[pin];
 
-    if (p.mode != INPUT || p.mode != INPUT_PULLUP || p.mode != INPUT_PULLDOWN) {
+    if (p.mode != INPUT && p.mode != INPUT_PULLUP && p.mode != INPUT_PULLDOWN) {
         Serial.printf("Waring: Pin %u is not set to INPUT\n", pin);
     }
 
@@ -163,7 +163,7 @@ uint8_t mock::Teensy::digitalRead(uint8_t pin) {
 int mock::Teensy::analogRead(uint8_t pin) {
     Pin &p = pins[pin];
 
-    if (p.mode != INPUT || p.mode != INPUT_PULLUP || p.mode != INPUT_PULLDOWN) {
+    if (p.mode != INPUT && p.mode != INPUT_PULLUP && p.mode != INPUT_PULLDOWN) {
         Serial.printf("Waring: Pin %u is not set to INPUT\n", pin);
     }
 

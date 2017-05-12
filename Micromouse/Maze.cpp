@@ -1,5 +1,8 @@
-#include "Maze.h"
 #include <Arduino.h>
+#undef min
+#undef max
+
+#include "Maze.h"
 #include <algorithm>
 #include <assert.h>
 #include <cstdlib> //abs
@@ -197,8 +200,10 @@ Maze Maze::generate(uint16_t seed) {
         // maze.reset();
     }
 
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     float currentSimulationSpeed = SIMULATION_SPEED;
     SIMULATION_SPEED = numeric_limits<float>::infinity();
+#endif
 
     int removalAttempts = 30;
     // 30 + 3d20 expected value = 61.5
@@ -244,7 +249,9 @@ Maze Maze::generate(uint16_t seed) {
         //              removal.y, maze.path.size());
     }
 
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
     SIMULATION_SPEED = currentSimulationSpeed;
+#endif
 
     return maze;
 }

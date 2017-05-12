@@ -1,5 +1,8 @@
-#include "Led.h"
 #include <Arduino.h>
+#undef min
+#undef max
+
+#include "Led.h"
 
 Led::Led() : PIN(0) {
 }
