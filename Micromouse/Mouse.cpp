@@ -418,10 +418,13 @@ void Mouse::mapMazeDFS() {
         maze.setExplored(Maze::NODE_START);
         maze.setExplored(Maze::NODE_FINISH);
 
+// TODO replace with hardware function that uses sensors
+#if !defined(__MK66FX1M0__) && !defined(__MK20DX256__)
         for (auto relation : RELATIONS) {
             if (virtualMaze.isWall(position, DirOp::relToDir(relation, facing)))
                 maze.setWall(position, DirOp::relToDir(relation, facing));
         }
+#endif
 
         maze.setExplored(position);
         maze.getNode(position).visited = true;
