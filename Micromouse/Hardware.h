@@ -1,10 +1,13 @@
 #pragma once
+#include <Arduino.h>
+#undef min
+#undef max
+
 #include "Direction.h"
 #include "Led.h"
 #include "Motor.h"
 #include "PIDController.h"
 #include "RangeFinder.h"
-#include <Arduino.h>
 
 class Hardware {
   public:

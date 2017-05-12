@@ -1,5 +1,8 @@
-#include "Mouse.h"
 #include <Arduino.h>
+#undef min
+#undef max
+
+#include "Mouse.h"
 #include <assert.h>
 #include <cstdio>
 #include <stack>

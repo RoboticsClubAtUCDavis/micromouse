@@ -1,5 +1,8 @@
-#include "IRSensor.h"
 #include <Arduino.h>
+#undef min
+#undef max
+
+#include "IRSensor.h"
 #include <cmath>
 
 float IRSensor::getDistance() const {

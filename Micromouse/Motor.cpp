@@ -1,5 +1,8 @@
-#include "Motor.h"
 #include <Arduino.h>
+#undef min
+#undef max
+
+#include "Motor.h"
 #include <cmath>
 
 Motor::Motor(void) : Motor(0, 0, 0, 0, 0) {

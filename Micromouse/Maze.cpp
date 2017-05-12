@@ -1,5 +1,8 @@
-#include "Maze.h"
 #include <Arduino.h>
+#undef min
+#undef max
+
+#include "Maze.h"
 #include <algorithm>
 #include <assert.h>
 #include <cstdlib> //abs
