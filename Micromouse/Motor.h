@@ -9,8 +9,8 @@
 class Motor {
   public:
     Motor(void);
-    Motor(unsigned en, unsigned in1, unsigned in2, unsigned enc1,
-          unsigned enc2);
+    Motor(unsigned en, unsigned in1, unsigned in2, unsigned encA,
+          unsigned encB);
     ~Motor();
 
     void off(void);

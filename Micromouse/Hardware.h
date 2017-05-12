@@ -11,14 +11,31 @@ class Hardware {
     // PIN DEFINITIONS
 
     // TODO: set correct pin values
-    static const unsigned IRSENSOR_LEFT_PIN = 0;
-    static const unsigned IRSENSOR_RIGHT_PIN = 0;
-    static const unsigned ULTRASONIC_PIN = 0;
-    // static const unsigned MOTOR_LEFT_PIN = 17
-    // ...
-    // ...
-    // static const unsigned RANGE_FINDER_FRONT_PIN = 18
+    static const unsigned IRSENSOR_LEFT_PIN = 16;
+    static const unsigned IRSENSOR_RIGHT_PIN = 17;
+    static const unsigned ULTRASONIC_PIN = 14;
+
+    static const unsigned MOTOR_LEFT_EN_PIN = 4;
+    static const unsigned MOTOR_LEFT_IN1_PIN = 8;
+    static const unsigned MOTOR_LEFT_IN2_PIN = 7;
+    static const unsigned ENCODER_LEFT_A_PIN = 21;
+    static const unsigned ENCODER_LEFT_B_PIN = 20;
+
+    static const unsigned MOTOR_RIGHT_EN_PIN = 3;
+    static const unsigned MOTOR_RIGHT_IN1_PIN = 6;
+    static const unsigned MOTOR_RIGHT_IN2_PIN = 5;
+    static const unsigned ENCODER_RIGHT_A_PIN = 23;
+    static const unsigned ENCODER_RIGHT_B_PIN = 22;
+
+    static const unsigned DIP_1_PIN = 35;
+    static const unsigned DIP_2_PIN = 36;
+    static const unsigned DIP_3_PIN = 37;
+    static const unsigned DIP_4_PIN = 38;
+
+    static const unsigned BUTTON_PIN = 38;
+
     static const unsigned LED_PIN = 13;
+    // static const unsigned RGB_LED_PIN = 2; // TODO update interface
 
     static const unsigned NUM_RANGE_FINDERS = 3;
     static const unsigned IRSENSOR_LEFT_MIN_DISTANCE = 20;   // mm

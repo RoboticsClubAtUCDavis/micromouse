@@ -10,7 +10,7 @@ void __throw_length_error(char const *e) {
     Serial.printf("Length Error : %s\n", e);
     exit(1);
 }
-}
+} // namespace std
 
 extern "C" {
 int _getpid() {
@@ -30,7 +30,12 @@ void setup() {
     Serial.begin(9600);
     delay(2000);
     Mouse mouse;
-    // mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);
+    //mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);
+    //mouse.testMode(Mouse::TestMode::TEST_MOTOR_PAIR);
+    //mouse.testMode(Mouse::TestMode::TEST_MOVEMENT);
+    //mouse.testMode(Mouse::TestMode::TEST_ROTATE);
+    //mouse.testMode(Mouse::TestMode::TEST_RANGE_FINDER_SINGLE);
+    //mouse.testMode(Mouse::TestMode::TEST_RANGE_FINDER_ALL);
 }
 
 void loop() {

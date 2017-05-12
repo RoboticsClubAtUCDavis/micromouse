@@ -11,7 +11,11 @@ const unsigned Hardware::COUNT_PER_NODE =
     Hardware::COUNT_PER_MM * Hardware::MM_PER_NODE;
 
 Hardware::Hardware()
-    : led(Hardware::LED_PIN)
+    : leftMotor(MOTOR_LEFT_EN_PIN, MOTOR_LEFT_IN1_PIN, MOTOR_LEFT_IN2_PIN,
+                ENCODER_LEFT_A_PIN, ENCODER_LEFT_B_PIN)
+    , rightMotor(MOTOR_RIGHT_EN_PIN, MOTOR_RIGHT_IN1_PIN, MOTOR_RIGHT_IN2_PIN,
+                 ENCODER_RIGHT_A_PIN, ENCODER_RIGHT_B_PIN)
+    , led(LED_PIN)
     , speedPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
     , distancePID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
     , leftPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
