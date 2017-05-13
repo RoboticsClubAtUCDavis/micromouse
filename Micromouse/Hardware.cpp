@@ -238,7 +238,7 @@ void Hardware::testRangeFinderSingle(Relation relation, unsigned iterations,
 
     for (size_t i = 0; i < iterations; i++) {
         auto dist = rangeFinders[relation]->getDistance();
-        Serial.printf("%u\n", dist);
+        Serial.printf("%f\n", dist);
         ::delay(delay);
     }
 }
@@ -254,7 +254,7 @@ void Hardware::testRangeFindersAll(unsigned iterations, unsigned delay) {
         auto distLeft = rangeFinders[LEFT]->getDistance();
         auto distFront = rangeFinders[FRONT]->getDistance();
         auto distRight = rangeFinders[RIGHT]->getDistance();
-        Serial.printf("%u, %u, %u\n", distLeft, distFront, distRight);
+        Serial.printf("%f, %f, %f\n", distLeft, distFront, distRight);
         ::delay(delay);
     }
 }
