@@ -37,11 +37,11 @@ void Motor::off(void) {
 // 1.0 = max speed forward; -1.0 = max speed reverse
 void Motor::setSpeed(float speed) {
     if (speed < 0) {
-        digitalWrite(in1, LOW);
-        digitalWrite(in2, HIGH);
-    } else {
         digitalWrite(in2, LOW);
         digitalWrite(in1, HIGH);
+    } else {
+        digitalWrite(in1, LOW);
+        digitalWrite(in2, HIGH);
     }
     analogWrite(en, abs(int(speed * 255)));
 }
