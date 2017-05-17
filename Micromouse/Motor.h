@@ -20,9 +20,9 @@ class Motor {
     float getSecondsPerCount(void);
 
   private:
-    unsigned en, in1, in2;
+    const unsigned en, in1, in2;
 
-    float secondsPerCount = 0.0f;
+    float countsPerSecond = 0.0f;
 
     long lastCounts = 0;
     long lastMicros = 0;

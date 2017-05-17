@@ -43,7 +43,7 @@ void Motor::setSpeed(float speed) {
         digitalWrite(in1, LOW);
         digitalWrite(in2, HIGH);
     }
-    analogWrite(en, abs(int(speed * 255)));
+    analogWrite(en, abs(int(speed * 2047)));
 }
 
 long Motor::getCounts(void) {
@@ -53,7 +53,7 @@ long Motor::getCounts(void) {
     if (counts != lastCounts) {
         long time = micros();
 
-        secondsPerCount = (time - lastMicros) /
+        countsPerSecond = (time - lastMicros) /
                           (1E6f /*usec->sec*/ * abs(counts - lastCounts));
         lastCounts = counts;
         lastMicros = time;
@@ -72,7 +72,7 @@ void Motor::resetCounts(void) {
 }
 
 float Motor::getSecondsPerCount(void) {
-    return secondsPerCount;
+    return countsPerSecond;
 }
 
 Motor::~Motor() {

@@ -1,6 +1,7 @@
 #include "Hardware.h"
 #include "IRSensor.h"
 #include "UltrasonicSensor.h"
+#include <algorithm>
 #include <cmath>
 #include <limits>
 
@@ -16,12 +17,12 @@ Hardware::Hardware()
     , rightMotor(MOTOR_RIGHT_EN_PIN, MOTOR_RIGHT_IN1_PIN, MOTOR_RIGHT_IN2_PIN,
                  ENCODER_RIGHT_A_PIN, ENCODER_RIGHT_B_PIN)
     , led(LED_PIN)
-    , speedPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
-    , distancePID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
+    , speedPID(0.0f, 0.00000005f, 0.0f, 0.0f, 20.0f)
+    , distancePID(0.02f, 0.0f, 100.0f, 0.0f, 1.0f, 0.8f)
     , leftPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
     , rightPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f) {
     led.turnOn();
-    setSpeed(100 /*mmps*/);
+    setSpeed(120 /*mmps*/);
     initRangeFinders();
     // TODO init rest of components.
 }
@@ -38,68 +39,92 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
     (void)keepGoing;
     (void)useCaution;
 
+    speedPID.clear(0.0f,-20.0f);
+    distancePID.clear(0.0f);
+	deltaTime();
+
+    leftMotor.resetCounts();
+    rightMotor.resetCounts();
+
     // Times 2 since two wheels. This prevents dividing by 2 later on.
-    auto targetCounts = unsigned(2 * mm * COUNT_PER_MM);
-    unsigned traveledCounts = 0;
+    auto targetCounts = long(2 * mm * COUNT_PER_MM);
+    long traveledCounts = 0;
 
     // [-1.0,1.0]
-    float leftSpeedFactor = 0.0f;
-    float rightSpeedFactor = 0.0f;
+    float leftSpeedFactor;
+    float rightSpeedFactor;
 
     while (true) {
-        unsigned dtime = deltaTime();
+        auto dtime = deltaTime();
+
+        auto countsLeft = leftMotor.getCounts();
+        auto countsRight = rightMotor.getCounts();
 
         traveledCounts += leftMotor.getCounts() + rightMotor.getCounts();
 
         leftMotor.resetCounts();
         rightMotor.resetCounts();
 
-        // `secondsPerCount` is doubled to account for not dividing by two here.
-        float avgSPC =
-            leftMotor.getSecondsPerCount() + rightMotor.getSecondsPerCount();
+        auto distanceErr = targetCounts - traveledCounts;
+        distanceErr = std::max(distanceErr, -long(COUNT_PER_NODE / 10));
+        distanceErr = std::min(distanceErr, long(COUNT_PER_NODE / 10));
 
-        float speedCorr =
-            speedPID.getCorrection(secondsPerCount - avgSPC, dtime);
+        auto distanceCorr = distancePID.getCorrection(distanceErr, dtime, false);
+        distanceCorr = std::max(distanceCorr, -1.0f);
+        distanceCorr = std::min(distanceCorr, 1.0f);
 
-        leftSpeedFactor += speedCorr;
-        rightSpeedFactor += speedCorr;
+        leftSpeedFactor = rightSpeedFactor = distanceCorr;
 
-        float leftGap = rangeFinders[LEFT]->getDistance();
-        float leftGapCorr = leftPID.getCorrection(LEFT_GAP - leftGap, dtime);
+        // float leftGap = rangeFinders[LEFT]->getDistance();
+        // float leftGapCorr = leftPID.getCorrection(LEFT_GAP - leftGap, dtime);
 
-        if (leftGapCorr > 0) {
-            leftSpeedFactor -= leftGapCorr;
-        } else {
-            rightSpeedFactor += leftGapCorr;
+        // if (leftGapCorr > 0) {
+        //    leftSpeedFactor -= leftGapCorr;
+        //} else {
+        //    rightSpeedFactor += leftGapCorr;
+        //}
+
+        // float rightGap = rangeFinders[RIGHT]->getDistance();
+        // float rightGapCorr =
+        //    rightPID.getCorrection(RIGHT_GAP - rightGap, dtime);
+
+        // if (rightGapCorr > 0) {
+        //    rightSpeedFactor -= rightGapCorr;
+        //} else {
+        //    leftSpeedFactor += rightGapCorr;
+        //}
+
+        // `countsPerSecond`
+        auto avgCPS = (countsRight + countsLeft) / (dtime * 2.0f) * 1E6;
+
+        auto speedCorr =
+            powf(1.04f,
+                 speedPID.getCorrection(countsPerSecond - avgCPS, dtime, true));
+
+        //  if (targetCounts - traveledCounts < long(COUNT_PER_NODE * 2)) {
+
+        if (avgCPS < 50.0f && std::fabs(targetCounts - traveledCounts) < 50) {
+            leftMotor.off();
+            rightMotor.off();
+            return traveledCounts * MM_PER_COUNT;
         }
+        // }
+        // Serial.printf("CNT: %i, ", targetCounts - traveledCounts);
+        // Serial.printf("CTL: %i, ", countsLeft);
+        // Serial.printf("CTR: %i, ", countsRight);
+        //Serial.printf("SPC: %f, ", speedCorr);
+        //Serial.printf("DST: %f, ", distanceCorr);
+        // Serial.printf("LSF: %f, ", leftSpeedFactor);
+        // Serial.printf("RSF: %f, ", rightSpeedFactor);
+        // Serial.printf("ASP: %f", avgCPS);
+        Serial.printf("\n");
 
-        float rightGap = rangeFinders[RIGHT]->getDistance();
-        float rightGapCorr =
-            rightPID.getCorrection(RIGHT_GAP - rightGap, dtime);
-
-        if (rightGapCorr > 0) {
-            rightSpeedFactor -= rightGapCorr;
-        } else {
-            leftSpeedFactor += rightGapCorr;
-        }
-
-        if (targetCounts - traveledCounts < COUNT_PER_NODE * 2) {
-            float distanceCorr =
-                distancePID.getCorrection(targetCounts - traveledCounts, dtime);
-
-            if (avgSPC < 0.001f && std::fabs(distanceCorr) < 0.1f) {
-                leftMotor.off();
-                rightMotor.off();
-                return traveledCounts * MM_PER_COUNT;
-            }
-        }
-
-        leftMotor.setSpeed(leftSpeedFactor);
-        rightMotor.setSpeed(rightSpeedFactor);
+        leftMotor.setSpeed(leftSpeedFactor * speedCorr);
+        rightMotor.setSpeed(rightSpeedFactor * speedCorr);
 
         // Loop approximately every 0.5mm traveled.
         // We will want to try a range of values here to find the best.
-        delayMicroseconds(avgSPC * 1E6f / 2.0f * COUNT_PER_MM / 2.0f);
+        delayMicroseconds(10000);
     }
 
     return 0;
@@ -120,8 +145,8 @@ void Hardware::rotate(int deg) {
 //}
 
 void Hardware::setSpeed(unsigned mmps) {
-    // Times 2 since two wheels. This prevents dividing by 2 later on.
-    secondsPerCount = MM_PER_COUNT / mmps * 2;
+    countsPerSecond = COUNT_PER_MM * mmps;
+    // Serial.printf("Target Speed: %f CPS\n", countsPerSecond);
 }
 
 // void Hardware::calibrateMotors() {
@@ -150,6 +175,12 @@ void Hardware::calibrateRangeFinder(Relation relation) {
 }
 
 void Hardware::testMotorSingle() {
+
+    // for (float i = 0.0; i < 1.0f; i += 0.001 )
+    //{
+    //	leftMotor.se
+    //}
+
     Serial.printf("Testing LeftMotor\n");
     leftMotor.setSpeed(0.1f);
     delay(2000);
@@ -202,12 +233,11 @@ void Hardware::testMotorPair() {
 
 void Hardware::testMovement() {
     Serial.printf("Testing Movement\n");
-
-    moveForward(10, false, false);
-    delay(2000);
     moveForward(100, false, false);
     delay(2000);
-    moveForward(1000, false, false);
+    moveForward(200, false, false);
+    delay(2000);
+    moveForward(300, false, false);
     delay(2000);
 }
 
@@ -276,7 +306,7 @@ void Hardware::initRangeFinders() {
     }
 }
 
-unsigned Hardware::DeltaTime::operator()() {
+uint32_t Hardware::DeltaTime::operator()() {
     auto deltaTime = micros() - previousTime;
     previousTime += deltaTime;
     return deltaTime;

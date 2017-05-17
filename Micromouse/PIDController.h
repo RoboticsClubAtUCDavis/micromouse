@@ -5,8 +5,8 @@ class PIDController {
     PIDController(float p, float i, float d, float initialError,
                   float maxIntegralError, float derivativeSmoothing = 0.0f);
 
-    float getCorrection(float currentError, unsigned delta);
-    void clear(float initialError);
+	float getCorrection(float currentError, uint32_t delta, bool log = false);
+    void clear(float initialError, float integratorError = 0.0f);
 
   private:
     const float P;
