@@ -19,6 +19,9 @@ int _getpid() {
 int _kill(int pid, int sig) {
     return -1;
 }
+int _write() {
+    return -1;
+}
 }
 
 #include "Mouse.h"
