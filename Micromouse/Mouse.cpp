@@ -46,7 +46,7 @@ void Mouse::testMode(TestMode mode) {
             bot.testRangeFinderSingle(RIGHT);
             break;
         case TestMode::TEST_RANGE_FINDER_ALL:
-            bot.testRangeFindersAll();
+            bot.testRangeFindersAll(0,10);
             break;
         default:
             break;
