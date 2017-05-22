@@ -17,10 +17,10 @@ Hardware::Hardware()
     , rightMotor(MOTOR_RIGHT_EN_PIN, MOTOR_RIGHT_IN1_PIN, MOTOR_RIGHT_IN2_PIN,
                  ENCODER_RIGHT_A_PIN, ENCODER_RIGHT_B_PIN)
     , led(LED_PIN)
-    , speedPID(0.0f, 0.00000005f, 0.0f, 0.0f, 20.0f)
+    , speedPID(0.002f, 0.00000002f, 100.0f, 0.0f, 20.0f, 0.6f)
     , distancePID(0.02f, 0.0f, 100.0f, 0.0f, 1.0f, 0.8f)
-    , leftPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f)
-    , rightPID(1.0f, 1.0f, 1.0f, 0.0f, 100.0f) {
+    , leftPID(0.0005f, 0.0f, 0.0f, 0.0f, 0.05f)
+    , rightPID(0.0005f, 0.0f, 0.0f, 0.0f, 100.0f) {
     led.turnOn();
     setSpeed(120 /*mmps*/);
     initRangeFinders();
@@ -39,9 +39,9 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
     (void)keepGoing;
     (void)useCaution;
 
-    speedPID.clear(0.0f,-20.0f);
+    speedPID.clear(-countsPerSecond, -20.0f);
     distancePID.clear(0.0f);
-	deltaTime();
+    deltaTime();
 
     leftMotor.resetCounts();
     rightMotor.resetCounts();
@@ -69,37 +69,34 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
         distanceErr = std::max(distanceErr, -long(COUNT_PER_NODE / 10));
         distanceErr = std::min(distanceErr, long(COUNT_PER_NODE / 10));
 
-        auto distanceCorr = distancePID.getCorrection(distanceErr, dtime, false);
+        auto distanceCorr =
+            distancePID.getCorrection(distanceErr, dtime, false);
         distanceCorr = std::max(distanceCorr, -1.0f);
         distanceCorr = std::min(distanceCorr, 1.0f);
 
         leftSpeedFactor = rightSpeedFactor = distanceCorr;
 
-        // float leftGap = rangeFinders[LEFT]->getDistance();
-        // float leftGapCorr = leftPID.getCorrection(LEFT_GAP - leftGap, dtime);
+        float leftGap = rangeFinders[LEFT]->getDistance();
+        float leftGapCorr = leftPID.getCorrection(leftGap - LEFT_GAP, dtime, false);
 
-        // if (leftGapCorr > 0) {
-        //    leftSpeedFactor -= leftGapCorr;
-        //} else {
-        //    rightSpeedFactor += leftGapCorr;
-        //}
+        if (leftGapCorr < 0) {
+            rightSpeedFactor += leftGapCorr;
+        }
 
-        // float rightGap = rangeFinders[RIGHT]->getDistance();
-        // float rightGapCorr =
-        //    rightPID.getCorrection(RIGHT_GAP - rightGap, dtime);
+        float rightGap = rangeFinders[RIGHT]->getDistance();
+        float rightGapCorr =
+            rightPID.getCorrection(rightGap - RIGHT_GAP, dtime);
 
-        // if (rightGapCorr > 0) {
-        //    rightSpeedFactor -= rightGapCorr;
-        //} else {
-        //    leftSpeedFactor += rightGapCorr;
-        //}
+        if (rightGapCorr < 0) {
+            leftSpeedFactor += rightGapCorr;
+        }
 
         // `countsPerSecond`
         auto avgCPS = (countsRight + countsLeft) / (dtime * 2.0f) * 1E6;
 
         auto speedCorr =
             powf(1.04f,
-                 speedPID.getCorrection(countsPerSecond - avgCPS, dtime, true));
+                 speedPID.getCorrection(countsPerSecond - avgCPS, dtime ,true));
 
         //  if (targetCounts - traveledCounts < long(COUNT_PER_NODE * 2)) {
 
@@ -112,10 +109,10 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
         // Serial.printf("CNT: %i, ", targetCounts - traveledCounts);
         // Serial.printf("CTL: %i, ", countsLeft);
         // Serial.printf("CTR: %i, ", countsRight);
-        //Serial.printf("SPC: %f, ", speedCorr);
-        //Serial.printf("DST: %f, ", distanceCorr);
-        // Serial.printf("LSF: %f, ", leftSpeedFactor);
-        // Serial.printf("RSF: %f, ", rightSpeedFactor);
+        // Serial.printf("SPC: %f, ", speedCorr);
+        // Serial.printf("DST: %f, ", distanceCorr);
+         Serial.printf("LSF: %f, ", leftSpeedFactor * 3);
+         Serial.printf("RSF: %f, ", rightSpeedFactor * 3);
         // Serial.printf("ASP: %f", avgCPS);
         Serial.printf("\n");
 
@@ -233,7 +230,7 @@ void Hardware::testMotorPair() {
 
 void Hardware::testMovement() {
     Serial.printf("Testing Movement\n");
-    moveForward(100, false, false);
+    moveForward(10000, false, false);
     delay(2000);
     moveForward(200, false, false);
     delay(2000);

@@ -48,8 +48,8 @@ class Hardware {
     static const unsigned ULTRASONIC_MIN_DISTANCE = 20;      // mm
     static const unsigned ULTRASONIC_MAX_DISTANCE = 1000;    // mm
 
-    static const unsigned LEFT_GAP = 40;  // mm
-    static const unsigned RIGHT_GAP = 40; // mm
+    static const unsigned LEFT_GAP = 33;  // mm
+    static const unsigned RIGHT_GAP = 33; // mm
 
     static const float COUNT_PER_MM;
     static const float MM_PER_COUNT;
