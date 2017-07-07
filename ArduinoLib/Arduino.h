@@ -19,9 +19,9 @@
 namespace mock {
 class CSerial {
   public:
-	void begin(int buadRate) {
-		  (void)buadRate;
-	}
+    void begin(int buadRate) const {
+        (void)buadRate;
+    }
 
     int printf(const char *fmt, ...) const {
         va_list args;
@@ -43,6 +43,7 @@ class Teensy {
     };
 
     static const int PWM_HIGH;
+    static int readResolution;
 
     Teensy();
 
@@ -51,12 +52,13 @@ class Teensy {
     void analogWrite(uint8_t pin, int val);
     uint8_t digitalRead(uint8_t pin);
     int analogRead(uint8_t pin);
+    void analogReadResolution(uint8_t res);
 
     Pin pins[40];
 };
 
 extern Teensy teensy;
-}
+} // namespace mock
 
 static const mock::CSerial Serial;
 
@@ -74,5 +76,43 @@ void delayMicroseconds(uint32_t usec);
 uint32_t random(uint32_t howbig);
 int32_t random(int32_t howsmall, int32_t howbig);
 void randomSeed(uint32_t newseed);
+void analogReadResolution(uint8_t res);
+
+class IntervalTimer {
+  public:
+    IntervalTimer() {
+    }
+
+    bool begin(void (*funct)(), unsigned int microseconds) {
+        (void)funct;
+        (void)microseconds;
+    }
+
+    bool begin(void (*funct)(), int microseconds) {
+        (void)funct;
+        (void)microseconds;
+    }
+    bool begin(void (*funct)(), unsigned long microseconds) {
+        (void)funct;
+        (void)microseconds;
+    }
+    bool begin(void (*funct)(), long microseconds) {
+        (void)funct;
+        (void)microseconds;
+    }
+    bool begin(void (*funct)(), float microseconds) {
+        (void)funct;
+        (void)microseconds;
+    }
+    bool begin(void (*funct)(), double microseconds) {
+        (void)funct;
+        (void)microseconds;
+    }
+    void end() {
+    }
+    void priority(uint8_t n) {
+        (void)n;
+    }
+};
 
 #endif
