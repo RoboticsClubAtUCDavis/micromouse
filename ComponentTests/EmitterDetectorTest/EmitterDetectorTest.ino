@@ -48,7 +48,7 @@ int main() {
     delay(2000);
 
     for (unsigned i = 1;; i++) {
-        Serial.printf("%u,%u,%u\n", 4095, 0, maxInput);
+        Serial.printf("%u,%u,%u\n", maxInput, 0, maxInput);
 
         sampleTimer.begin(read, sampleRate);
         blink(blinks);
