@@ -15,6 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="led-test.ino" />
+    <None Include="EmitterDetectorTest.ino" />
   </ItemGroup>
 </Project>

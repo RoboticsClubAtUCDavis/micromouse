@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="led-test.ino" />
+    <None Include="EmitterDetectorTest.ino" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{36FFD50E-7DF4-4A10-B759-852D5B370D29}</ProjectGuid>
