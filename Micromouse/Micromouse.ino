@@ -28,9 +28,6 @@ int _write() {
 
 void setup() {
     Serial.begin(115200);
-    analogWriteFrequency(2, 29296.875);
-    analogWriteFrequency(3, 29296.875);
-    analogWriteResolution(11);
     delay(4000);
     Mouse mouse;
     mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);

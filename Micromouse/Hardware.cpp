@@ -1,6 +1,7 @@
 #include "Hardware.h"
 #include "IRSensor.h"
 #include "UltrasonicSensor.h"
+#include <Arduino.h>
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -22,6 +23,7 @@ Hardware::Hardware()
     , leftPID(0.0005f, 0.0f, 0.0f, 0.0f, 0.05f)
     , rightPID(0.0005f, 0.0f, 0.0f, 0.0f, 100.0f) {
     led.turnOn();
+    analogWriteResolution(Hardware::WRITE_RESOLUTION);
     setSpeed(100 /*mmps*/);
     // initRangeFinders();
     // TODO init rest of components.

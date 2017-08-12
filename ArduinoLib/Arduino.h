@@ -42,8 +42,9 @@ class Teensy {
         bool hasAin;
     };
 
-    static const int PWM_HIGH;
+    static int PWM_HIGH;
     static int readResolution;
+    static int writeResolution;
 
     Teensy();
 
@@ -52,7 +53,8 @@ class Teensy {
     void analogWrite(uint8_t pin, int val);
     uint8_t digitalRead(uint8_t pin);
     int analogRead(uint8_t pin);
-    void analogReadResolution(uint8_t res);
+    void analogReadResolution(int res);
+    void analogWriteResolution(uint32_t res);
 
     Pin pins[40];
 };
@@ -76,7 +78,8 @@ void delayMicroseconds(uint32_t usec);
 uint32_t random(uint32_t howbig);
 int32_t random(int32_t howsmall, int32_t howbig);
 void randomSeed(uint32_t newseed);
-void analogReadResolution(uint8_t res);
+void analogReadResolution(int res);
+void analogWriteResolution(uint32_t res);
 
 class IntervalTimer {
   public:

@@ -55,6 +55,9 @@ class Hardware {
     static const unsigned MM_PER_NODE;
     static const unsigned COUNT_PER_NODE;
 
+    static constexpr unsigned WRITE_RESOLUTION = 11;
+    static constexpr unsigned MAX_WRITE_VALUE = (0x1 << WRITE_RESOLUTION) - 1;
+
     Hardware();
     ~Hardware();
 

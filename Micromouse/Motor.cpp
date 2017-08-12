@@ -2,6 +2,7 @@
 #undef min
 #undef max
 
+#include "Hardware.h"
 #include "Motor.h"
 #include <cmath>
 
@@ -37,7 +38,7 @@ void Motor::setSpeed(float speed) {
     } else {
         digitalWrite(ph, HIGH);
     }
-    analogWrite(en, abs(int(speed * 2047)));
+    analogWrite(en, abs(int(speed * Hardware::MAX_WRITE_VALUE)));
 }
 
 long Motor::getCounts(void) {
