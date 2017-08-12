@@ -9,8 +9,8 @@
 Hardware::Hardware()
     : leftMotor(MOTOR_LEFT_EN_PIN, MOTOR_LEFT_PH_PIN, ENCODER_LEFT_A_PIN,
                 ENCODER_LEFT_B_PIN)
-    //, rightMotor(MOTOR_RIGHT_EN_PIN, MOTOR_RIGHT_PH_PIN, ENCODER_RIGHT_A_PIN,
-    //             ENCODER_RIGHT_B_PIN)
+    , rightMotor(MOTOR_RIGHT_EN_PIN, MOTOR_RIGHT_PH_PIN, ENCODER_RIGHT_A_PIN,
+                 ENCODER_RIGHT_B_PIN)
     , led(LED_PIN)
     , speedPID(0.002f, 0.00000002f, 100.0f, 0.0f, 20.0f, 0.6f)
     , distancePID(0.02f, 0.0f, 100.0f, 0.0f, 1.0f, 0.8f)
@@ -72,21 +72,21 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
 
         leftSpeedFactor = rightSpeedFactor = distanceCorr;
 
-        float leftGap = rangeFinders[LEFT]->getDistance();
-        float leftGapCorr =
-            leftPID.getCorrection(leftGap - LEFT_GAP, dtime, false);
+        // float leftGap = rangeFinders[LEFT]->getDistance();
+        // float leftGapCorr =
+        //    leftPID.getCorrection(leftGap - LEFT_GAP, dtime, false);
 
-        if (leftGapCorr < 0) {
-            rightSpeedFactor += leftGapCorr;
-        }
+        // if (leftGapCorr < 0) {
+        //    rightSpeedFactor += leftGapCorr;
+        //}
 
-        float rightGap = rangeFinders[RIGHT]->getDistance();
-        float rightGapCorr =
-            rightPID.getCorrection(rightGap - RIGHT_GAP, dtime);
+        // float rightGap = rangeFinders[RIGHT]->getDistance();
+        // float rightGapCorr =
+        //    rightPID.getCorrection(rightGap - RIGHT_GAP, dtime);
 
-        if (rightGapCorr < 0) {
-            leftSpeedFactor += rightGapCorr;
-        }
+        // if (rightGapCorr < 0) {
+        //    leftSpeedFactor += rightGapCorr;
+        //}
 
         // `countsPerSecond`
         auto avgCPS = (countsRight + countsLeft) / (dtime * 2.0f) * 1E6;
@@ -188,26 +188,26 @@ void Hardware::testMotorSingle() {
     delay(2000);
     leftMotor.off();
 
-    // delay(2000);
+    delay(2000);
 
-    // Serial.printf("Testing RightMotor\n");
-    // rightMotor.setSpeed(0.1f);
-    // delay(2000);
-    // rightMotor.setSpeed(0.0f);
-    // delay(2000);
-    // rightMotor.setSpeed(0.5f);
-    // delay(2000);
-    // rightMotor.setSpeed(0.0f);
-    // delay(2000);
-    // rightMotor.setSpeed(-1.0f);
-    // delay(2000);
-    // rightMotor.off();
+    Serial.printf("Testing RightMotor\n");
+    rightMotor.setSpeed(0.25f);
+    delay(2000);
+    rightMotor.setSpeed(0.0f);
+    delay(1000);
+    rightMotor.setSpeed(0.5f);
+    delay(2000);
+    rightMotor.setSpeed(0.0f);
+    delay(1000);
+    rightMotor.setSpeed(-1.0f);
+    delay(2000);
+    rightMotor.off();
 }
 
 void Hardware::testMotorPair() {
     Serial.printf("Testing Motor Pair\n");
-    leftMotor.setSpeed(0.1f);
-    rightMotor.setSpeed(0.1f);
+    leftMotor.setSpeed(0.25f);
+    rightMotor.setSpeed(0.25f);
     delay(2000);
     leftMotor.setSpeed(0.0f);
     rightMotor.setSpeed(0.0f);
