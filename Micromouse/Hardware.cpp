@@ -6,12 +6,6 @@
 #include <cmath>
 #include <limits>
 
-const float Hardware::COUNT_PER_MM = 7.23957f;
-const float Hardware::MM_PER_COUNT = 1.0f / Hardware::COUNT_PER_MM;
-const unsigned Hardware::MM_PER_NODE = 90;
-const unsigned Hardware::COUNT_PER_NODE =
-    Hardware::COUNT_PER_MM * Hardware::MM_PER_NODE;
-
 Hardware::Hardware()
     : leftMotor(MOTOR_LEFT_EN_PIN, MOTOR_LEFT_PH_PIN, ENCODER_LEFT_A_PIN,
                 ENCODER_LEFT_B_PIN)
