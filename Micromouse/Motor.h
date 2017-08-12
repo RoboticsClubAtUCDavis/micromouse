@@ -9,8 +9,7 @@
 class Motor {
   public:
     Motor(void);
-    Motor(unsigned en, unsigned in1, unsigned in2, unsigned encA,
-          unsigned encB);
+    Motor(unsigned en, unsigned ph, unsigned encA, unsigned encB);
     ~Motor();
 
     void off(void);
@@ -20,7 +19,7 @@ class Motor {
     float getSecondsPerCount(void);
 
   private:
-    const unsigned en, in1, in2;
+    unsigned en, ph;
 
     float countsPerSecond = 0.0f;
 
