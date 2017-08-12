@@ -14,16 +14,16 @@ const unsigned Hardware::COUNT_PER_NODE =
 Hardware::Hardware()
     : leftMotor(MOTOR_LEFT_EN_PIN, MOTOR_LEFT_PH_PIN, ENCODER_LEFT_A_PIN,
                 ENCODER_LEFT_B_PIN)
-    , rightMotor(MOTOR_RIGHT_EN_PIN, MOTOR_RIGHT_PH_PIN, ENCODER_RIGHT_A_PIN,
-                 ENCODER_RIGHT_B_PIN)
+    //, rightMotor(MOTOR_RIGHT_EN_PIN, MOTOR_RIGHT_PH_PIN, ENCODER_RIGHT_A_PIN,
+    //             ENCODER_RIGHT_B_PIN)
     , led(LED_PIN)
     , speedPID(0.002f, 0.00000002f, 100.0f, 0.0f, 20.0f, 0.6f)
     , distancePID(0.02f, 0.0f, 100.0f, 0.0f, 1.0f, 0.8f)
     , leftPID(0.0005f, 0.0f, 0.0f, 0.0f, 0.05f)
     , rightPID(0.0005f, 0.0f, 0.0f, 0.0f, 100.0f) {
     led.turnOn();
-    setSpeed(120 /*mmps*/);
-    initRangeFinders();
+    setSpeed(100 /*mmps*/);
+    //initRangeFinders();
     // TODO init rest of components.
 }
 
@@ -179,32 +179,32 @@ void Hardware::testMotorSingle() {
     //}
 
     Serial.printf("Testing LeftMotor\n");
-    leftMotor.setSpeed(0.1f);
+    leftMotor.setSpeed(0.25f);
     delay(2000);
     leftMotor.setSpeed(0.0f);
-    delay(2000);
+    delay(1000);
     leftMotor.setSpeed(0.5f);
     delay(2000);
     leftMotor.setSpeed(0.0f);
-    delay(2000);
+    delay(1000);
     leftMotor.setSpeed(-1.0f);
     delay(2000);
     leftMotor.off();
 
-    delay(2000);
+    //delay(2000);
 
-    Serial.printf("Testing RightMotor\n");
-    rightMotor.setSpeed(0.1f);
-    delay(2000);
-    rightMotor.setSpeed(0.0f);
-    delay(2000);
-    rightMotor.setSpeed(0.5f);
-    delay(2000);
-    rightMotor.setSpeed(0.0f);
-    delay(2000);
-    rightMotor.setSpeed(-1.0f);
-    delay(2000);
-    rightMotor.off();
+    //Serial.printf("Testing RightMotor\n");
+    //rightMotor.setSpeed(0.1f);
+    //delay(2000);
+    //rightMotor.setSpeed(0.0f);
+    //delay(2000);
+    //rightMotor.setSpeed(0.5f);
+    //delay(2000);
+    //rightMotor.setSpeed(0.0f);
+    //delay(2000);
+    //rightMotor.setSpeed(-1.0f);
+    //delay(2000);
+    //rightMotor.off();
 }
 
 void Hardware::testMotorPair() {

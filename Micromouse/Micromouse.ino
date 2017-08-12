@@ -33,9 +33,9 @@ void setup() {
 	analogWriteResolution(11);
     delay(4000);
     Mouse mouse;
-    //mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);
+    mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);
     //mouse.testMode(Mouse::TestMode::TEST_MOTOR_PAIR);
-    mouse.testMode(Mouse::TestMode::TEST_MOVEMENT);
+    //mouse.testMode(Mouse::TestMode::TEST_MOVEMENT);
     //mouse.testMode(Mouse::TestMode::TEST_ROTATE);
     //mouse.testMode(Mouse::TestMode::TEST_RANGE_FINDER_SINGLE);
     //mouse.testMode(Mouse::TestMode::TEST_RANGE_FINDER_ALL);
