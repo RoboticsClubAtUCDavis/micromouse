@@ -1,5 +1,5 @@
-#include "../Micromouse/ArduinoSpoof/Arduino.h"
-#include "../Micromouse/Led.h"
+#include <Arduino.h>
+#include "Micromouse/Led.h"
 #include "catch.hpp"
 using namespace mock;
 

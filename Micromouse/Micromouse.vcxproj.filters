@@ -48,9 +48,6 @@
     <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ArduinoSpoof\Arduino.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IRSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -99,9 +96,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ArduinoSpoof\Arduino.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IRSensor.cpp">
