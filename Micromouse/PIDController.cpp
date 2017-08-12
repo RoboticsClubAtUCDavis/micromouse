@@ -42,12 +42,12 @@ float PIDController::getCorrection(float currentError, uint32_t delta,
     previousError = derivativeSmoothing * previousError +
                     (1 - derivativeSmoothing) * currentError;
 
-	dTerm = std::max(dTerm, -1.0f);
-	dTerm = std::min(dTerm, 1.0f);
-
+    dTerm = std::max(dTerm, -1.0f);
+    dTerm = std::min(dTerm, 1.0f);
 
     if (log)
-        Serial.printf("PID: %f, %f, %f, %f, %f, ", pTerm, iTerm, dTerm, pTerm + iTerm + dTerm, currentError / 100.0f);
+        Serial.printf("PID: %f, %f, %f, %f, %f \n ", pTerm, iTerm, dTerm,
+                      pTerm + iTerm + dTerm, currentError / 100.0f);
 
     return pTerm + iTerm + dTerm;
 }
@@ -55,8 +55,8 @@ float PIDController::getCorrection(float currentError, uint32_t delta,
 void PIDController::clear(float initialError, float integratorError) {
     this->integratedError = integratorError;
 
-	// Bound the integral error between the +/- maximums.
-	integratedError = std::max(integratedError, -maxIntegralError);
-	integratedError = std::min(integratedError, maxIntegralError);
+    // Bound the integral error between the +/- maximums.
+    integratedError = std::max(integratedError, -maxIntegralError);
+    integratedError = std::min(integratedError, maxIntegralError);
     previousError = initialError;
 }
