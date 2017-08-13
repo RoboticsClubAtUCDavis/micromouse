@@ -2,7 +2,7 @@
 
 import glob
 
-cpp_flags = '-std=c++11 -Wall -g'
+cpp_flags = '-std=c++11 -Wall -Wextra -Werror -g'
 cpp_paths = ['#ArduinoLib', '#']
 env = Environment(CPPFLAGS = cpp_flags, LINKFLAGS=cpp_flags, CPPPATH=cpp_paths)
 

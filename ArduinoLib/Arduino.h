@@ -89,27 +89,33 @@ class IntervalTimer {
     bool begin(void (*funct)(), unsigned int microseconds) {
         (void)funct;
         (void)microseconds;
+        return true;
     }
 
     bool begin(void (*funct)(), int microseconds) {
         (void)funct;
         (void)microseconds;
+        return true;
     }
     bool begin(void (*funct)(), unsigned long microseconds) {
         (void)funct;
         (void)microseconds;
+        return true;
     }
     bool begin(void (*funct)(), long microseconds) {
         (void)funct;
         (void)microseconds;
+        return true;
     }
     bool begin(void (*funct)(), float microseconds) {
         (void)funct;
         (void)microseconds;
+        return true;
     }
     bool begin(void (*funct)(), double microseconds) {
         (void)funct;
         (void)microseconds;
+        return true;
     }
     void end() {
     }
