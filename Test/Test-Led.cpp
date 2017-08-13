@@ -1,3 +1,4 @@
+#include "Micromouse/Hardware.h"
 #include "Micromouse/Led.h"
 #include "catch.hpp"
 #include <Arduino.h>
@@ -7,6 +8,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
     GIVEN("An Led with a pin") {
         const unsigned pinNum = 2;
         Teensy::Pin &pin = teensy.pins[pinNum];
+        teensy.analogWriteResolution(Hardware::WRITE_RESOLUTION);
 
         REQUIRE(pin.hasPwm);
 
@@ -34,7 +36,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
                 }
 
                 WHEN("The brighntess is set once") {
-                    float b = 50.0f;
+                    float b = 0.50f;
                     led.setBrightness(b);
                     THEN("The pin pwm is not changed immediately") {
                         CHECK_FALSE(pin.isHigh);
@@ -45,14 +47,13 @@ SCENARIO("Leds can be fully controlled", "[led]") {
                         led.turnOn();
                         THEN("The pin pwm is now set correctly based on set "
                              "brightness") {
-                            CHECK(pin.pwm ==
-                                  unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                            CHECK(pin.pwm == unsigned(b * Teensy::PWM_HIGH));
                         }
                     }
                 }
 
                 WHEN("The brighntess is set multiple times") {
-                    float b = 50.0f;
+                    float b = 0.50f;
                     led.setBrightness(b);
                     led.setBrightness(b);
                     led.setBrightness(b);
@@ -65,61 +66,58 @@ SCENARIO("Leds can be fully controlled", "[led]") {
                         led.turnOn();
                         THEN("The pin pwm is now set correctly based on set "
                              "brightness") {
-                            CHECK(pin.pwm ==
-                                  unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                            CHECK(pin.pwm == unsigned(b * Teensy::PWM_HIGH));
                         }
                     }
                 }
 
                 WHEN("The Led blinks") {
-                    float b = 50.0f;
+                    float b = 0.50f;
                     led.setBrightness(b);
                     led.blink(3);
                     THEN("After the blink it i returns to the same state") {
                         CHECK(pin.pwm == 0);
                         led.turnOn();
-                        CHECK(pin.pwm ==
-                              unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                        CHECK(pin.pwm == unsigned(b * Teensy::PWM_HIGH));
                     }
                     led.blink(0);
                     THEN("After the blink it i returns to the same state") {
                         CHECK(pin.pwm == 0);
                         led.turnOn();
-                        CHECK(pin.pwm ==
-                              unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                        CHECK(pin.pwm == unsigned(b * Teensy::PWM_HIGH));
                     }
                 }
             }
 
             WHEN("The brighntess is set once") {
-                float b = 50.0f;
+                float b = 0.50f;
                 led.setBrightness(b);
                 THEN("The pin pwm is set correctly") {
-                    CHECK(pin.pwm == unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                    CHECK(pin.pwm == unsigned(b * Teensy::PWM_HIGH));
                 }
             }
 
             WHEN("The brighntess is set multiple times") {
-                float b = 50.0f;
+                float b = 0.50f;
                 led.setBrightness(b);
                 led.setBrightness(b);
                 led.setBrightness(b);
                 led.setBrightness(b);
                 THEN("The brightness is not compounded") {
-                    CHECK(pin.pwm == unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                    CHECK(pin.pwm == unsigned(b * Teensy::PWM_HIGH));
                 }
             }
 
             WHEN("The Led blinks") {
-                float b = 50.0f;
+                float b = 0.50f;
                 led.setBrightness(b);
                 led.blink(3);
                 THEN("After the blink it i returns to the same state") {
-                    CHECK(pin.pwm == unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                    CHECK(pin.pwm == unsigned(b * Teensy::PWM_HIGH));
                 }
                 led.blink(0);
                 THEN("After the blink it i returns to the same state") {
-                    CHECK(pin.pwm == unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                    CHECK(pin.pwm == unsigned(b * Teensy::PWM_HIGH));
                 }
             }
         }
