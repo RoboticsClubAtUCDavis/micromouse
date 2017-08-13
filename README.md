@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/RoboticsClubAtUCDavis/micromouse.svg?branch=dev)](https://travis-ci.org/RoboticsClubAtUCDavis/micromouse)
+[![Build Status](https://travis-ci.org/blhough/micromouse.svg?branch=master)](https://travis-ci.org/blhough/micromouse)
 # micromouse
 
 ## Contributing
