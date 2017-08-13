@@ -1,0 +1,7 @@
+import glob
+
+Import('env')
+
+sources = Glob('*.cpp')
+lib = env.Library('ArduinoLib', sources)
+Return('lib')
