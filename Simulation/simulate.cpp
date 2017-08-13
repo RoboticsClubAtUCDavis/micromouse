@@ -15,12 +15,13 @@
 #include <thread>
 
 const std::string WINDOW_TITLE = "Micromouse simulator";
-const float NODE_SIZE = 1. / std::max<float>(Maze::NODE_COLS, Maze::NODE_ROWS);
+constexpr float NODE_SIZE =
+    1.0f / (float)std::max<int>(Maze::NODE_COLS, Maze::NODE_ROWS);
 bool colorGradient = true;
 bool vectorField = true;
 
 sf::Vector2f nodeVector(NodeCoordinate c) {
-    return sf::Vector2f(.5 + c.x, Maze::NODE_ROWS - c.y - .5) * NODE_SIZE;
+    return sf::Vector2f(0.5f + c.x, Maze::NODE_ROWS - c.y - 0.5f) * NODE_SIZE;
 }
 
 sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
@@ -33,9 +34,9 @@ sf::VertexArray line(NodeCoordinate c1, NodeCoordinate c2,
 
 void HSVtoRGB(float &fR, float &fG, float &fB, float fH, float fS, float fV) {
     float fC = fV * fS; // Chroma
-    float fHPrime = fmod(fH / 60.0, 6);
-    float fX = fC * (1 - fabs(fmod(fHPrime, 2) - 1));
-    float fM = fV - fC;
+    auto fHPrime = float(fmod(fH / 60.0, 6));
+    auto fX = fC * float(1 - fabs(fmod(fHPrime, 2) - 1));
+    auto fM = fV - fC;
 
     if (0 <= fHPrime && fHPrime < 1) {
         fR = fC;
@@ -96,9 +97,9 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
         enum States { DEFAULT, EXPLORED, EVALUATED, EXP_AND_EVAL };
 
         int state = 0;
-        state |= maze.getNode(pos).evaluated;
+        state |= maze.getNode(pos).evaluated ? 0x1 : 0x0;
         state <<= 1;
-        state |= maze.isExplored(pos);
+        state |= maze.isExplored(pos) ? 0x1 : 0x0;
 
         float r, g, b;
         HSVtoRGB(r, g, b,
@@ -111,12 +112,16 @@ class CellDrawable : public sf::Transformable, public sf::Drawable {
                 c = sf::Color(150, 200, 200, 40);
                 break;
             case EVALUATED:
-                colorGradient ? c = sf::Color(r * 255, g * 255, b * 255, 20)
-                              : c = sf::Color(255, 255, 150, 40);
+                colorGradient
+                    ? c = sf::Color(uint8_t(r * 255), uint8_t(g * 255),
+                                    uint8_t(b * 255), 20)
+                    : c = sf::Color(255, 255, 150, 40);
                 break;
             case EXP_AND_EVAL:
-                colorGradient ? c = sf::Color(r * 255, g * 255, b * 255, 70)
-                              : c = sf::Color(255, 170, 170, 35);
+                colorGradient
+                    ? c = sf::Color(uint8_t(r * 255), uint8_t(g * 255),
+                                    uint8_t(b * 255), 70)
+                    : c = sf::Color(255, 170, 170, 35);
                 break;
             case DEFAULT:
             default:
@@ -198,7 +203,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
     }
 
     void drawPath(sf::RenderTarget &target, sf::RenderStates states,
-                  const Path &path, Maze &maze) const {
+                  const Path &path, Maze &mz) const {
 
         enum States { UNEXPLORED, EXPLORED };
 
@@ -208,7 +213,7 @@ class MazeDrawable : public sf::Transformable, public sf::Drawable {
             NodeCoordinate nextNode = node + i;
 
             int state = 0;
-            state |= maze.getNode(node).explored;
+            state |= mz.getNode(node).explored ? 0x1 : 0x0;
 
             sf::Color color;
             switch (state) {
@@ -316,8 +321,9 @@ class Simulator : public sf::RenderWindow {
                     close();
                 }
                 if (event.type == sf::Event::Resized)
-                    setView(sf::View(sf::FloatRect(0, 0, event.size.width,
-                                                   event.size.height)));
+                    setView(sf::View(sf::FloatRect(0.0f, 0.0f,
+                                                   float(event.size.width),
+                                                   float(event.size.height))));
             }
 
             if (SIMULATION_SPEED < 1000.0f)
@@ -328,7 +334,7 @@ class Simulator : public sf::RenderWindow {
   private:
     sf::Vector2f mazeSize(void) {
         sf::Vector2u size = getSize();
-        float min = std::min(size.x, size.y);
+        auto min = float(std::min(size.x, size.y));
         return sf::Vector2f(min, min);
     }
 
@@ -357,7 +363,7 @@ class Simulator : public sf::RenderWindow {
 };
 
 int main() {
-    srand(time(0));
+    srand(unsigned(time(0)));
     Mouse mouse;
 
     // mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);

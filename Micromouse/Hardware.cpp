@@ -66,7 +66,7 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
         distanceErr = std::min(distanceErr, long(COUNT_PER_NODE / 10));
 
         auto distanceCorr =
-            distancePID.getCorrection(distanceErr, dtime, false);
+            distancePID.getCorrection(float(distanceErr), dtime, false);
         distanceCorr = std::max(distanceCorr, -1.0f);
         distanceCorr = std::min(distanceCorr, 1.0f);
 
@@ -89,7 +89,7 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
         //}
 
         // `countsPerSecond`
-        auto avgCPS = (countsRight + countsLeft) / (dtime * 2.0f) * 1E6;
+        auto avgCPS = (countsRight + countsLeft) / (dtime * 2.0f) * 1E6f;
 
         auto speedCorrRaw =
             speedPID.getCorrection(countsPerSecond - avgCPS, dtime, false);
@@ -100,7 +100,7 @@ unsigned Hardware::moveForward(unsigned mm, bool keepGoing, bool useCaution) {
         if (avgCPS < 50.0f && std::fabs(targetCounts - traveledCounts) < 50) {
             leftMotor.off();
             rightMotor.off();
-            return traveledCounts * MM_PER_COUNT;
+            return unsigned(traveledCounts * MM_PER_COUNT);
         }
         // }
         // Serial.printf("CNT: %i, ", targetCounts - traveledCounts);

@@ -2,24 +2,25 @@
 #undef min
 #undef max
 
+#include "Hardware.h"
 #include "Led.h"
 
 Led::Led() : PIN(0) {
 }
 
-Led::Led(unsigned pin) : PIN(pin), brightness(255) {
+Led::Led(unsigned pin) : PIN(pin), brightness(1.0f) {
     pinMode(pin, OUTPUT);
 }
 
-void Led::setBrightness(unsigned percent) {
-    brightness = percent * 2.55;
+void Led::setBrightness(float percent) {
+    brightness = percent;
     if (ledPower) {
-        analogWrite(PIN, brightness);
+        analogWrite(PIN, int(brightness * Hardware::MAX_WRITE_VALUE));
     }
 }
 
 void Led::turnOn() {
-    analogWrite(PIN, brightness);
+    analogWrite(PIN, int(brightness * Hardware::MAX_WRITE_VALUE));
     ledPower = true;
 }
 
@@ -35,7 +36,6 @@ void Led::blink(unsigned n, unsigned delay1, unsigned delay2) {
     }
 
     if (ledPower) {
-
         for (unsigned i = 1;; i++) {
             turnOff();
             delay(delay1);
@@ -45,7 +45,6 @@ void Led::blink(unsigned n, unsigned delay1, unsigned delay2) {
             }
             delay(delay2);
         }
-
     } else {
         for (unsigned j = 1;; j++) {
             turnOn();

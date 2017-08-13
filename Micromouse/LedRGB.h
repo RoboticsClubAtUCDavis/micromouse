@@ -1,13 +1,14 @@
 #pragma once
 #include "Led.h"
+#include <stdint.h>
 
 class LedRGB : public Led {
   public:
     LedRGB();
 
-    LedRGB(unsigned redPin, unsigned greenPin, unsigned bluePin);
-    void setRGB(unsigned r, unsigned g, unsigned b);
-    void setBrightness(unsigned percent);
+    LedRGB(uint8_t redPin, uint8_t greenPin, uint8_t bluePin);
+    void setRGB(uint8_t r, uint8_t g, uint8_t b);
+    void setBrightness(float percent);
     void turnOn();
     void turnOff();
 
@@ -15,6 +16,6 @@ class LedRGB : public Led {
     Led redLed;
     Led greenLed;
     Led blueLed;
-    unsigned redBrightness = 100, greenBrightness = 100, blueBrightness = 100;
-    double brightness = 1;
+    float redBrightness = 1.0f, greenBrightness = 1.0f, blueBrightness = 1.0f;
+    float brightness = 1.0f;
 };

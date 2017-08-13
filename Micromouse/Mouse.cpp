@@ -46,7 +46,7 @@ void Mouse::testMode(TestMode mode) {
             bot.testRangeFinderSingle(RIGHT);
             break;
         case TestMode::TEST_RANGE_FINDER_ALL:
-            bot.testRangeFindersAll(0,10);
+            bot.testRangeFindersAll(0, 10);
             break;
         default:
             break;
@@ -291,6 +291,7 @@ NodeCoordinate Mouse::findOtherNode(NodeCoordinateList &coordList,
 
     // The given `NodeCoordinate` was not found.
     assert(false);
+    return NodeCoordinate();
 }
 
 void Mouse::mapMazeStrategy3() {
@@ -509,7 +510,7 @@ void Mouse::rankMappingStrategies(const unsigned cycles) {
 
     running = true;
 
-    for (size_t i = 0; i < cycles && running; i++) {
+    for (uint16_t i = 0; i < cycles && running; i++) {
         for (auto strategy : MAP_STRATS) {
 
             mappingStrategy = strategy;

@@ -52,16 +52,17 @@ class Hardware {
 
     static constexpr double PI = 3.14159265359;
 
-    static constexpr double WHEEL_RADIUS = 24.13f;
+    static constexpr float WHEEL_RADIUS = 24.13f;
     static constexpr unsigned COUNT_PER_REV = 12;
-    static constexpr double GEAR_RATIO =
+    static constexpr float GEAR_RATIO =
         (31 * 33 * 35 * 34) / float(16 * 14 * 13 * 14);
     static constexpr float COUNT_PER_MM =
-        GEAR_RATIO * COUNT_PER_REV / (2 * PI * WHEEL_RADIUS);
+        float(GEAR_RATIO * COUNT_PER_REV / (2 * PI * WHEEL_RADIUS));
     static constexpr float MM_PER_COUNT = 1 / COUNT_PER_MM;
 
     static constexpr unsigned MM_PER_NODE = 90;
-    static constexpr unsigned COUNT_PER_NODE = MM_PER_NODE * COUNT_PER_MM;
+    static constexpr auto COUNT_PER_NODE =
+        unsigned(MM_PER_NODE * COUNT_PER_MM + 0.5f);
 
     static constexpr unsigned WRITE_RESOLUTION = 11;
     static constexpr unsigned MAX_WRITE_VALUE = (0x1 << WRITE_RESOLUTION) - 1;

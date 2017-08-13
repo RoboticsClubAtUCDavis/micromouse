@@ -34,7 +34,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
                 }
 
                 WHEN("The brighntess is set once") {
-                    unsigned b = 50;
+                    float b = 50.0f;
                     led.setBrightness(b);
                     THEN("The pin pwm is not changed immediately") {
                         CHECK_FALSE(pin.isHigh);
@@ -52,7 +52,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
                 }
 
                 WHEN("The brighntess is set multiple times") {
-                    unsigned b = 50;
+                    float b = 50.0f;
                     led.setBrightness(b);
                     led.setBrightness(b);
                     led.setBrightness(b);
@@ -72,7 +72,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
                 }
 
                 WHEN("The Led blinks") {
-                    unsigned b = 50;
+                    float b = 50.0f;
                     led.setBrightness(b);
                     led.blink(3);
                     THEN("After the blink it i returns to the same state") {
@@ -92,7 +92,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
             }
 
             WHEN("The brighntess is set once") {
-                unsigned b = 50;
+                float b = 50.0f;
                 led.setBrightness(b);
                 THEN("The pin pwm is set correctly") {
                     CHECK(pin.pwm == unsigned(b / 100.0f * Teensy::PWM_HIGH));
@@ -100,7 +100,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
             }
 
             WHEN("The brighntess is set multiple times") {
-                unsigned b = 50;
+                float b = 50.0f;
                 led.setBrightness(b);
                 led.setBrightness(b);
                 led.setBrightness(b);
@@ -111,7 +111,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
             }
 
             WHEN("The Led blinks") {
-                unsigned b = 50;
+                float b = 50.0f;
                 led.setBrightness(b);
                 led.blink(3);
                 THEN("After the blink it i returns to the same state") {
