@@ -2,17 +2,16 @@
 #undef min
 #undef max
 
+#include "Hardware.h"
 #include "Motor.h"
 #include <cmath>
 
-Motor::Motor(void) : Motor(0, 0, 0, 0, 0) {
+Motor::Motor(void) : Motor(0, 0, 0, 0) {
 }
 
-Motor::Motor(unsigned en, unsigned in1, unsigned in2, unsigned encA,
-             unsigned encB)
+Motor::Motor(unsigned en, unsigned ph, unsigned encA, unsigned encB)
     : en(en)
-    , in1(in1)
-    , in2(in2)
+    , ph(ph)
 #if defined(__MK66FX1M0__) || defined(__MK20DX256__)
     , encoder(encA, encB) {
 #else
@@ -23,27 +22,23 @@ Motor::Motor(unsigned en, unsigned in1, unsigned in2, unsigned encA,
 #endif
 
     pinMode(en, OUTPUT);
-    pinMode(in1, OUTPUT);
-    pinMode(in2, OUTPUT);
+    pinMode(ph, OUTPUT);
     off();
 }
 
 void Motor::off(void) {
-    digitalWrite(en, LOW);
-    digitalWrite(in1, LOW);
-    digitalWrite(in2, LOW);
+    analogWrite(en, LOW);
+    digitalWrite(ph, LOW);
 }
 
 // 1.0 = max speed forward; -1.0 = max speed reverse
 void Motor::setSpeed(float speed) {
-    if (speed < 0) {
-        digitalWrite(in1, LOW);
-        digitalWrite(in2, HIGH);
+    if (speed < 0.0f) {
+        digitalWrite(ph, LOW);
     } else {
-        digitalWrite(in2, LOW);
-        digitalWrite(in1, HIGH);
+        digitalWrite(ph, HIGH);
     }
-    analogWrite(en, abs(int(speed * 255)));
+    analogWrite(en, abs(int(speed * Hardware::MAX_WRITE_VALUE)));
 }
 
 long Motor::getCounts(void) {
@@ -53,7 +48,7 @@ long Motor::getCounts(void) {
     if (counts != lastCounts) {
         long time = micros();
 
-        secondsPerCount = (time - lastMicros) /
+        countsPerSecond = (time - lastMicros) /
                           (1E6f /*usec->sec*/ * abs(counts - lastCounts));
         lastCounts = counts;
         lastMicros = time;
@@ -72,7 +67,7 @@ void Motor::resetCounts(void) {
 }
 
 float Motor::getSecondsPerCount(void) {
-    return secondsPerCount;
+    return countsPerSecond;
 }
 
 Motor::~Motor() {

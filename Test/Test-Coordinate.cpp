@@ -1,5 +1,5 @@
-#include "../Micromouse/Coordinate.h"
-#include "../Micromouse/Direction.h"
+#include "Micromouse/Coordinate.h"
+#include "Micromouse/Direction.h"
 #include "catch.hpp"
 
 SCENARIO("NodeCoordinates have an x and y component") {

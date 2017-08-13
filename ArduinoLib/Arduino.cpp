@@ -86,16 +86,24 @@ void randomSeed(uint32_t newseed) {
     srand(newseed);
 }
 
-void analogReadResolution(uint8_t res) {
+void analogReadResolution(int res) {
 #ifdef VERBOSE_ARDUINO
     printf("analogReadResolution - res: %u\n", res);
 #endif // VERBOSE_ARDUINO
     mock::teensy.analogReadResolution(res);
 }
 
+void analogWriteResolution(uint32_t res) {
+#ifdef VERBOSE_ARDUINO
+    printf("analogWriteResolution - res: %u\n", res);
+#endif // VERBOSE_ARDUINO
+    mock::teensy.analogWriteResolution(res);
+}
+
 mock::Teensy mock::teensy;
-const int mock::Teensy::PWM_HIGH = 255;
+int mock::Teensy::writeResolution = 8;
 int mock::Teensy::readResolution = 10;
+int mock::Teensy::PWM_HIGH = 255;
 
 mock::Teensy::Teensy() {
     for (auto &i : pins) {
@@ -182,6 +190,11 @@ int mock::Teensy::analogRead(uint8_t pin) {
     return 0;
 }
 
-void mock::Teensy::analogReadResolution(uint8_t res) {
+void mock::Teensy::analogReadResolution(int res) {
     readResolution = res;
+}
+
+void mock::Teensy::analogWriteResolution(uint32_t res) {
+    writeResolution = res;
+    PWM_HIGH = (0x1 << res) - 1;
 }

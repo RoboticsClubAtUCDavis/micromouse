@@ -58,8 +58,7 @@ int main() {
         sampleTimer.end();
         delayMicroseconds(intervalDuration);
     }
-	sampleTimer.end();
-
+    sampleTimer.end();
 }
 
 void blink(unsigned n) {

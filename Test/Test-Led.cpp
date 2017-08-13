@@ -1,6 +1,6 @@
-#include "../Micromouse/ArduinoSpoof/Arduino.h"
-#include "../Micromouse/Led.h"
+#include "Micromouse/Led.h"
 #include "catch.hpp"
+#include <Arduino.h>
 using namespace mock;
 
 SCENARIO("Leds can be fully controlled", "[led]") {
@@ -86,7 +86,7 @@ SCENARIO("Leds can be fully controlled", "[led]") {
                         CHECK(pin.pwm == 0);
                         led.turnOn();
                         CHECK(pin.pwm ==
-                            unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                              unsigned(b / 100.0f * Teensy::PWM_HIGH));
                     }
                 }
             }
@@ -115,13 +115,11 @@ SCENARIO("Leds can be fully controlled", "[led]") {
                 led.setBrightness(b);
                 led.blink(3);
                 THEN("After the blink it i returns to the same state") {
-                    CHECK(pin.pwm ==
-                        unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                    CHECK(pin.pwm == unsigned(b / 100.0f * Teensy::PWM_HIGH));
                 }
                 led.blink(0);
                 THEN("After the blink it i returns to the same state") {
-                    CHECK(pin.pwm ==
-                        unsigned(b / 100.0f * Teensy::PWM_HIGH));
+                    CHECK(pin.pwm == unsigned(b / 100.0f * Teensy::PWM_HIGH));
                 }
             }
         }

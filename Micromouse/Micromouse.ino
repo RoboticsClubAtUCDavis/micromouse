@@ -27,15 +27,15 @@ int _write() {
 #include "Mouse.h"
 
 void setup() {
-    Serial.begin(9600);
-    delay(2000);
+    Serial.begin(115200);
+    delay(4000);
     Mouse mouse;
-    //mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);
-    //mouse.testMode(Mouse::TestMode::TEST_MOTOR_PAIR);
-    //mouse.testMode(Mouse::TestMode::TEST_MOVEMENT);
-    //mouse.testMode(Mouse::TestMode::TEST_ROTATE);
-    //mouse.testMode(Mouse::TestMode::TEST_RANGE_FINDER_SINGLE);
-    //mouse.testMode(Mouse::TestMode::TEST_RANGE_FINDER_ALL);
+    // mouse.testMode(Mouse::TestMode::TEST_MOTOR_SINGLE);
+    // mouse.testMode(Mouse::TestMode::TEST_MOTOR_PAIR);
+    mouse.testMode(Mouse::TestMode::TEST_MOVEMENT);
+    // mouse.testMode(Mouse::TestMode::TEST_ROTATE);
+    // mouse.testMode(Mouse::TestMode::TEST_RANGE_FINDER_SINGLE);
+    // mouse.testMode(Mouse::TestMode::TEST_RANGE_FINDER_ALL);
 }
 
 void loop() {

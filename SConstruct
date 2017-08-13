@@ -2,15 +2,12 @@
 
 import glob
 
-cpp_flags = '-std=c++11 -Wall -Wextra -Werror -g -IMicromouse/ArduinoSpoof -pthread'
-sources = Glob("Micromouse/*.cpp") + Glob('Micromouse/ArduinoSpoof/*.cpp')
-sfml_libs = Split('sfml-graphics sfml-window sfml-system')
+cpp_flags = '-std=c++11 -Wall -Wextra -Werror -g'
+cpp_paths = ['#ArduinoLib', '#']
+env = Environment(CPPFLAGS = cpp_flags, LINKFLAGS=cpp_flags, CPPPATH=cpp_paths)
 
-env = Environment(CPPFLAGS = cpp_flags, LINKFLAGS=cpp_flags)
-source_objs = [env.Object(i) for i in sources]
-simulate_deps = Glob('Simulation/*.cpp') + source_objs
-test_deps = Glob('Test/*.cpp') + source_objs
-
-env.Program('simulate', simulate_deps, LIBS=sfml_libs, LINKFLAGS=cpp_flags)
-test = env.Program('Test/test', test_deps)
+Export('env')
+arduino_lib = SConscript('ArduinoLib/SConscript')
+micromouse_lib = SConscript('Micromouse/SConscript', 'arduino_lib')
+test = SConscript('Test/SConscript', 'micromouse_lib arduino_lib')
 env.AlwaysBuild(env.Alias('test', [test], test[0].path))

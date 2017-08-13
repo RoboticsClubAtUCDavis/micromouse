@@ -1,0 +1,7 @@
+import glob
+
+Import('env','micromouse_lib','arduino_lib')
+
+sources = Glob('*.cpp')
+lib = env.Program('Test', sources, LIBS=[micromouse_lib,arduino_lib])
+Return('lib')
