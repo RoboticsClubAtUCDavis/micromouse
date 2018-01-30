@@ -265,7 +265,7 @@ class Simulator : public sf::RenderWindow {
                            sf::Style::Default, sf::ContextSettings(0, 0, 8))
         , mouse(mouse) {
         try {
-            mouse.virtualMaze = Maze::fromFile("1.maze");
+            mouse.virtualMaze = Maze::fromFile("4.maze");
             // mouse.virtualMaze = Maze::generate();
         } catch (const std::exception &e) {
             std::cout << e.what();
